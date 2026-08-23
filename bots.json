@@ -1,0 +1,22 @@
+[
+  {
+    "id": "rsrs",
+    "name": "rsrs",
+    "host": "3ww123.play.hosting",
+    "port": 25565,
+    "user": "rsrs",
+    "version": "26.2",
+    "enabled": true,
+    "createdAt": "2026-08-23T06:45:25.639Z"
+  },
+  {
+    "id": "phant0m",
+    "name": "Ph4nt0m",
+    "host": "3ww123.play.hosting",
+    "port": 25565,
+    "user": "Ph4nt0m",
+    "version": "26.2 (776)",
+    "enabled": true,
+    "createdAt": "2026-08-23T06:44:28.227Z"
+  }
+]

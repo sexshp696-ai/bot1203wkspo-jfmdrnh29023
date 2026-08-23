@@ -1,0 +1,30 @@
+{
+  "name": "phant0m-bot",
+  "version": "2.0.0",
+  "description": "Ph4nt0m Bot — Minecraft AFK + Discord Manager | 24/7 Render",
+  "main": "discord_bot.js",
+  "scripts": {
+    "start": "node discord_bot.js",
+    "dev": "node discord_bot.js"
+  },
+  "keywords": [
+    "minecraft",
+    "discord",
+    "bot",
+    "afk",
+    "phant0m"
+  ],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.27.0",
+    "dotenv": "^17.4.2",
+    "express": "^4.22.2",
+    "minecraft-data": "^3.113.2",
+    "mineflayer": "^4.37.1"
+  }
+}

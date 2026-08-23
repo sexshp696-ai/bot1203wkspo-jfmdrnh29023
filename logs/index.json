@@ -1,0 +1,42 @@
+[
+  {
+    "fname": "Ph4nt0m_2026-08-23_03-48-24.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-23_03-48-24.html",
+    "time": "2026-08-23T06:48:24.040Z",
+    "reason": "Desconectado após 9s online",
+    "type": "desconectado",
+    "uptime": "9s",
+    "ka": 0,
+    "tent": 3
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-23_03-46-38.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-23_03-46-38.html",
+    "time": "2026-08-23T06:46:38.985Z",
+    "reason": "Desconectado após 58s online",
+    "type": "desconectado",
+    "uptime": "58s",
+    "ka": 3,
+    "tent": 2
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-23_03-35-20.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-23_03-35-20.html",
+    "time": "2026-08-23T06:35:20.438Z",
+    "reason": "[!] Kick play:",
+    "type": "desconectado",
+    "uptime": "5h 22m 52s",
+    "ka": 1291,
+    "tent": 1
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-22_22-02-26.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-22_22-02-26.html",
+    "time": "2026-08-23T01:02:26.338Z",
+    "reason": "Recuperado de disco",
+    "type": "desconectado",
+    "uptime": "?",
+    "ka": "?",
+    "tent": "?"
+  }
+]

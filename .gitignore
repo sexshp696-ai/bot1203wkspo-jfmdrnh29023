@@ -1,0 +1,22 @@
+# Secrets — NUNCA commite!
+.env
+.env.local
+
+# Logs gerados (HTMLs) — só index.json fica
+logs/*.html
+logs/used_profiles.json
+logs/bot_bio.json
+
+# Deps
+node_modules/
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
