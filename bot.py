@@ -5,9 +5,9 @@ sys.stderr.reconfigure(line_buffering=True)
 import socket
 import struct
 import time
-import random
 import uuid
 import zlib
+import threading
 
 
 def ev(val):
@@ -64,6 +64,7 @@ CONFIG_CLIENT_INFO = 0x00
 CONFIG_FINISH = 0x03
 CONFIG_KNOWN_PACKS_SB = 0x07
 
+PLAY_CHAT_COMMAND = 0x06
 PLAY_CONFIRM_TELEPORT = 0x00
 PLAY_CHUNK_BATCH = 0x0B
 PLAY_KEEPALIVE = 0x1C
@@ -72,6 +73,13 @@ CB_KEEPALIVE = 0x2C
 CB_DISCONNECT = 0x20
 CB_SYNC_POS = 0x48
 CB_CHUNK_BATCH_FINISHED = 0x0B
+
+GAMEMODE_NAMES = {
+    0: "Survival",
+    1: "Creative",
+    2: "Adventure",
+    3: "Spectator",
+}
 
 
 class Bot:
@@ -88,6 +96,9 @@ class Bot:
         self.y = 64.0
         self.z = 0.0
         self.spawned = False
+        self.gamemode = -1
+        self.chat_mode = "enabled"
+        self.send_lock = threading.Lock()
 
     def _recv(self):
         chunk = self.sock.recv(65536)
@@ -122,24 +133,37 @@ class Bot:
                 return pid, payload_raw[off2:]
 
     def _send(self, pid, data=b""):
-        payload = ev(pid) + data
-        if self.compress >= 0:
-            if len(payload) >= self.compress:
-                comp = zlib.compress(payload)
-                inner = ev(len(payload)) + comp
+        with self.send_lock:
+            payload = ev(pid) + data
+            if self.compress >= 0:
+                if len(payload) >= self.compress:
+                    comp = zlib.compress(payload)
+                    inner = ev(len(payload)) + comp
+                else:
+                    inner = ev(0) + payload
+                self.sock.sendall(ev(len(inner)) + inner)
             else:
-                inner = ev(0) + payload
-            self.sock.sendall(ev(len(inner)) + inner)
-        else:
-            self.sock.sendall(ev(len(payload)) + payload)
+                self.sock.sendall(ev(len(payload)) + payload)
 
     def _send_raw(self, pid, data=b""):
-        self.sock.sendall(ev(len(ev(pid) + data)) + ev(pid) + data)
+        with self.send_lock:
+            self.sock.sendall(ev(len(ev(pid) + data)) + ev(pid) + data)
+
+    def send_chat_command(self, cmd):
+        if not self.running or self.state != "play":
+            return
+        cmd_clean = cmd.lstrip("/")
+        try:
+            # 1.21 Chat Command (0x04): command (String)
+            self._send(PLAY_CHAT_COMMAND, ws(cmd_clean))
+            print(f"[*] Comando enviado ao servidor: /{cmd_clean}")
+        except Exception as e:
+            print(f"[!] Erro ao enviar comando: {e}")
 
     def connect(self):
         print(f"[*] Conectando a {self.host}:{self.port} como '{self.user}'...")
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.settimeout(15)
+        self.sock.settimeout(20)
         self.sock.connect((self.host, self.port))
 
         hand = ev(776) + ws(self.host) + struct.pack(">H", self.port) + ev(2)
@@ -216,6 +240,7 @@ class Bot:
             if len(data) >= 8:
                 kid = struct.unpack(">q", data[:8])[0]
                 self._send(PLAY_KEEPALIVE, wl(kid))
+
         elif pid == CB_DISCONNECT:
             try:
                 msg = data.decode("utf-8")
@@ -223,52 +248,105 @@ class Bot:
                 msg = str(data[:100])
             print(f"[!] Kick play: {msg}")
             self.running = False
+
         elif pid == CB_SYNC_POS:
             try:
+                off = 0
                 teleport_id, off = dv(data)
+                self._send(PLAY_CONFIRM_TELEPORT, ev(teleport_id))
+                self.spawned = True
+                if len(data) >= off + 24:
+                    self.x = struct.unpack(">d", data[off:off + 8])[0]
+                    self.y = struct.unpack(">d", data[off + 8:off + 16])[0]
+                    self.z = struct.unpack(">d", data[off + 16:off + 24])[0]
+                    cx = int(self.x) >> 4
+                    cz = int(self.z) >> 4
+                    gm = GAMEMODE_NAMES.get(self.gamemode, f"Unknown({self.gamemode})")
+                    print(f"[COORDS] X={self.x:.1f} Y={self.y:.1f} Z={self.z:.1f} | Chunk {cx},{cz}")
+                    print(f"[GAMEMODE] {self.gamemode} ({gm})")
+                    print(f"[CHATMODE] {self.chat_mode}")
             except Exception:
-                return
-            self._send(PLAY_CONFIRM_TELEPORT, ev(teleport_id))
-            self.spawned = True
-            if len(data) >= off + 24:
-                self.x = struct.unpack(">d", data[off:off + 8])[0]
-                self.y = struct.unpack(">d", data[off + 8:off + 16])[0]
-                self.z = struct.unpack(">d", data[off + 16:off + 24])[0]
+                pass
+
         elif pid == CB_CHUNK_BATCH_FINISHED:
             self._send(PLAY_CHUNK_BATCH, struct.pack(">f", 1.0))
+
         elif pid == 0x76:
-            # Start Configuration - must respond with Acknowledge Configuration
             print("[*] Start Configuration recebido, respondendo...")
+            self.state = "configuration"
             self._send(0x10)
+
         elif pid == 0x3D:
-            # Ping - must respond with Pong
             if len(data) >= 4:
                 ping_id = struct.unpack(">i", data[:4])[0]
                 self._send(0x2D, struct.pack(">i", ping_id))
+
         elif pid == 0x15:
-            # Cookie Request - respond with empty Cookie Response
             self._send(0x14, ev(0) + ev(0))
+
         elif pid == 0x26:
-            # Game Event - handle respawn screen (event 11)
             if len(data) >= 5:
                 event = data[0]
                 if event == 11:
-                    # Enable respawn screen - auto respawn
                     print("[*] Respawn screen, respawnando...")
                     self._send(0x0C, ev(0))
+                elif event == 3:
+                    try:
+                        val = struct.unpack(">f", data[1:5])[0]
+                        self.gamemode = int(val)
+                        gm = GAMEMODE_NAMES.get(self.gamemode, f"Unknown({self.gamemode})")
+                        print(f"[GAMEMODE] {self.gamemode} ({gm})")
+                    except Exception:
+                        pass
+
         elif pid == 0x52:
-            # Respawn packet - re-enter world
             print("[*] Respawn recebido")
             self.spawned = False
+
         elif pid == 0x44:
-            # Combat Death - player died
             print("[*] Player morreu!")
-        elif pid == 0x22:
-            # Entity Event (death animation)
-            pass
+
         elif pid == 0x60:
-            # Set Health
-            pass
+            try:
+                health = struct.unpack(">f", data[:4])[0]
+                if health <= 0:
+                    print("[*] Player morreu! (health=0)")
+            except Exception:
+                pass
+
+        elif pid == 0x31:
+            try:
+                if len(data) >= 6:
+                    gm_byte = data[5]
+                    self.gamemode = gm_byte
+                    gm = GAMEMODE_NAMES.get(self.gamemode, f"Unknown({self.gamemode})")
+                    print(f"[GAMEMODE] {self.gamemode} ({gm})")
+            except Exception:
+                pass
+
+    def _stdin_reader(self):
+        while self.running:
+            try:
+                line = sys.stdin.readline()
+                if not line:
+                    break
+                line = line.strip()
+                if not line:
+                    continue
+                if line.startswith("cmd:"):
+                    cmd = line[4:].strip()
+                    self.send_chat_command(cmd)
+                elif line.startswith("gm:"):
+                    mode = line[3:].strip()
+                    self.send_chat_command(f"gamemode {mode}")
+                    # Local update
+                    modes_map = {"survival": 0, "creative": 1, "adventure": 2, "spectator": 3, "0": 0, "1": 1, "2": 2, "3": 3}
+                    if mode.lower() in modes_map:
+                        self.gamemode = modes_map[mode.lower()]
+                        gm = GAMEMODE_NAMES.get(self.gamemode, f"Unknown({self.gamemode})")
+                        print(f"[GAMEMODE] {self.gamemode} ({gm})")
+            except Exception:
+                break
 
     def run(self):
         if not self.connect():
@@ -278,7 +356,12 @@ class Bot:
         self.running = True
         ka_count = 0
         start = time.time()
+        coord_report_interval = 30
+        last_coord_report = time.time()
         print("[*] Bot ativo! Ficando parado no servidor...")
+
+        stdin_thread = threading.Thread(target=self._stdin_reader, daemon=True)
+        stdin_thread.start()
 
         try:
             while self.running:
@@ -298,18 +381,28 @@ class Bot:
                 except Exception:
                     pass
 
+                now = time.time()
+                if self.spawned and (now - last_coord_report) >= coord_report_interval:
+                    last_coord_report = now
+                    gm = GAMEMODE_NAMES.get(self.gamemode, f"GM{self.gamemode}")
+                    print(f"[COORDS] X={self.x:.1f} Y={self.y:.1f} Z={self.z:.1f}")
+                    print(f"[GAMEMODE] {self.gamemode} ({gm})")
+                    print(f"[CHATMODE] {self.chat_mode}")
+
                 time.sleep(0.2)
 
         except KeyboardInterrupt:
             print("\n[*] Bot encerrado.")
         finally:
             self.running = False
-            self.sock.close()
+            try:
+                self.sock.close()
+            except Exception:
+                pass
             print("[*] Desconectado.")
 
 
 if __name__ == "__main__":
-    import sys
     h = sys.argv[1] if len(sys.argv) > 1 else "3ww123.play.hosting"
     p = int(sys.argv[2]) if len(sys.argv) > 2 else 25565
     u = sys.argv[3] if len(sys.argv) > 3 else "Ph4nt0m"

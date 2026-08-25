@@ -1,22 +1,43 @@
 try{ require('dotenv').config(); }catch{}
-const { Client, GatewayIntentBits, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, REST, Routes, SlashCommandBuilder, PermissionFlagsBits, AttachmentBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, StringSelectMenuBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, ChannelType, PermissionFlagsBits, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, REST, Routes, SlashCommandBuilder, AttachmentBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, StringSelectMenuBuilder } = require('discord.js');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
-const https = require('https');
+const net = require('net');
+const WhatsAppManager = require('./whatsapp_manager');
 
-// ============ CONFIG (via .env — nunca hardcode token!) ============
+// ============ CONFIG ============
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const CHANNEL_ID = process.env.CHANNEL_ID || "1540883450708623370";
 const OWNER_ID = process.env.OWNER_ID || "1390600304214544525";
-if(!DISCORD_TOKEN){ console.error("❌ Faltando DISCORD_TOKEN no .env / Environment Variables do Render!"); console.error("Crie .env com DISCORD_TOKEN=seu_token ou configure no Render → Environment"); process.exit(1); }
+if(!DISCORD_TOKEN){
+    console.error("❌ Faltando DISCORD_TOKEN no .env!");
+    process.exit(1);
+}
 
 let MC_HOST = "3ww123.play.hosting";
 let MC_PORT = 25565;
 let MC_USER = "Ph4nt0m";
 let MC_VERSION = "26.2 (776)";
 
-// ============ STATE ============
+// ============ PYTHON SPAWN HELPER ============
+const PYTHON_CANDIDATES = ["python3", "python", "py"];
+function getPythonExe() {
+    for (const exe of PYTHON_CANDIDATES) {
+        try {
+            const result = require('child_process').spawnSync(exe, ["--version"], { timeout: 3000, encoding: "utf8" });
+            if (result.status === 0 || (result.output && result.output.join("").includes("Python"))) {
+                console.log(`[PY] Usando '${exe}' (${(result.stdout||result.stderr||"").trim()})`);
+                return exe;
+            }
+        } catch {}
+    }
+    console.warn("[PY] Fallback para 'python'");
+    return "python";
+}
+const PYTHON_EXE = getPythonExe();
+
+// ============ STATE DO BOT AFK ============
 let mcProcess = null;
 let mcState = "desligado"; // desligado, conectando, online, caido
 let mcStartTime = null;
@@ -26,19 +47,46 @@ let mcInfo = {
     ping: "?",
     motivo: "",
     tentativas: 0,
-    kaCount: 0
+    kaCount: 0,
+    gamemode: "?",
+    chatmode: "?"
 };
-let autoReconnect = false; // DESLIGADO conforme pedido
+let autoReconnect = true;
 let shuttingDown = false;
-let liveMessage = null; // mensagem que sera editada com uptime
+let liveMessage = null;
 let liveInterval = null;
-let sessionLogs = []; // logs da sessao atual
-let allLogs = []; // historico de sessoes — PERSISTIDO em logs/index.json
+let sessionLogs = [];
+let allLogs = [];
 let sessionStartStr = "";
-let botInitTime = Date.now(); // quando o bot do discord iniciou — para "server on há"
-let runningBotId = null; // ID do bot que está rodando no MC (legado, agora multi)
-let botInstances = new Map(); // id -> { process, state, info, liveMessage, liveInterval, startTime, botConfig }
+let botInitTime = Date.now();
+let runningBotId = null;
 const LOG_INDEX = path.join(__dirname, "logs", "index.json");
+
+// ============ STATE DO SERVIDOR MINECRAFT (SLP) ============
+let serverState = {
+    online: false,
+    firstOnlineTime: null,
+    lastOnlineTime: null,
+    lastOfflineTime: null,
+    ping: -1,
+    version: "26.2",
+    players: { online: 0, max: 20, list: [] },
+    motd: "A Minecraft Server"
+};
+let serverStatusMessage = null;
+let previousPlayerList = new Set();
+
+// Canais dedicados de log e monitoramento
+let serverStatusChannel = null;
+let serverChatChannel = null;
+let logsHtmlChannel = null;
+let eventsChannel = null;
+let alertsChannel = null;
+let whatsappControlChannel = null;
+let whatsappLogsChannel = null;
+
+let whatsappControlMessage = null;
+
 function loadLogs() {
     try {
         const dir = path.join(__dirname, "logs");
@@ -47,27 +95,22 @@ function loadLogs() {
             const data = JSON.parse(fs.readFileSync(LOG_INDEX, "utf8"));
             if (Array.isArray(data)) allLogs = data;
         }
-        // Recupera HTMLs órfãos que não estão no index
         const files = fs.readdirSync(dir).filter(f=>f.endsWith(".html")).sort().reverse();
         for (const fname of files) {
             if (!allLogs.find(l=>l.fname===fname)) {
                 const fpath = path.join(dir, fname);
                 const stat = fs.statSync(fpath);
-                // Tenta extrair tent e tipo do nome ou deixa ?
                 allLogs.push({ fname, fpath, time: stat.mtime.toISOString(), reason: "Recuperado de disco", type: "desconectado", uptime: "?", ka: "?", tent: "?" });
             }
         }
-        // Ordena por data decrescente
         allLogs.sort((a,b)=> new Date(b.time) - new Date(a.time));
-        if (allLogs.length>100) allLogs = allLogs.slice(0,100);
-        // Restaura tentativas para não perder contagem
+        if (allLogs.length > 100) allLogs = allLogs.slice(0, 100);
         const maxTent = Math.max(0, ...allLogs.map(l=>parseInt(l.tent)||0));
         if (maxTent > mcInfo.tentativas) mcInfo.tentativas = maxTent;
-        console.log(`[LOG] Carregados ${allLogs.length} logs persistidos (tentativas=${mcInfo.tentativas})`);
-        // Salva index para persistir órfãos recuperados
         if (fs.readdirSync(dir).filter(f=>f.endsWith(".html")).length !== allLogs.filter(l=>fs.existsSync(l.fpath)).length || !fs.existsSync(LOG_INDEX)) saveLogs();
     } catch(e){ console.error("Erro loadLogs:", e.message); }
 }
+
 function saveLogs() {
     try {
         const dir = path.join(__dirname, "logs");
@@ -76,9 +119,9 @@ function saveLogs() {
     } catch(e){ console.error("Erro saveLogs:", e.message); }
 }
 
-loadLogs(); // carrega logs persistidos do disco
+loadLogs();
 
-// ============ BOTS MANAGER (multi-bot) ============
+// ============ BOTS CONFIG ============
 const BOTS_FILE = path.join(__dirname, "bots.json");
 let bots = [];
 function loadBots(){
@@ -91,7 +134,7 @@ function loadBots(){
     }
 }
 function saveBots(){ try{ fs.writeFileSync(BOTS_FILE, JSON.stringify(bots,null,2), "utf8"); }catch(e){ console.error("saveBots",e.message); } }
-function getSelectedBot(){ return bots[0] || null; } // por enquanto o primário é o Ph4nt0m
+function getSelectedBot(){ return bots[0] || null; }
 function syncPrimary(){
     const p = bots[0];
     if(p){ MC_HOST = p.host; MC_PORT = p.port; MC_USER = p.user; MC_VERSION = p.version; }
@@ -99,179 +142,114 @@ function syncPrimary(){
 loadBots();
 syncPrimary();
 
-function botsEmbed(){
-    const total = bots.length;
-    const online = mcState==="online" ? 1 : 0;
-    const e = new EmbedBuilder()
-        .setColor(0x5865F2)
-        .setTitle("🤖 Gerenciador de Bots — Ph4nt0m")
-        .setDescription(
-            `**Gerencie todos os seus bots aqui!**\n`+
-            `> Total: \`${total}\` • Online: \`${online}\` • Offline: \`${total-online}\`\n`+
-            `> Auto-Reconnect: \`${autoReconnect?"ON":"OFF"}\` • Monitorando há \`${getBotUptime()}\`\n\n`+
-            `**Como usar:**\n`+
-            `> ➕ **Criar Bot** — cria novo bot com IP/nome custom\n`+
-            `> ⚙️ **Configurar IP** — altera host/porta do bot selecionado\n`+
-            `> 📝 **Renomear** — muda nick do bot\n`+
-            `> 🗑️ **Deletar** — remove bot\n`+
-            `> ▶️ **Iniciar/Parar** — conecta/desconecta o bot\n`
-        )
-        .setThumbnail("https://mc-heads.net/avatar/Ph4nt0m/100")
-        .setTimestamp()
-        .setFooter({ text: `Ph4nt0m Manager • ${total} bots • Use os botões abaixo` });
-    bots.forEach((b,i)=>{
-        const inst = botInstances.get(b.id);
-        const isMultiRunning = !!inst;
-        const isSingleRunning = b.id === runningBotId && mcState==="online";
-        const isRunning = isMultiRunning || isSingleRunning;
-        const isPrimary = i===0;
-        let status = "⚫ OFFLINE";
-        if(inst){
-            if(inst.state==="online") status = "🟢 ONLINE (RODANDO)";
-            else if(inst.state==="conectando") status = "🟡 CONECTANDO";
-            else if(inst.state==="caido") status = "🔴 CAÍDO";
-        } else if(isSingleRunning) status = "🟢 ONLINE (RODANDO)";
-        else if(isPrimary && mcState==="conectando") status = "🟡 CONECTANDO";
-        else if(isPrimary && mcState==="caido") status = "🔴 CAÍDO";
-        else if(isPrimary) status = "⭐ SELECIONADO";
-        const ka = inst ? inst.info.kaCount : (isSingleRunning? mcInfo.kaCount : 0);
-        const up = inst && inst.startTime ? `${Math.floor((Date.now()-inst.startTime)/1000)}s` : isSingleRunning? getUptime() : "—";
-        e.addFields({ name: `${isRunning?"🟢":isPrimary?"⭐":"🤖"} Bot #${i+1} — ${b.name} ${isRunning?"(RODANDO)":isPrimary?"(SELECIONADO)":""}`, value: `> **ID:** \`${b.id}\`\n> **IP:** \`${b.host}:${b.port}\` • **Nick:** \`${b.user}\`\n> **Versão:** \`${b.version}\` • **Status:** ${status} • KA \`${ka}\` • Uptime \`${up}\`\n> **Criado:** <t:${Math.floor(new Date(b.createdAt).getTime()/1000)}:R>`, inline:false });
-    });
-    if(total===0) e.addFields({ name:"Nenhum bot", value: "Clique em ➕ Criar Bot para começar", inline:false });
-    return e;
-}
-function botsRows(){
-    const row1 = new ActionRowBuilder().addComponents(
-        new ButtonBuilder().setCustomId("btn_bot_create").setLabel("➕ Criar Bot").setStyle(ButtonStyle.Success),
-        new ButtonBuilder().setCustomId("btn_bot_config_ip").setLabel("⚙️ Configurar IP").setStyle(ButtonStyle.Primary),
-        new ButtonBuilder().setCustomId("btn_bot_rename").setLabel("📝 Renomear").setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId("btn_bot_delete").setLabel("🗑️ Deletar").setStyle(ButtonStyle.Danger),
-    );
-    const row2 = new ActionRowBuilder().addComponents(
-        new ButtonBuilder().setCustomId("btn_bot_start").setLabel("▶️ Iniciar Bot").setStyle(ButtonStyle.Success),
-        new ButtonBuilder().setCustomId("btn_bot_stop").setLabel("⏹️ Parar Bot").setStyle(ButtonStyle.Danger),
-        new ButtonBuilder().setCustomId("btn_bot_refresh").setLabel("🔄 Atualizar").setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId("btn_randomize").setLabel("❓ ?").setStyle(ButtonStyle.Secondary),
-    );
-    // Select menu para escolher bot quando houver vários
-    let rows = [row1, row2];
-    if(bots.length>1){
-        const select = new StringSelectMenuBuilder().setCustomId("select_bot").setPlaceholder("Selecione o bot para configurar").addOptions(bots.slice(0,25).map((b,i)=>({ label: `${b.name} (${b.host}:${b.port})`, value: b.id, description: `ID ${b.id} • ${b.user}`, default: i===0 })));
-        rows.push(new ActionRowBuilder().addComponents(select));
+// ============ PROTOCOLO MINECRAFT SERVER LIST PING (SLP) ============
+function writeVarInt(val) {
+    const bytes = [];
+    while (true) {
+        let b = val & 0x7F;
+        val >>>= 7;
+        if (val !== 0) b |= 0x80;
+        bytes.push(b);
+        if (val === 0) break;
     }
-    return rows;
+    return Buffer.from(bytes);
 }
 
-// ============ MULTI-BOT SUPPORT ============
-function startBotMulti(botId){
-    const botCfg = bots.find(b=>b.id===botId) || getSelectedBot();
-    if(!botCfg) return;
-    if(botInstances.has(botCfg.id) && botInstances.get(botCfg.id).process){
-        console.log(`[MC-MULTI] Bot ${botCfg.name} já está rodando`);
-        return;
+function readVarInt(buf, offset = 0) {
+    let result = 0;
+    let shift = 0;
+    let cursor = offset;
+    while (cursor < buf.length) {
+        const b = buf[cursor++];
+        result |= (b & 0x7F) << shift;
+        if (!(b & 0x80)) return { value: result, offset: cursor };
+        shift += 7;
     }
-    console.log(`[MC-MULTI] Iniciando bot ${botCfg.name} (${botCfg.host}:${botCfg.port}) em paralelo — total ${botInstances.size+1} bots`);
-    // Reusa startMC logic mas sem matar outros — cria instancia separada
-    const instance = {
-        process: null,
-        state: "conectando",
-        info: { coords:"Desconhecido", kaCount:0, motivo:"", tentativas: (botInstances.get(botCfg.id)?.info.tentativas||0)+1 },
-        liveMessage: null,
-        liveInterval: null,
-        startTime: Date.now(),
-        botConfig: botCfg
-    };
-    botInstances.set(botCfg.id, instance);
-    // Spawn processo
-    const botPath = path.join(__dirname, "bot.py");
-    const proc = spawn("py", [botPath, botCfg.host, String(botCfg.port), botCfg.user], { cwd: __dirname });
-    instance.process = proc;
-    instance.state = "conectando";
-    let buffer = "";
-    proc.stdout.on("data", (data)=>{
-        const text = data.toString();
-        buffer += text;
-        text.split("\n").forEach(raw=>{
-            const line = raw.trim(); if(!line) return;
-            console.log(`[MC:${botCfg.name}] ${line}`);
-            addLog("info", `[${botCfg.name}] ${line.slice(0,180)}`, `Bot ${botCfg.id}`);
-            if(line.includes("[+] PLAY STATE!") || line.includes("PLAY STATE")){
-                instance.state = "online";
-                instance.startTime = Date.now();
-                addLog("play", `[${botCfg.name}] Entrou no servidor`, `IP ${botCfg.host}:${botCfg.port}`);
-                sendToChannel({ content:`${mentionOwner()} @everyone`, embeds:[new EmbedBuilder().setColor(0x2ecc71).setTitle(`✅ ${botCfg.name} Conectado!`).setDescription(`Bot **${botCfg.name}** (\`${botCfg.user}\`) entrou em \`${botCfg.host}:${botCfg.port}\``).setThumbnail("https://mc-heads.net/avatar/"+botCfg.user+"/100").setTimestamp().setFooter({text:`${botCfg.name} • Online`})], allowedMentions:{parse:["everyone"],users:[OWNER_ID]}}).then(msg=>{
-                    if(msg){ instance.liveMessage = msg;
-                        if(instance.liveInterval) clearInterval(instance.liveInterval);
-                        instance.liveInterval = setInterval(async()=>{
-                            if(instance.state!=="online" || !instance.liveMessage) return;
-                            try{
-                                const uptime = Math.floor((Date.now()-instance.startTime)/1000);
-                                const h=Math.floor(uptime/3600), m=Math.floor((uptime%3600)/60), s=uptime%60;
-                                const upStr = h>0? `${h}h ${m}m ${s}s` : m>0? `${m}m ${s}s` : `${s}s`;
-                                await instance.liveMessage.edit({ content:`${mentionOwner()} @everyone`, embeds:[new EmbedBuilder().setColor(0x2ecc71).setTitle(`✅ ${botCfg.name} — Online`).setDescription(`Atualizado <t:${Math.floor(Date.now()/1000)}:R> • Uptime \`${upStr}\` • KA \`${instance.info.kaCount}\``).setThumbnail("https://mc-heads.net/avatar/"+botCfg.user+"/100").addFields({name:"IP",value:`\`${botCfg.host}:${botCfg.port}\``,inline:true},{name:"Nick",value:`\`${botCfg.user}\``,inline:true},{name:"Uptime",value:`\`${upStr}\``,inline:true}).setTimestamp().setFooter({text:`${botCfg.name} • Online`})], components: fallenRow(), allowedMentions:{parse:["everyone"],users:[OWNER_ID]}});
-                            }catch{}
-                        },1000);
-                    }
-                });
-            } else if(line.includes("[KA #")){
-                const m=line.match(/\[KA #(\d+)\]/); if(m) instance.info.kaCount=parseInt(m[1]);
-            } else if(line.includes("[!] Kick")){
-                instance.info.motivo=line; instance.state="caido";
-                addLog("kick", `[${botCfg.name}] ${line.slice(0,200)}`, `Uptime ${Math.floor((Date.now()-instance.startTime)/1000)}s`);
-                const embed = disconnectedEmbed(`[${botCfg.name}] ${line}`, line.toLowerCase().includes("ban")?"banido":"kickado");
-                if(instance.liveMessage) instance.liveMessage.edit({ content:`${mentionOwner()} @everyone`, embeds:[embed], components: fallenRow(), allowedMentions:{parse:["everyone"],users:[OWNER_ID]}}).catch(()=> sendToChannel({content:`${mentionOwner()} @everyone`, embeds:[embed], components: fallenRow(), allowedMentions:{parse:["everyone"],users:[OWNER_ID]}}));
+    return null;
+}
+
+function pingMinecraftServer(host, port = 25565, timeout = 4000) {
+    return new Promise((resolve) => {
+        const start = Date.now();
+        const clientSock = new net.Socket();
+        let buffer = Buffer.alloc(0);
+        let resolved = false;
+
+        const timer = setTimeout(() => {
+            if (!resolved) {
+                resolved = true;
+                clientSock.destroy();
+                resolve({ online: false, ping: -1, error: "timeout" });
+            }
+        }, timeout);
+
+        clientSock.connect(port, host, () => {
+            const hostBuf = Buffer.from(host, 'utf8');
+            const portBuf = Buffer.alloc(2);
+            portBuf.writeUInt16BE(port);
+
+            const handPayload = Buffer.concat([
+                writeVarInt(0x00),
+                writeVarInt(776),
+                writeVarInt(hostBuf.length),
+                hostBuf,
+                portBuf,
+                writeVarInt(1)
+            ]);
+            clientSock.write(Buffer.concat([writeVarInt(handPayload.length), handPayload]));
+
+            const reqPayload = writeVarInt(0x00);
+            clientSock.write(Buffer.concat([writeVarInt(reqPayload.length), reqPayload]));
+        });
+
+        clientSock.on('data', (data) => {
+            buffer = Buffer.concat([buffer, data]);
+            try {
+                const pktLen = readVarInt(buffer, 0);
+                if (!pktLen) return;
+                if (buffer.length < pktLen.offset + pktLen.value) return;
+
+                const pktId = readVarInt(buffer, pktLen.offset);
+                if (!pktId) return;
+
+                const strLen = readVarInt(buffer, pktId.offset);
+                if (!strLen) return;
+
+                const jsonStr = buffer.slice(strLen.offset, strLen.offset + strLen.value).toString('utf8');
+                const ping = Date.now() - start;
+                resolved = true;
+                clearTimeout(timer);
+                clientSock.destroy();
+
+                try {
+                    const parsed = JSON.parse(jsonStr);
+                    resolve({
+                        online: true,
+                        ping,
+                        version: parsed.version?.name || "26.2",
+                        players: {
+                            online: parsed.players?.online || 0,
+                            max: parsed.players?.max || 20,
+                            list: (parsed.players?.sample || []).map(p => p.name)
+                        },
+                        motd: typeof parsed.description === 'string' ? parsed.description : (parsed.description?.text || "A Minecraft Server"),
+                        raw: parsed
+                    });
+                } catch {
+                    resolve({ online: true, ping, version: "26.2", players: { online: 0, max: 20, list: [] }, motd: "A Minecraft Server" });
+                }
+            } catch {}
+        });
+
+        clientSock.on('error', (err) => {
+            if (!resolved) {
+                resolved = true;
+                clearTimeout(timer);
+                resolve({ online: false, ping: -1, error: err.message });
             }
         });
     });
-    proc.stderr.on("data", d=>{ const t=d.toString().trim(); if(t) console.error(`[MC:${botCfg.name}-ERR] ${t}`); });
-    proc.on("close", (code)=>{
-        console.log(`[MC-MULTI] Bot ${botCfg.name} finalizado code=${code} state=${instance.state}`);
-        if(instance.liveInterval) clearInterval(instance.liveInterval);
-        const uptime = instance.startTime ? `${Math.floor((Date.now()-instance.startTime)/1000)}s` : "?";
-        let sendType="desconectado";
-        if(!instance.info.motivo) instance.info.motivo=`Desconectado após ${uptime} (code ${code})`;
-        if(instance.info.motivo.toLowerCase().includes("ban")) sendType="banido";
-        addLog(sendType, `[${botCfg.name}] ${instance.info.motivo.slice(0,200)}`, `Uptime ${uptime}`);
-        const htmlPath = generateHTMLLog(`[${botCfg.name}] ${instance.info.motivo}`, sendType);
-        const embed = disconnectedEmbed(`[${botCfg.name}] ${instance.info.motivo}`, sendType);
-        if(instance.liveMessage){
-            instance.liveMessage.edit({ content:`${mentionOwner()} @everyone`, embeds:[embed], components: fallenRow(), allowedMentions:{parse:["everyone"],users:[OWNER_ID]}}).catch(()=> sendToChannel({content:`${mentionOwner()} @everyone`, embeds:[embed], components: fallenRow(), allowedMentions:{parse:["everyone"],users:[OWNER_ID]}}));
-        } else {
-            sendToChannel({ content:`${mentionOwner()} @everyone`, embeds:[embed], components: fallenRow(), allowedMentions:{parse:["everyone"],users:[OWNER_ID]}});
-        }
-        botInstances.delete(botCfg.id);
-        if(autoReconnect && !shuttingDown){
-            console.log(`[MC-MULTI] Auto-reconnect para ${botCfg.name} em 5s...`);
-            setTimeout(()=> startBotMulti(botCfg.id), 5000);
-        }
-    });
-    proc.on("error", err=>{
-        console.error(`[MC-MULTI] Erro bot ${botCfg.name}:`, err.message);
-        instance.state="caido"; instance.info.motivo=`Erro: ${err.message}`;
-        sendToChannel({ content:`${mentionOwner()} @everyone`, embeds:[disconnectedEmbed(`[${botCfg.name}] ${err.message}`,"erro")], components: fallenRow(), allowedMentions:{parse:["everyone"],users:[OWNER_ID]}});
-        botInstances.delete(botCfg.id);
-    });
 }
-function stopBotMulti(botId){
-    const inst = botInstances.get(botId);
-    if(inst){
-        if(inst.liveInterval) clearInterval(inst.liveInterval);
-        try{ inst.process.kill(); }catch{}
-        botInstances.delete(botId);
-        return true;
-    }
-    // fallback para bot legado single
-    if(botId===getSelectedBot()?.id && mcProcess){
-        killMC(); return true;
-    }
-    return false;
-}
-
-// ============ DISCORD CLIENT ============
-const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]
-});
 
 // ============ HELPERS ============
 function mentionOwner() { return `<@${OWNER_ID}>`; }
@@ -286,6 +264,18 @@ function getUptime() {
     if (m > 0) return `${m}m ${sec}s`;
     return `${sec}s`;
 }
+
+function getServerUptime() {
+    if (!serverState.firstOnlineTime) return "—";
+    const s = Math.floor((Date.now() - serverState.firstOnlineTime) / 1000);
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    if (h > 0) return `${h}h ${m}m ${sec}s`;
+    if (m > 0) return `${m}m ${sec}s`;
+    return `${sec}s`;
+}
+
 function getBotUptime() {
     const s = Math.floor((Date.now() - botInitTime) / 1000);
     const h = Math.floor(s / 3600);
@@ -296,128 +286,20 @@ function getBotUptime() {
     return `${sec}s`;
 }
 
-function colorForState(state) {
-    if (state === "online") return 0x2ecc71;
-    if (state === "conectando") return 0xf1c40f;
-    if (state === "caido") return 0xe74c3c;
-    return 0x95a5a6;
-}
-
-function emojiForState(state) {
-    if (state === "online") return "🟢";
-    if (state === "conectando") return "🟡";
-    if (state === "caido") return "🔴";
-    return "⚫";
-}
-
-// ============ RANDOMIZE PROFILE (? botao) — nunca repete — FIXADO PRA FUNCIONAR TUDO ============
-const usedProfiles = new Set();
-const ADJS = ["Sombrio","Lunar","Solar","Fantasma","Neon","Cyber","Mistico","Abissal","Estelar","Vortex","Nether","Ender","Crimson","Obsidian","Emerald","Diamond","Shadow","Frost","Blazing","Toxic","Quantum","Nova","Apex","Omega","Alpha","Delta","Sigma","Titan","Specter","Phantom","Giga","Mega","Ultra","Hyper","Psycho","Crazy","Insano","Brabo","Zika","Lendario","Mitico","Divino","Supremo","Caotico","Anarquico","Rebelde","Selvagem","Feroz","Voraz","Sanguinario","Maldito","Amaldicoado","Bendito","Sagrado","Profano"];
-const NOUNS = ["Blade","Wraith","Specter","Reaper","Hunter","Guardian","Seeker","Voyager","Rider","Walker","Slayer","Keeper","Breaker","Weaver","Stalker","Drifter","Nomad","Titan","Prime","Core","Pulse","Echo","Nexus","Abyss","Void","Storm","Flame","Frost","Venom","Havoc","Destroyer","Annihilator","Overlord","Emperor","King","God","Demon","Angel","Beast","Monster","Machine","Cyborg","Android","Mutant","Freak","Psycho","Maniac","Lunatic","Berserker","Warlord","Champion","Legend","Myth","Saga","Epos","Chronos","Nebula","Quasar","Pulsar"];
-const BIOS = [
-    "Caçador de Phantoms nas noites sem lua 🌙", "Guardião do servidor 24/7 — nunca dorme 😴❌", "Viajante interdimensional do Nether 👾🔥",
-    "Sombra que protege o spawn com a vida", "Eco do End — ouvindo o vazio há milênios", "Lenda viva do 3ww123.play.hosting — respeita!",
-    "Forjado em obsidian e redstone no limite do mundo", "Assombração amigável que dá bom dia no chat", "Vigia noturno — anti-AFK supremo, nunca cai",
-    "Entidade quântica em forma de bot — bug da matrix", "Fragmento de alma do Ender Dragon domesticado 🐉", "Protocolo 776 encarnado — sou a atualização",
-    "Sussurro do chat global que ninguém cala", "Sentinela de chunks infinitos — carrego o mundo nas costas", "Mestre do keepalive eterno — meu ping é -1",
-    "Nômade do overworld sem casa, sem rumo", "Guardião da criatividade — modo criativo é meu habitat", "Signo de pureza — nunca morro, só respawno",
-    "Nunca offline, sempre vigilante 👁️ 24/7", "Randomizado pelo caos — único no universo, nunca repete",
-    "Comi 64 pães de uma vez e não morri 🍞", "Fiz parkour no teto do Nether e sobrevivi", "Já vi o Herobrine e ele me deu autógrafo",
-    "Meu skin é tão feia que o Creeper tem medo de mim 💥", "Dormi no Nether e acordei no End — como?", "Tentei domar um Ghast e ele me adotou",
-    "Sou o motivo do lag — com orgulho", "Minha picareta é de diamante mas meu coração é de terra", "Já morri 100x pra Phantom e voltei 101x 💀",
-    "Rei do PvP com 2 FPS", "Lenda do servidor que ninguém conhece mas todos respeitam", "Bot mais brabo que player pro — chama no x1",
-    "Viciado em redstone e café ☕", "Construí uma casa de terra e chamei de mansão", "Meu inventário é só batata e esperança 🥔",
-    "Fui banido do céu por ser bom demais", "Anjo caído que virou bot — história triste", "Demônio que largou o capeta pra jogar Minecraft",
-    "Cyborg com coração de redstone pulsante", "Mutante radioativo do bioma radioativo ☢️", "Psicopata que ama ovelha rosa 🐑💗"
-];
-const AVATAR_BASES = [
-    "https://mc-heads.net/avatar/", // PNG OK
-    "https://api.dicebear.com/7.x/bottts/png?seed=", // PNG fix (era SVG que quebrava!)
-    "https://api.dicebear.com/7.x/pixel-art/png?seed=",
-    "https://api.dicebear.com/7.x/thumbs/png?seed=",
-    "https://robohash.org/", // PNG
-    "https://i.pravatar.cc/512?u=", // JPG
-    "https://picsum.photos/seed/", // JPG
-];
-function randomName(){
-    let n; let tries=0;
-    do{ n = `${ADJS[Math.floor(Math.random()*ADJS.length)]}${NOUNS[Math.floor(Math.random()*NOUNS.length)]}_${Math.random().toString(36).slice(2,6).toUpperCase()}${Math.floor(Math.random()*99)}`; tries++; if(tries>100) break; }while(usedProfiles.has("name:"+n));
-    return n;
-}
-function randomBio(){
-    const b = BIOS[Math.floor(Math.random()*BIOS.length)] + ` • #${Math.random().toString(36).slice(2,7)}`;
-    return b;
-}
-function randomAvatarUrl(name){
-    const r = Math.random();
-    if(r<0.30) return `https://mc-heads.net/avatar/${encodeURIComponent(name)}/512`;
-    if(r<0.50) return `https://api.dicebear.com/7.x/bottts/png?seed=${encodeURIComponent(name+Math.random().toString(36).slice(2,8))}&backgroundColor=${["5865F2","57F287","FEE75C","EB459E","9b59b6","2ecc71"][Math.floor(Math.random()*6)]}`;
-    if(r<0.65) return `https://robohash.org/${encodeURIComponent(name+Math.random().toString(36).slice(2,8))}.png?set=set1&bgset=bg1`;
-    if(r<0.80) return `https://i.pravatar.cc/512?u=${encodeURIComponent(name+Date.now())}`;
-    return `https://picsum.photos/seed/${encodeURIComponent(name+Math.random().toString(36).slice(2,8))}/512/512`;
-}
-async function fetchAvatarBuffer(url){
-    return new Promise((resolve,reject)=>{
-        const lib = url.startsWith("https") ? https : require('http');
-        const req = lib.get(url, { headers: { "User-Agent":"Ph4nt0mBot/2.0" } }, res=>{
-            if(res.statusCode>=300 && res.statusCode<400 && res.headers.location){
-                // redirect
-                fetchAvatarBuffer(res.headers.location).then(resolve).catch(reject);
-                return;
-            }
-            if(res.statusCode!==200) return reject(new Error(`HTTP ${res.statusCode}`));
-            const chunks=[]; res.on('data',c=>chunks.push(c)); res.on('end',()=> resolve(Buffer.concat(chunks)));
-        });
-        req.on('error',reject);
-        req.setTimeout(8000, ()=>{ req.destroy(); reject(new Error("timeout")); });
-    });
-}
-function randomDescription(){
-    const descs = [
-        `Bot randomizado em ${new Date().toLocaleString('pt-BR')} — único e irrepetível. Seed: ${Math.random().toString(36).slice(2,10)}`,
-        `Entidade ${Math.random().toString(36).slice(2,8).toUpperCase()} — forjada no caos quântico. Nunca vista antes.`,
-        `Assinatura #${Date.now().toString(36).toUpperCase()} — DNA digital único.`,
-        `Mutante do protocolo 776 — hash ${Math.random().toString(16).slice(2,10).toUpperCase()}`,
-    ];
-    return descs[Math.floor(Math.random()*descs.length)];
-}
-function generateUniqueProfile(){
-    let tries=0;
-    while(tries<200){
-        const name = randomName();
-        const bio = randomBio();
-        const desc = randomDescription();
-        const avatar = randomAvatarUrl(name);
-        const key = `${name}|${bio}|${desc}|${avatar}`;
-        if(!usedProfiles.has(key)){
-            usedProfiles.add(key);
-            // persiste pra nunca repetir mesmo após reiniciar
-            try{
-                const pFile = path.join(__dirname, "logs", "used_profiles.json");
-                let arr=[]; if(fs.existsSync(pFile)) try{arr=JSON.parse(fs.readFileSync(pFile,"utf8"))}catch{}
-                arr.push(key); if(arr.length>5000) arr=arr.slice(-5000);
-                fs.writeFileSync(pFile, JSON.stringify(arr,null,2));
-                arr.forEach(k=> usedProfiles.add(k));
-            }catch{}
-            return { name, bio, desc, avatar, key };
-        }
-        tries++;
-    }
-    // fallback
-    return { name: `Ph4nt0m_${Date.now().toString(36).slice(-4).toUpperCase()}`, bio: randomBio(), desc: randomDescription(), avatar: `https://mc-heads.net/avatar/Ph4nt0m_${Math.random().toString(36).slice(2,6)}/512`, key: Date.now().toString() };
-}
-// Carrega perfis já usados do disco
-try{
-    const pFile = path.join(__dirname, "logs", "used_profiles.json");
-    if(fs.existsSync(pFile)){ JSON.parse(fs.readFileSync(pFile,"utf8")).forEach(k=> usedProfiles.add(k)); }
-}catch{}
-
-// ============ LOG SYSTEM ============
 function addLog(type, msg, detail="") {
     sessionLogs.push({ time: new Date().toISOString(), ts: Date.now(), type, msg, detail });
-    if (sessionLogs.length > 10000) sessionLogs.shift(); // aumentado de 500 para 10000 — guarda TUDO
+    if (sessionLogs.length > 10000) sessionLogs.shift();
+    
+    if (eventsChannel) {
+        try {
+            const timeStr = new Date().toLocaleTimeString('pt-BR');
+            const icon = { connect:"🔌", keepalive:"💓", play:"🎮", kick:"🥾", ban:"🔨", death:"💀", disconnect:"⚠️", error:"❌", info:"ℹ️", chat:"💬" }[type] || "•";
+            eventsChannel.send(`\`[${timeStr}]\` ${icon} **${type.toUpperCase()}** — ${msg} ${detail ? `| *${detail}*` : ""}`).catch(()=>{});
+        } catch {}
+    }
 }
 function clearSessionLogs() { sessionLogs = []; sessionStartStr = new Date().toLocaleString('pt-BR'); }
+
 function generateHTMLLog(reason, type) {
     try {
         const dir = path.join(__dirname, "logs");
@@ -433,14 +315,14 @@ function generateHTMLLog(reason, type) {
         const coords = mcInfo.coords;
         const typeCounts = {};
         sessionLogs.forEach(l=> typeCounts[l.type] = (typeCounts[l.type]||0)+1);
-        const breakdown = Object.entries(typeCounts).map(([k,v])=> `<span style="display:inline-block;margin:4px 6px;padding:6px 12px;border-radius:20px;background:#1e1e2a;border:1px solid #2a2a3a;font-size:12px;"><b style="color:#fff;">${k.toUpperCase()}</b> <span style="background:${{connect:"#3498db",keepalive:"#2ecc71",play:"#f1c40f",kick:"#e74c3c",ban:"#992d22",death:"#9b59b6",disconnect:"#e67e22",error:"#e74c3c",info:"#95a5a6"}[k]||"#95a5a6"};color:#fff;padding:1px 7px;border-radius:10px;margin-left:6px;">${v}</span></span>`).join("");
+        const breakdown = Object.entries(typeCounts).map(([k,v])=> `<span style="display:inline-block;margin:4px 6px;padding:6px 12px;border-radius:20px;background:#1e1e2a;border:1px solid #2a2a3a;font-size:12px;"><b style="color:#fff;">${k.toUpperCase()}</b> <span style="background:${{connect:"#3498db",keepalive:"#2ecc71",play:"#f1c40f",kick:"#e74c3c",ban:"#992d22",death:"#9b59b6",disconnect:"#e67e22",error:"#e74c3c",info:"#95a5a6",chat:"#5865F2"}[k]||"#95a5a6"};color:#fff;padding:1px 7px;border-radius:10px;margin-left:6px;">${v}</span></span>`).join("");
         const rows = sessionLogs.map((l,i) => {
             const d = new Date(l.ts);
             const t = d.toLocaleTimeString('pt-BR');
             const dt = d.toLocaleDateString('pt-BR');
-            const colors = { connect:"#3498db", keepalive:"#2ecc71", play:"#f1c40f", kick:"#e74c3c", ban:"#992d22", death:"#9b59b6", disconnect:"#e67e22", error:"#e74c3c", info:"#95a5a6" };
+            const colors = { connect:"#3498db", keepalive:"#2ecc71", play:"#f1c40f", kick:"#e74c3c", ban:"#992d22", death:"#9b59b6", disconnect:"#e67e22", error:"#e74c3c", info:"#95a5a6", chat:"#5865F2" };
             const c = colors[l.type] || "#95a5a6";
-            const icon = { connect:"🔌", keepalive:"💓", play:"🎮", kick:"🥾", ban:"🔨", death:"💀", disconnect:"⚠️", error:"❌", info:"ℹ️" }[l.type] || "•";
+            const icon = { connect:"🔌", keepalive:"💓", play:"🎮", kick:"🥾", ban:"🔨", death:"💀", disconnect:"⚠️", error:"❌", info:"ℹ️", chat:"💬" }[l.type] || "•";
             const ago = Math.floor((now - d)/1000); let agoStr = ago<60? `${ago}s atrás` : ago<3600? `${Math.floor(ago/60)}m atrás` : `${Math.floor(ago/3600)}h atrás`;
             return `<tr><td style="color:#888;">${i+1}</td><td><div style="font-weight:600;">${t}</div><div style="font-size:11px;color:#888;">${dt} • ${agoStr}</div></td><td><span style="background:${c};padding:3px 9px;border-radius:20px;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;box-shadow:0 2px 8px ${c}55;">${l.type.toUpperCase()}</span></td><td style="font-weight:500;">${icon} ${escapeHtml(l.msg)}</td><td style="font-size:12px;color:#bbb;max-width:320px;word-break:break-word;">${escapeHtml(l.detail)||'<span style="color:#666;">—</span>'}</td></tr>`;
         }).join("");
@@ -471,7 +353,7 @@ tr:nth-child(even){background:#15151f}tr:nth-child(even):hover{background:#1e1e3
 .kpi{display:inline-flex;align-items:center;gap:6px;background:#1a1a26;border:1px solid #2a2a3a;padding:6px 10px;border-radius:20px;font-size:12px;margin:4px}
 ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#2a2a4a;border-radius:8px}::-webkit-scrollbar-track{background:#0f0f14}
 </style></head><body>
-<div class="header"><h1>🤖 Ph4nt0m — Log Detalhado</h1><p style="font-size:15px;">${escapeHtml(reason||"Sem motivo")} • <span class="badge ${type}">${type.toUpperCase()}</span> • Sessão <b>#${tent}</b></p><p style="font-size:13px;opacity:.9;">Sessão: ${start} → ${end} • Uptime: <b>${uptime}</b> • Total eventos: <b>${sessionLogs.length.toLocaleString('pt-BR')}</b> (TODOS inclusos)</p><p style="font-size:11px;opacity:.7;">Bot iniciado há ${getBotUptime()} • Protocolo ${MC_VERSION} • Gerado ${end}</p></div>
+<div class="header"><h1>🤖 Ph4nt0m — Log Detalhado</h1><p style="font-size:15px;">${escapeHtml(reason||"Sem motivo")} • <span class="badge ${type}">${type.toUpperCase()}</span> • Sessão <b>#${tent}</b></p><p style="font-size:13px;opacity:.9;">Sessão: ${start} → ${end} • Uptime: <b>${uptime}</b> • Total eventos: <b>${sessionLogs.length.toLocaleString('pt-BR')}</b></p></div>
 <div class="stats">
 <div class="card"><h3>🌐 SERVIDOR</h3><p>${MC_HOST}:${MC_PORT}</p></div>
 <div class="card"><h3>👤 NICK</h3><p>${MC_USER}</p></div>
@@ -482,162 +364,905 @@ tr:nth-child(even){background:#15151f}tr:nth-child(even):hover{background:#1e1e3
 <div class="card"><h3>📜 TOTAL EVENTOS</h3><p>${sessionLogs.length.toLocaleString('pt-BR')}</p></div>
 <div class="card"><h3>🕐 MONITORANDO HÁ</h3><p>${getBotUptime()}</p></div>
 </div>
-<div class="summary"><h3>📊 Breakdown por tipo</h3><div>${breakdown || '<span style="color:#888;">Nenhum evento</span>'}</div><div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;"><span class="kpi">📦 Protocolo ${MC_VERSION}</span><span class="kpi">🕐 Iniciado ${start}</span><span class="kpi">🏁 Finalizado ${end}</span><span class="kpi">📄 ${fname}</span></div></div>
-<div class="timeline"><div style="display:flex;justify-content:space-between;align-items:center;"><h2 style="margin:16px 0 8px;">📜 Timeline Completa — ${sessionLogs.length.toLocaleString('pt-BR')} eventos (TODOS)</h2><span style="font-size:12px;color:#888;">Scroll para ver tudo ↓</span></div><div class="table-wrap"><div class="table-scroll"><table><thead><tr><th>#</th><th>Hora</th><th>Tipo</th><th>Evento</th><th>Detalhe Completo</th></tr></thead><tbody>${rows || '<tr><td colspan=5 style="text-align:center;color:#888;padding:24px;">Nenhum evento registrado</td></tr>'}</tbody></table></div></div><p style="text-align:center;color:#666;font-size:11px;margin-top:8px;">Mostrando TODOS os ${sessionLogs.length} logs — sem limite de 500 • Gerado com Ph4nt0m Bot</p></div>
-<div class="footer">Gerado em ${end} • Ph4nt0m Bot • Protocolo ${MC_VERSION} • Monitorando há ${getBotUptime()}<br>Arquivo: ${fname} • <span style="color:#5865F2;">Toda a timeline inclusa — sem cortes</span></div>
+<div class="summary"><h3>📊 Breakdown por tipo</h3><div>${breakdown || '<span style="color:#888;">Nenhum evento</span>'}</div></div>
+<div class="timeline"><h2>📜 Timeline Completa</h2><div class="table-wrap"><div class="table-scroll"><table><thead><tr><th>#</th><th>Hora</th><th>Tipo</th><th>Evento</th><th>Detalhe Completo</th></tr></thead><tbody>${rows || '<tr><td colspan=5 style="text-align:center;color:#888;padding:24px;">Nenhum evento registrado</td></tr>'}</tbody></table></div></div></div>
+<div class="footer">Gerado em ${end} • Ph4nt0m AFK Manager</div>
 </body></html>`;
         fs.writeFileSync(fpath, html, "utf8");
         allLogs.unshift({ fname, fpath, time: now.toISOString(), reason, type, uptime, ka, tent: mcInfo.tentativas });
         if (allLogs.length > 500) allLogs.pop();
         saveLogs();
-        console.log(`[LOG] HTML gerado: ${fpath}`);
+
+        if (logsHtmlChannel) {
+            try {
+                const file = new AttachmentBuilder(fpath);
+                const logEmbed = new EmbedBuilder()
+                    .setColor(type === "kickado" || type === "banido" || type === "erro" ? 0xe74c3c : 0x3498db)
+                    .setTitle(`📄 Novo Relatório de Sessão Gerado — #${tent}`)
+                    .setDescription(
+                        `**A sessão do bot/player foi finalizada no servidor.**\n` +
+                        `> 🌐 **Servidor:** \`${MC_HOST}:${MC_PORT}\` | 👤 **Nick:** \`${MC_USER}\`\n` +
+                        `> ⏱️ **Uptime da Sessão:** \`${uptime}\` | 💓 **KeepAlives:** \`${ka}\`\n` +
+                        `> 📍 **Últimas Coords:** \`${coords}\`\n` +
+                        `> ⚠️ **Motivo:** \`${(reason||"Encerramento de sessão").slice(0, 200)}\`\n\n` +
+                        `*O arquivo HTML com a timeline completa e interativa de eventos foi anexado abaixo:*`
+                    )
+                    .setTimestamp()
+                    .setFooter({ text: `Ph4nt0m Logs • Arquivo: ${fname}` });
+                
+                logsHtmlChannel.send({ embeds: [logEmbed], files: [file] }).catch(err => console.error("Erro ao enviar HTML no canal:", err.message));
+            } catch (err) {
+                console.error("Erro no anexo de log:", err.message);
+            }
+        }
+
         return fpath;
     } catch(e){ console.error("Erro ao gerar HTML:", e.message); return null; }
 }
 function escapeHtml(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
-// ============ EMBEDS ============
-function menuEmbed() {
-    const totalBots = bots.length;
-    const running = botInstances.size + (mcState==="online"?1:0);
+// ============ GERENCIADOR DO WHATSAPP ============
+const whatsappManager = new WhatsAppManager({
+    onQR: async (qrBuffer) => {
+        console.log("[WA] Novo QR Code gerado para autenticação.");
+        if (whatsappControlChannel) {
+            await updateWhatsAppControlPanel(qrBuffer);
+        }
+    },
+    onPairingCode: async (code) => {
+        console.log(`[WA] Pairing code: ${code}`);
+        if (whatsappControlChannel) {
+            await updateWhatsAppControlPanel(null, code);
+        }
+    },
+    onStatusChange: async (state, userNumber) => {
+        console.log(`[WA] Status alterado para: ${state} (Número: ${userNumber || '—'})`);
+        if (whatsappControlChannel) {
+            await updateWhatsAppControlPanel();
+        }
+        if (whatsappLogsChannel) {
+            whatsappLogsChannel.send(`ℹ️ **[STATUS WHATSAPP]** Estado atual: \`${state.toUpperCase()}\` ${userNumber ? `(Número: +${userNumber})` : ""}`).catch(()=>{});
+        }
+    },
+    onAdminRequest: async (req) => {
+        if (whatsappControlChannel) {
+            const embed = new EmbedBuilder()
+                .setColor(0xf1c40f)
+                .setTitle("📱 Solicitação de Vinculação de Administrador — WhatsApp")
+                .setDescription(
+                    `**Um novo número enviou mensagem para o bot no WhatsApp e deseja se tornar Administrador!**\n\n` +
+                    `> 👤 **Nome do Contato:** \`${req.name}\`\n` +
+                    `> 📱 **Número:** \`+${req.number}\`\n` +
+                    `> 💬 **Mensagem enviada:** "${req.text}"\n` +
+                    `> ⏰ **Horário:** <t:${Math.floor(req.timestamp/1000)}:T>\n\n` +
+                    `*Ao confirmar, este número terá acesso total a todos os comandos numéricos de controle do Minecraft pelo WhatsApp!*`
+                )
+                .setTimestamp();
+
+            const row = new ActionRowBuilder().addComponents(
+                new ButtonBuilder().setCustomId("btn_wa_confirm_admin").setLabel(`✅ Confirmar +${req.number}`).setStyle(ButtonStyle.Success),
+                new ButtonBuilder().setCustomId("btn_wa_reject_admin").setLabel("❌ Recusar").setStyle(ButtonStyle.Danger)
+            );
+
+            whatsappControlChannel.send({ content: `${mentionOwner()}`, embeds: [embed], components: [row] });
+        }
+    },
+    onGetMenuEmbed: async () => {
+        const total = bots.length;
+        const isOnline = mcState === "online";
+        const statusGlobal = isOnline ? "🟢 1 Bot Ativo" : mcState === "conectando" ? "🟡 Conectando..." : "⚫ Todos Offline";
+        const sel = getSelectedBot() || { name: "Ph4nt0m", host: MC_HOST, port: MC_PORT, user: MC_USER, version: MC_VERSION };
+
+        let coordStr = mcInfo.coords !== "Desconhecido" ? mcInfo.coords : "Aguardando spawn...";
+        const gmStr = mcInfo.gamemode !== "?" ? mcInfo.gamemode : "Detectado no Login";
+        const up = isOnline ? getUptime() : "—";
+        const ka = isOnline ? `${mcInfo.kaCount} pacotes` : "0";
+
+        let botsListText = bots.map((b, i) => {
+            const isPrimary = i === 0;
+            const st = (isPrimary && isOnline) ? "🟢 ONLINE" : (isPrimary && mcState === "conectando") ? "🟡 CONECTANDO" : "⚫ OFFLINE";
+            return `${isPrimary ? "⭐" : "🤖"} *#${i+1} — ${b.name}* ${isPrimary ? "*(Principal)*" : ""}\n` +
+                   `> 🌐 *Servidor:* ${b.host}:${b.port}\n` +
+                   `> 👤 *Nick:* ${b.user} • 📦 *Versão:* ${b.version}\n` +
+                   `> 📡 *Status:* ${st}\n` +
+                   `> 💓 *KeepAlives:* ${isPrimary ? ka : "0"} • ⏳ *Uptime:* ${isPrimary ? up : "—"}\n` +
+                   `> 📍 *Posição:* ${isPrimary ? coordStr : "—"}\n` +
+                   `> 🎮 *Gamemode:* ${isPrimary ? gmStr : "—"}`;
+        }).join("\n\n");
+
+        return `╭──────────────────────────────╮\n` +
+               `│ 🎮 *PH4NT0M MANAGER — PAINEL* │\n` +
+               `╰──────────────────────────────╯\n` +
+               `> 🤖 *Total de Bots:* ${total} | 🌐 *Status:* ${statusGlobal}\n` +
+               `> 🔄 *Auto-Reconnect:* ${autoReconnect ? "✅ ATIVADO (5s)" : "❌ DESATIVADO"}\n` +
+               `> ⏱️ *Monitorando há:* ${getBotUptime()}\n` +
+               `> 🖥️ *Servidor:* ${serverState.online ? "🟢 ONLINE (" + serverState.players.online + " players)" : "🔴 OFFLINE"}\n\n` +
+               `${botsListText}\n\n` +
+               `┌────────────────────────────┐\n` +
+               `│   🎮 *PAINEL DE CONTROLE*    │\n` +
+               `└────────────────────────────┘\n` +
+               `*1.* ▶️ Iniciar Bot Principal\n` +
+               `*2.* ⏹️ Parar Bot AFK\n` +
+               `*3.* 🔄 Forçar Reconexão\n` +
+               `*4.* 🎮 Mudar Gamemode (/gamemode)\n` +
+               `*5.* 📊 Status do Servidor & Bot\n` +
+               `*6.* 🔄 Alternar Auto-Reconnect (ON/OFF)\n` +
+               `*7.* 👥 Jogadores Online no Servidor\n` +
+               `*8.* 💬 Enviar Comando/Chat (ex: *8 /time set day*)\n` +
+               `*9.* 📜 Logs & Relatórios HTML\n` +
+               `*10.* ⚙️ Configurar IP (ex: *10 host:porta*)\n` +
+               `*11.* 📝 Renomear Nick (ex: *11 NovoNick*)\n` +
+               `*12.* ➕ Criar Bot (ex: *12 Nome host:port nick*)\n` +
+               `*13.* 🗑️ Deletar Bot\n` +
+               `*0.* 🔄 Atualizar Painel\n\n` +
+               `_Envie o número do botão desejado (ex: *1*, *4.2*, *8*)._`;
+    },
+    onCommand: async (cmd, rawText) => {
+        const parts = rawText.trim().split(/\s+/);
+        const option = parts[0].toLowerCase();
+
+        // 1. Iniciar Bot
+        if (option === '1' || option === '1.1' || option === 'iniciar' || option === 'ligar') {
+            if (mcState === "online") {
+                return `╭──────────────────────────────╮\n` +
+                       `│ ⚠️ *BOT JÁ CONECTADO*          │\n` +
+                       `╰──────────────────────────────╯\n` +
+                       `> 🌐 *Servidor:* ${MC_HOST}:${MC_PORT}\n` +
+                       `> 👤 *Nick:* ${MC_USER}\n` +
+                       `> ⏳ *Uptime:* ${getUptime()}\n` +
+                       `> 📍 *Posição:* ${mcInfo.coords}\n\n` +
+                       `*Ações:* [2] Parar | [3] Reconectar | [4] Gamemode | [5] Status`;
+            }
+            startMC();
+            return `╭──────────────────────────────╮\n` +
+                   `│ 🔄 *INICIANDO CONEXÃO...*     │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 🌐 *Servidor:* ${MC_HOST}:${MC_PORT}\n` +
+                   `> 👤 *Nick:* ${MC_USER}\n` +
+                   `> 📦 *Versão:* ${MC_VERSION}\n` +
+                   `> 📡 *Status:* 🟡 Conectando ao mundo...\n\n` +
+                   `_Aguarde alguns segundos, você receberá a confirmação assim que entrar!_`;
+        }
+
+        // 2. Parar Bot
+        if (option === '2' || option === 'parar' || option === 'desconectar') {
+            shuttingDown = true; killMC(); mcState = "desligado"; shuttingDown = false;
+            return `╭──────────────────────────────╮\n` +
+                   `│ 🔌 *BOT DESCONECTADO*         │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 👤 *Bot:* ${MC_USER}\n` +
+                   `> 🌐 *Servidor:* ${MC_HOST}:${MC_PORT}\n` +
+                   `> 📡 *Status:* ⚫ OFFLINE\n\n` +
+                   `*Ações:* [1] Iniciar | [5] Status | [0] Menu`;
+        }
+
+        // 3. Reconectar
+        if (option === '3' || option === 'reconectar') {
+            killMC();
+            setTimeout(() => startMC(), 1500);
+            return `╭──────────────────────────────╮\n` +
+                   `│ 🔄 *RECONEXÃO FORÇADA*        │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 👤 *Bot:* ${MC_USER}\n` +
+                   `> ⏳ *Ação:* Reiniciando processo em 1.5s...\n\n` +
+                   `_Conexão sendo reestabelecida automaticamente._`;
+        }
+
+        // 4. Gamemode
+        if (option === '4') {
+            return `╭──────────────────────────────╮\n` +
+                   `│ 🎮 *ALTERAR GAMEMODE*         │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `Envie o número do modo de jogo desejado:\n\n` +
+                   `*4.1* 🟢 Sobrevivência (Survival)\n` +
+                   `*4.2* 🟣 Criativo (Creative - Imortal)\n` +
+                   `*4.3* 🔵 Aventura (Adventure)\n` +
+                   `*4.4* 👁️ Espectador (Spectator)\n\n` +
+                   `_Exemplo: Envie *4.2* para modo Criativo._`;
+        }
+        if (option === '4.1' || option === 'survival') {
+            setBotGamemode('survival');
+            mcInfo.gamemode = "Sobrevivência (0)";
+            return `╭──────────────────────────────╮\n` +
+                   `│ 🎮 *GAMEMODE ATUALIZADO*      │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 🟢 *Novo Modo:* Sobrevivência (Survival)\n` +
+                   `> 💬 *Comando:* \`/gamemode survival\` emitido no servidor!\n\n` +
+                   `*Ações:* [4] Outro Modo | [5] Status | [0] Menu`;
+        }
+        if (option === '4.2' || option === 'creative') {
+            setBotGamemode('creative');
+            mcInfo.gamemode = "Criativo (1)";
+            return `╭──────────────────────────────╮\n` +
+                   `│ 🎮 *GAMEMODE ATUALIZADO*      │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 🟣 *Novo Modo:* Criativo (Creative - Imortal)\n` +
+                   `> 💬 *Comando:* \`/gamemode creative\` emitido no servidor!\n\n` +
+                   `*Ações:* [4] Outro Modo | [5] Status | [0] Menu`;
+        }
+        if (option === '4.3' || option === 'adventure') {
+            setBotGamemode('adventure');
+            mcInfo.gamemode = "Aventura (2)";
+            return `╭──────────────────────────────╮\n` +
+                   `│ 🎮 *GAMEMODE ATUALIZADO*      │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 🔵 *Novo Modo:* Aventura (Adventure)\n` +
+                   `> 💬 *Comando:* \`/gamemode adventure\` emitido no servidor!\n\n` +
+                   `*Ações:* [4] Outro Modo | [5] Status | [0] Menu`;
+        }
+        if (option === '4.4' || option === 'spectator') {
+            setBotGamemode('spectator');
+            mcInfo.gamemode = "Espectador (3)";
+            return `╭──────────────────────────────╮\n` +
+                   `│ 🎮 *GAMEMODE ATUALIZADO*      │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 👁️ *Novo Modo:* Espectador (Spectator)\n` +
+                   `> 💬 *Comando:* \`/gamemode spectator\` emitido no servidor!\n\n` +
+                   `*Ações:* [4] Outro Modo | [5] Status | [0] Menu`;
+        }
+
+        // 5. Status Completo
+        if (option === '5' || option === 'status') {
+            const isOnline = mcState === "online";
+            const serverSt = serverState.online ? "🟢 ONLINE (Acessível)" : "🔴 OFFLINE";
+            const botSt = isOnline ? `🟢 ONLINE (Uptime: ${getUptime()})` : `⚫ ${mcState.toUpperCase()}`;
+            const playersList = serverState.players.list.length > 0 ? serverState.players.list.join(", ") : "Nenhum no momento";
+
+            return `╭──────────────────────────────╮\n` +
+                   `│ 📊 *STATUS COMPLETO — AO VIVO*│\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 🌐 *Servidor:* ${MC_HOST}:${MC_PORT}\n` +
+                   `> 📡 *Status Servidor:* ${serverSt}\n` +
+                   `> ⏱️ *Servidor Ligado há:* ${getServerUptime()}\n` +
+                   `> 🏓 *Ping:* ${serverState.ping > 0 ? serverState.ping + " ms" : "—"} • 📦 *Versão:* ${serverState.version}\n` +
+                   `> 👥 *Players Online:* ${serverState.players.online}/${serverState.players.max} (${playersList})\n\n` +
+                   `> 🤖 *Bot AFK (${MC_USER}):* ${botSt}\n` +
+                   `> 📍 *Posição:* ${mcInfo.coords}\n` +
+                   `> 🎮 *Gamemode:* ${mcInfo.gamemode}\n` +
+                   `> 💓 *KeepAlives:* ${mcInfo.kaCount} pacotes respondidos\n` +
+                   `> 🔄 *Auto-Reconnect:* ${autoReconnect ? "✅ ATIVADO (5s)" : "❌ DESATIVADO"}\n` +
+                   `> 🔢 *Sessão:* #${mcInfo.tentativas}\n\n` +
+                   `┌────────────────────────────┐\n` +
+                   `│   🎮 *AÇÕES RÁPIDAS*         │\n` +
+                   `└────────────────────────────┘\n` +
+                   `[1] Iniciar  [2] Parar  [3] Reconectar  [4] Gamemode\n` +
+                   `[6] Auto-Rec [7] Players [8] Chat/Cmd   [0] Menu`;
+        }
+
+        // 6. Auto-reconnect
+        if (option === '6' || option === 'autoreconnect' || option === 'auto') {
+            autoReconnect = !autoReconnect;
+            if (autoReconnect && mcState !== "online" && serverState.online) setTimeout(() => startMC(), 2000);
+            return `╭──────────────────────────────╮\n` +
+                   `│ 🔄 *AUTO-RECONNECT ALTERADO*  │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> ⚙️ *Estado:* ${autoReconnect ? "✅ ATIVADO (Reconecta em 5s se cair)" : "❌ DESATIVADO (Manual)"}\n\n` +
+                   `*Ações:* [1] Iniciar | [5] Status | [0] Menu`;
+        }
+
+        // 7. Players Online
+        if (option === '7' || option === 'players') {
+            const list = serverState.players.list.length > 0 ? serverState.players.list.map(p => `> • *${p}*`).join("\n") : "> *Nenhum jogador online no momento.*";
+            return `╭──────────────────────────────╮\n` +
+                   `│ 👥 *JOGADORES NO SERVIDOR*    │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 🌐 *Servidor:* ${MC_HOST}:${MC_PORT}\n` +
+                   `> 📊 *Total:* ${serverState.players.online}/${serverState.players.max}\n\n` +
+                   `**Lista de Jogadores:**\n${list}\n\n` +
+                   `*Ações:* [5] Status | [0] Menu`;
+        }
+
+        // 8. Enviar Comando / Chat
+        if (option === '8' || option.startsWith('8.')) {
+            const cmdToSend = rawText.replace(/^[0-9.]+\s*/, '').trim();
+            if (!cmdToSend) {
+                return `╭──────────────────────────────╮\n` +
+                       `│ 💬 *ENVIAR COMANDO / CHAT*    │\n` +
+                       `╰──────────────────────────────╯\n` +
+                       `Envie o comando após o *8*.\n\n` +
+                       `*Exemplos:*\n` +
+                       `> *8 /time set day*\n` +
+                       `> *8 /weather clear*\n` +
+                       `> *8 Olá a todos no servidor!*`;
+            }
+            sendBotCommand(cmdToSend);
+            return `╭──────────────────────────────╮\n` +
+                   `│ 💬 *COMANDO / CHAT ENVIADO*   │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 📤 *Enviado:* \`${cmdToSend}\`\n` +
+                   `> 🤖 *Player:* ${MC_USER}\n\n` +
+                   `*Ações:* [5] Status | [0] Menu`;
+        }
+
+        // 9. Logs
+        if (option === '9' || option === 'logs') {
+            return `╭──────────────────────────────╮\n` +
+                   `│ 📜 *HISTÓRICO DE LOGS*        │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> ⏱️ *Monitorando há:* ${getBotUptime()}\n` +
+                   `> 🔢 *Sessão Atual:* #${mcInfo.tentativas} (${sessionLogs.length} eventos)\n` +
+                   `> 📍 *Últimas Coords:* ${mcInfo.coords}\n` +
+                   `> 🎮 *Gamemode:* ${mcInfo.gamemode}\n` +
+                   `> 📁 *Relatórios HTML Salvos:* ${allLogs.length} arquivos\n\n` +
+                   `*Ações:* [5] Status | [0] Menu`;
+        }
+
+        // 10. Configurar IP
+        if (option === '10') {
+            const arg = rawText.replace(/^[0-9.]+\s*/, '').trim();
+            if (!arg || !arg.includes(':')) {
+                return `╭──────────────────────────────╮\n` +
+                       `│ ⚙️ *CONFIGURAR IP/HOST*       │\n` +
+                       `╰──────────────────────────────╯\n` +
+                       `Envie o IP e a porta após o *10*.\n\n` +
+                       `*Exemplo:* *10 meuserver.play.hosting:25565*`;
+            }
+            const [host, port] = arg.split(':');
+            bots[0].host = host;
+            bots[0].port = parseInt(port) || 25565;
+            saveBots(); syncPrimary();
+            return `╭──────────────────────────────╮\n` +
+                   `│ ⚙️ *ENDEREÇO ATUALIZADO*      │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 🌐 *Novo Servidor:* \`${bots[0].host}:${bots[0].port}\`\n\n` +
+                   `*Ações:* [1] Iniciar | [5] Status | [0] Menu`;
+        }
+
+        // 11. Renomear Nick
+        if (option === '11') {
+            const newNick = rawText.replace(/^[0-9.]+\s*/, '').trim();
+            if (!newNick) {
+                return `╭──────────────────────────────╮\n` +
+                       `│ 📝 *RENOMEAR NICK DO BOT*     │\n` +
+                       `╰──────────────────────────────╯\n` +
+                       `Envie o novo nick após o *11*.\n\n` +
+                       `*Exemplo:* *11 Ph4nt0m_Pro*`;
+            }
+            bots[0].user = newNick;
+            saveBots(); syncPrimary();
+            return `╭──────────────────────────────╮\n` +
+                   `│ 📝 *NICK ATUALIZADO*          │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 👤 *Novo Nick:* \`${newNick}\`\n\n` +
+                   `*Ações:* [1] Iniciar | [5] Status | [0] Menu`;
+        }
+
+        // 12. Criar Bot
+        if (option === '12') {
+            const rest = rawText.replace(/^[0-9.]+\s*/, '').trim().split(/\s+/);
+            if (rest.length < 3) {
+                return `╭──────────────────────────────╮\n` +
+                       `│ ➕ *CRIAR NOVO BOT*           │\n` +
+                       `╰──────────────────────────────╯\n` +
+                       `Envie: *12 <Nome> <IP:Porta> <Nick>*\n\n` +
+                       `*Exemplo:* *12 Phantom2 3ww123.play.hosting:25565 Ph4nt0m2*`;
+            }
+            const [name, hostPort, nick] = rest;
+            const [host, port] = hostPort.split(':');
+            const id = name.toLowerCase().replace(/[^a-z0-9]/g, "") || `bot${Date.now()}`;
+            bots.push({ id, name, host, port: parseInt(port)||25565, user: nick, version: MC_VERSION, enabled: true, createdAt: new Date().toISOString() });
+            saveBots();
+            return `╭──────────────────────────────╮\n` +
+                   `│ ✅ *NOVO BOT CRIADO!*         │\n` +
+                   `╰──────────────────────────────╯\n` +
+                   `> 🤖 *Nome:* ${name}\n` +
+                   `> 🌐 *Servidor:* ${host}:${port||25565}\n` +
+                   `> 👤 *Nick:* ${nick}\n\n` +
+                   `*Ações:* [0] Ver Menu de Bots`;
+        }
+
+        // 13. Deletar Bot
+        if (option === '13') {
+            if (bots.length <= 1) {
+                return `❌ *Você não pode deletar o único bot cadastrado!*`;
+            }
+            const removed = bots.pop();
+            saveBots();
+            return `🗑️ *Bot \`${removed.name}\` foi removido com sucesso!*`;
+        }
+
+        return `╭──────────────────────────────╮\n` +
+               `│ ❓ *OPÇÃO NÃO RECONHECIDA*    │\n` +
+               `╰──────────────────────────────╯\n` +
+               `Envie *0* ou *menu* para ver todas as opções disponíveis.`;
+    },
+    onLog: (msg) => {
+        if (whatsappLogsChannel) {
+            whatsappLogsChannel.send(`💬 \`[${new Date().toLocaleTimeString('pt-BR')}]\` ${msg}`).catch(()=>{});
+        }
+    }
+});
+
+// ============ CRIAÇÃO AUTOMÁTICA DOS CANAIS ============
+async function setupLogChannels(guild) {
+    if (!guild) return;
+    try {
+        const channelsToEnsure = [
+            { name: "🟢・status-servidor", topic: "Status em tempo real do servidor Minecraft e tempo ligado (Uptime)", key: "status" },
+            { name: "📱・whatsapp", topic: "Painel de controle e pareamento do WhatsApp com QR Code e vinculação de Admin", key: "wa_control" },
+            { name: "📲・logs-whatsapp", topic: "Histórico de mensagens e comandos executados pelo WhatsApp", key: "wa_logs" },
+            { name: "💬・chat-servidor", topic: "Retransmissão ao vivo de chat, jogadores entrando/saindo e mortes", key: "chat" },
+            { name: "📜・logs-html", topic: "Download automático de relatórios .html de cada sessão encerrada", key: "html" },
+            { name: "⚡・logs-eventos", topic: "Eventos ao vivo do bot no Minecraft (Conexões, Chunks, KeepAlives)", key: "events" },
+            { name: "🚨・alertas-quedas", topic: "Alertas críticos de servidor ligou/caiu, kicks, bans e reinícios", key: "alerts" }
+        ];
+
+        let category = guild.channels.cache.find(c => c.type === ChannelType.GuildCategory && c.name.includes("LOGS & MONITORAMENTO"));
+        if (!category) {
+            try {
+                category = await guild.channels.create({
+                    name: "📊 LOGS & MONITORAMENTO",
+                    type: ChannelType.GuildCategory
+                });
+            } catch {}
+        }
+
+        for (const item of channelsToEnsure) {
+            let ch = guild.channels.cache.find(c => c.name === item.name);
+            if (!ch) {
+                try {
+                    ch = await guild.channels.create({
+                        name: item.name,
+                        type: ChannelType.GuildText,
+                        parent: category ? category.id : null,
+                        topic: item.topic
+                    });
+                    console.log(`[CANAIS] Canal criado: ${item.name}`);
+                } catch (e) {
+                    console.error(`[CANAIS] Erro ao criar ${item.name}:`, e.message);
+                }
+            }
+            if (ch) {
+                if (item.key === "status") serverStatusChannel = ch;
+                else if (item.key === "wa_control") whatsappControlChannel = ch;
+                else if (item.key === "wa_logs") whatsappLogsChannel = ch;
+                else if (item.key === "chat") serverChatChannel = ch;
+                else if (item.key === "html") logsHtmlChannel = ch;
+                else if (item.key === "events") eventsChannel = ch;
+                else if (item.key === "alerts") alertsChannel = ch;
+            }
+        }
+        console.log(`[CANAIS] Todos os 7 canais de monitoramento configurados.`);
+    } catch (e) {
+        console.error("[CANAIS] Erro no setupLogChannels:", e.message);
+    }
+}
+
+// ============ PAINEL WHATSAPP NO DISCORD ============
+async function updateWhatsAppControlPanel(qrBuffer = null, pairingCode = null) {
+    if (!whatsappControlChannel) return;
+
+    const isConnected = whatsappManager.state === "conectado";
+    const isWaitingQR = whatsappManager.state === "qr" || qrBuffer !== null;
+    const admin = whatsappManager.config.adminNumber ? `\`+${whatsappManager.config.adminNumber.split('@')[0]}\` (${whatsappManager.config.adminName || 'Admin'})` : `*Nenhum (Envie mensagem para o WhatsApp do bot para vincular)*`;
+
+    const embed = new EmbedBuilder()
+        .setColor(isConnected ? 0x2ecc71 : isWaitingQR ? 0xf1c40f : 0x95a5a6)
+        .setTitle("📱 Gerenciador WhatsApp — Ph4nt0m Integration")
+        .setDescription(
+            `### 🌟 Controle o Bot do Minecraft direto pelo WhatsApp!\n\n` +
+            `> 📡 **Status do WhatsApp:** \`${whatsappManager.state.toUpperCase()}\`\n` +
+            `> 🤖 **Número do Bot Conectado:** \`${whatsappManager.userNumber ? '+' + whatsappManager.userNumber : 'Desconectado'}\`\n` +
+            `> 👤 **Administrador Vinculado:** ${admin}\n` +
+            `> 🔒 **Controle por Códigos:** \`1: Ligar • 2: Desligar • 3: Reconectar • 4: Gamemode • 5: Status\`\n\n` +
+            `**📲 Como conectar seu WhatsApp:**\n` +
+            `> 1. Clique em **📱 Gerar QR Code** e escaneie com seu WhatsApp.\n` +
+            `> 2. Ou clique em **🔢 Conectar por Código** e digite seu número para receber o código de 8 dígitos.\n` +
+            `> 3. Envie qualquer mensagem do seu WhatsApp pessoal para o bot para solicitar a vinculação de Administrador!\n`
+        )
+        .setTimestamp()
+        .setFooter({ text: `WhatsApp Baileys Integration • 24/7 Render Deploy` });
+
+    if (pairingCode) {
+        embed.addFields({ name: "🔢 Código de Emparelhamento (Pairing Code)", value: `\`\`\`${pairingCode}\`\`\`\n*Digite este código no seu WhatsApp em Aparelhos Conectados → Conectar com número de telefone.*`, inline: false });
+    }
+
+    const row = new ActionRowBuilder().addComponents(
+        new ButtonBuilder().setCustomId("btn_wa_connect_qr").setLabel("📱 Gerar QR Code").setStyle(ButtonStyle.Primary),
+        new ButtonBuilder().setCustomId("btn_wa_pairing_code").setLabel("🔢 Conectar por Código").setStyle(ButtonStyle.Success),
+        new ButtonBuilder().setCustomId("btn_wa_disconnect").setLabel("🔌 Desconectar WhatsApp").setStyle(ButtonStyle.Danger),
+        new ButtonBuilder().setCustomId("btn_wa_refresh").setLabel("🔄 Atualizar Status").setStyle(ButtonStyle.Secondary)
+    );
+
+    const files = [];
+    if (qrBuffer) {
+        const attachment = new AttachmentBuilder(qrBuffer, { name: "qrcode.png" });
+        embed.setImage("attachment://qrcode.png");
+        files.push(attachment);
+    }
+
+    try {
+        if (whatsappControlMessage) {
+            await whatsappControlMessage.edit({ embeds: [embed], components: [row], files }).catch(async () => {
+                whatsappControlMessage = await whatsappControlChannel.send({ embeds: [embed], components: [row], files });
+            });
+        } else {
+            whatsappControlMessage = await whatsappControlChannel.send({ embeds: [embed], components: [row], files });
+        }
+    } catch (e) {
+        console.error("[WA-PANEL] Erro ao atualizar painel WhatsApp:", e.message);
+    }
+}
+
+// ============ EMBED DE STATUS DO SERVIDOR (SLP) ============
+function serverStatusEmbed() {
+    const isOnline = serverState.online;
+    const color = isOnline ? 0x2ecc71 : 0xe74c3c;
+    const title = isOnline ? "🟢 SERVIDOR MINECRAFT — ONLINE & ATIVO" : "🔴 SERVIDOR MINECRAFT — OFFLINE (DESLIGADO)";
+    const serverUptimeStr = getServerUptime();
+    
+    const playersList = serverState.players.list.length > 0 
+        ? serverState.players.list.map(p => `\`${p}\``).join(", ") 
+        : "*Nenhum jogador online no momento*";
+
+    const botStatus = mcState === "online" ? `\`🟢 Online há ${getUptime()}\`` : mcState === "conectando" ? "`🟡 Conectando...`" : "`⚫ Desconectado`";
+
+    const e = new EmbedBuilder()
+        .setColor(color)
+        .setTitle(title)
+        .setDescription(
+            `### 🌐 Monitoramento Contínuo do Servidor\n` +
+            `> 📡 **Status de Conexão:** ${isOnline ? "`🟢 ONLINE (Acessível)`" : "`🔴 OFFLINE (Sem resposta)`"}\n` +
+            `> ⏱️ **Servidor Ligado há:** \`${serverUptimeStr}\`\n` +
+            `> 🏓 **Latência / Ping:** \`${serverState.ping > 0 ? serverState.ping + " ms" : "—"}\`\n` +
+            `> 👥 **Jogadores Online:** \`${serverState.players.online}/${serverState.players.max}\`\n\n` +
+            `**📋 Lista de Jogadores:**\n> ${playersList}\n\n` +
+            `**⚙️ Informações do Sistema:**\n` +
+            `> 🌐 **IP / Endereço:** \`${MC_HOST}:${MC_PORT}\`\n` +
+            `> 📦 **Versão:** \`${serverState.version}\` (Protocolo 776)\n` +
+            `> 🤖 **Bot AFK (${MC_USER}):** ${botStatus}\n` +
+            `> 📱 **WhatsApp:** \`${whatsappManager.state.toUpperCase()}\`\n` +
+            `> 📜 **MOTD:** \`${serverState.motd}\`\n`
+        )
+        .setThumbnail(`https://mc-heads.net/avatar/${encodeURIComponent(MC_USER)}/128`)
+        .setTimestamp()
+        .setFooter({ text: `Atualizado automaticamente a cada 6s • Render Deploy 24/7`, iconURL: `https://mc-heads.net/avatar/${encodeURIComponent(MC_USER)}/32` });
+
+    return e;
+}
+
+function serverStatusRow() {
+    return [
+        new ActionRowBuilder().addComponents(
+            new ButtonBuilder().setCustomId("btn_server_refresh").setLabel("🔄 Atualizar Status").setStyle(ButtonStyle.Primary),
+            new ButtonBuilder().setCustomId("btn_bot_start").setLabel("▶️ Conectar Bot AFK").setStyle(ButtonStyle.Success),
+            new ButtonBuilder().setCustomId("btn_logs").setLabel("📜 Logs de Sessão").setStyle(ButtonStyle.Secondary)
+        )
+    ];
+}
+
+// ============ LOOP DE MONITORAMENTO CONTÍNUO DO SERVIDOR ============
+async function updateServerStatusLoop() {
+    try {
+        const res = await pingMinecraftServer(MC_HOST, MC_PORT);
+        const wasOnline = serverState.online;
+
+        if (res.online) {
+            if (!wasOnline) {
+                serverState.online = true;
+                serverState.firstOnlineTime = Date.now();
+                console.log(`[SERVER-MONITOR] 🟢 Servidor ${MC_HOST}:${MC_PORT} ACABOU DE LIGAR!`);
+                
+                // Notificação no WhatsApp
+                whatsappManager.sendAdminAlert(
+                    `╭──────────────────────────────╮\n` +
+                    `│ 🟢 *SERVIDOR MINECRAFT LIGOU!* │\n` +
+                    `╰──────────────────────────────╯\n` +
+                    `> 🌐 *Endereço:* ${MC_HOST}:${MC_PORT}\n` +
+                    `> ⏱️ *Horário:* ${new Date().toLocaleTimeString('pt-BR')}\n` +
+                    `> 🤖 *Auto-Reconnect:* ${autoReconnect ? "Conectando bot em 3s..." : "Aguardando comando."}\n\n` +
+                    `*Ações:* [1] Conectar Bot | [5] Status | [0] Menu`
+                );
+
+                if (alertsChannel) {
+                    alertsChannel.send({
+                        content: `${mentionOwner()} @everyone 🟢 **O SERVIDOR MINECRAFT ACABOU DE LIGAR!**\n> 🌐 **Endereço:** \`${MC_HOST}:${MC_PORT}\`\n> ⏱️ Horário: <t:${Math.floor(Date.now()/1000)}:T>`
+                    }).catch(()=>{});
+                }
+                if (eventsChannel) {
+                    eventsChannel.send(`🟢 **[SERVIDOR LIGOU]** O servidor Minecraft ${MC_HOST}:${MC_PORT} está online e acessível!`).catch(()=>{});
+                }
+
+                if (autoReconnect && mcState !== "online" && mcState !== "conectando") {
+                    console.log("[SERVER-MONITOR] Servidor ligou e auto-reconnect ativo: iniciando bot em 3s...");
+                    setTimeout(() => startMC(), 3000);
+                }
+            }
+
+            serverState.ping = res.ping;
+            serverState.version = res.version || serverState.version;
+            serverState.motd = res.motd || serverState.motd;
+
+            const currentList = new Set(res.players.list || []);
+            if (serverChatChannel && previousPlayerList.size > 0) {
+                for (const player of currentList) {
+                    if (!previousPlayerList.has(player) && player !== MC_USER) {
+                        serverChatChannel.send(`📥 **\`${player}\`** entrou no servidor Minecraft!`).catch(()=>{});
+                    }
+                }
+                for (const player of previousPlayerList) {
+                    if (!currentList.has(player) && player !== MC_USER) {
+                        serverChatChannel.send(`📤 **\`${player}\`** saiu do servidor Minecraft.`).catch(()=>{});
+                    }
+                }
+            }
+            previousPlayerList = currentList;
+            serverState.players = res.players;
+
+        } else {
+            if (wasOnline) {
+                serverState.online = false;
+                serverState.firstOnlineTime = null;
+                console.log(`[SERVER-MONITOR] 🔴 Servidor ${MC_HOST}:${MC_PORT} DESLIGOU / CAIU!`);
+                
+                // Notificação no WhatsApp
+                whatsappManager.sendAdminAlert(
+                    `╭──────────────────────────────╮\n` +
+                    `│ 🚨 *SERVIDOR MINECRAFT CAIU!* │\n` +
+                    `╰──────────────────────────────╯\n` +
+                    `> 🌐 *Endereço:* ${MC_HOST}:${MC_PORT}\n` +
+                    `> ⏱️ *Horário:* ${new Date().toLocaleTimeString('pt-BR')}\n` +
+                    `> ⚠️ *Status:* Sem resposta (Offline)\n\n` +
+                    `*Ações:* [5] Status | [0] Menu`
+                );
+
+                if (alertsChannel) {
+                    alertsChannel.send({
+                        content: `${mentionOwner()} @everyone 🚨 **O SERVIDOR MINECRAFT DESLIGOU OU CAIU!**\n> 🌐 **Endereço:** \`${MC_HOST}:${MC_PORT}\`\n> ⏱️ Horário: <t:${Math.floor(Date.now()/1000)}:T>`
+                    }).catch(()=>{});
+                }
+                if (eventsChannel) {
+                    eventsChannel.send(`🔴 **[SERVIDOR CAIU/DESLIGOU]** O servidor Minecraft ${MC_HOST}:${MC_PORT} parou de responder.`).catch(()=>{});
+                }
+                previousPlayerList.clear();
+            }
+            serverState.online = false;
+            serverState.ping = -1;
+            serverState.players = { online: 0, max: 20, list: [] };
+        }
+
+        if (serverStatusChannel) {
+            if (serverStatusMessage) {
+                await serverStatusMessage.edit({
+                    embeds: [serverStatusEmbed()],
+                    components: serverStatusRow()
+                }).catch(async () => {
+                    serverStatusMessage = await serverStatusChannel.send({
+                        embeds: [serverStatusEmbed()],
+                        components: serverStatusRow()
+                    }).catch(()=>{});
+                });
+            } else {
+                serverStatusMessage = await serverStatusChannel.send({
+                    embeds: [serverStatusEmbed()],
+                    components: serverStatusRow()
+                }).catch(()=>{});
+            }
+        }
+
+    } catch (e) {
+        console.error("[SERVER-MONITOR] Erro no updateServerStatusLoop:", e.message);
+    }
+}
+
+// ============ EMBEDS GIGANTES E ULTRA DETALHADOS ============
+function botsEmbed(){
+    const total = bots.length;
+    const isOnline = mcState === "online";
+    const statusGlobal = isOnline ? "🟢 **1 Bot Ativo**" : mcState === "conectando" ? "🟡 **Conectando...**" : "⚫ **Todos Offline**";
+    
     const e = new EmbedBuilder()
         .setColor(0x5865F2)
-        .setTitle("🤖 Ph4nt0m Bot — Painel de Controle GIGANTE")
+        .setTitle("🎮 Ph4nt0m Manager — Painel de Controle de Bots")
         .setDescription(
-            `**Bem-vindo ao painel ULTRA COMPLETO do Ph4nt0m!**\n` +
-            `Bot AFK multi-instância para manter \`${MC_HOST}:${MC_PORT}\` online 24/7 no Render.\n\n` +
-            `**📋 Funcionalidades Completas:**\n` +
-            `> 🟢 **Conectar** — Conecta o Ph4nt0m\n` +
-            `> 🔴 **Disconnect** — Desconecta\n` +
-            `> 💀 **Kill** — Mata TUDO e desliga\n` +
-            `> 🔄 **Reconectar** — Reconexão forçada\n` +
-            `> 🔄 **Auto: ON/OFF** — Toggle auto-reconnect\n` +
-            `> 📜 **Logs** — Histórico com HTML lindo (10k linhas, data/hora, #tentativa)\n` +
-            `> 📊 **Status** — Status detalhado com uptime\n` +
-            `> 🤖 **/bots** — Gerencia TODOS os bots (criar, IP, nick, deletar)\n` +
-            `> 💬 **Comandos:** \`/conectar\` \`/bots\` \`/status\`\n`
+            `### 🌟 Painel Central AFK 24/7\n` +
+            `Gerencie seus bots Minecraft diretamente por aqui com suporte a reconexão automática, logs em tempo real e monitoramento de chunks.\n\n` +
+            `**📊 Status Geral do Sistema:**\n` +
+            `> 🤖 **Total de Bots:** \`${total}\` | 🌐 **Status Atual:** ${statusGlobal}\n` +
+            `> 🔄 **Auto-Reconnect:** \`${autoReconnect ? "✅ ATIVADO (5s)" : "❌ DESATIVADO"}\`\n` +
+            `> ⏱️ **Monitoramento Contínuo:** \`${getBotUptime()}\`\n` +
+            `> 🖥️ **Status do Servidor:** \`${serverState.online ? "🟢 ONLINE (" + serverState.players.online + " players)" : "🔴 OFFLINE"}\`\n` +
+            `> 📱 **WhatsApp Bot:** \`${whatsappManager.state.toUpperCase()}\`\n\n` +
+            `**🛠️ Ações Rápidas Disponíveis:**\n` +
+            `> ➕ **Criar Bot:** Cadastra novo host/porta/nick\n` +
+            `> ⚙️ **Configurar IP:** Modifica endereço do bot selecionado\n` +
+            `> 📝 **Renomear:** Altera o nick do bot no Minecraft\n` +
+            `> 🎮 **Gamemode:** Altera o modo de jogo do bot (/gamemode)\n` +
+            `> ▶️ **Iniciar Bot:** Dispara a conexão com o embed ao vivo\n` +
+            `> ⏹️ **Parar Bot:** Encerra a conexão com segurança\n`
         )
-        .setThumbnail("https://mc-heads.net/avatar/Ph4nt0m/100")
-        .setImage("https://i.imgur.com/8Km9tLL.png")
-        .setFooter({ text: `Ph4nt0m Bot • ${new Date().toLocaleString('pt-BR')} • Render Ready`, iconURL: "https://mc-heads.net/avatar/Ph4nt0m/32" })
+        .setThumbnail(`https://mc-heads.net/avatar/${encodeURIComponent(MC_USER)}/128`)
         .setTimestamp()
-        .addFields(
-            { name: "🌐 Servidor Principal", value: `\`${MC_HOST}:${MC_PORT}\``, inline: true },
-            { name: "👤 Nick Principal", value: `\`${MC_USER}\``, inline: true },
-            { name: "📦 Versão", value: `\`${MC_VERSION}\``, inline: true },
-            { name: "🤖 Bots Totais", value: `\`${totalBots}\``, inline: true },
-            { name: "🟢 Rodando", value: `\`${running}\``, inline: true },
-            { name: "🕐 Monitorando há", value: `\`${getBotUptime()}\``, inline: true },
-            { name: "💓 Auto-Reconnect", value: autoReconnect ? "`✅ ON`" : "`❌ OFF`", inline: true },
-            { name: "📜 Logs Salvos", value: `\`${allLogs.length}\``, inline: true },
-            { name: "🏓 Health Check", value: "`/health`", inline: true },
-            { name: "🛡️ Modo", value: "`Parado • Anti-AFK`", inline: true },
-            { name: "☁️ Hospedagem", value: "`Render • Sempre ON`", inline: true },
-            { name: "💡 Dica", value: `> \`/op ${MC_USER}\` + \`/gamemode creative ${MC_USER}\` = imortal!`, inline: false },
-        );
+        .setFooter({ text: `Ph4nt0m AFK Manager • ${total} bot(s) configurado(s)`, iconURL: `https://mc-heads.net/avatar/${encodeURIComponent(MC_USER)}/32` });
+
+    bots.forEach((b, i) => {
+        const isPrimary = i === 0;
+        let stText = "⚫ OFFLINE";
+        if (isPrimary) {
+            if (mcState === "online") stText = "🟢 ONLINE & ATIVO";
+            else if (mcState === "conectando") stText = "🟡 CONECTANDO...";
+            else if (mcState === "caido") stText = "🔴 DESCONECTADO / CAÍDO";
+            else stText = "⭐ SELECIONADO (PRONTO)";
+        }
+        
+        const up = (isPrimary && mcState === "online") ? getUptime() : "—";
+        const ka = (isPrimary && mcState === "online") ? `${mcInfo.kaCount} pacotes` : "0";
+
+        e.addFields({
+            name: `${isPrimary ? "⭐" : "🤖"} #${i+1} — ${b.name} ${isPrimary ? "*(Principal)*" : ""}`,
+            value: 
+                `> 🌐 **Servidor:** \`${b.host}:${b.port}\`\n` +
+                `> 👤 **Nick:** \`${b.user}\` • 📦 **Versão:** \`${b.version}\`\n` +
+                `> 📡 **Status:** \`${stText}\`\n` +
+                `> 💓 **KeepAlives:** \`${ka}\` • ⏳ **Uptime:** \`${up}\`\n` +
+                `> 📅 **Criado em:** <t:${Math.floor(new Date(b.createdAt).getTime()/1000)}:R>`,
+            inline: false
+        });
+    });
+
     return e;
 }
 
-function menuRow(disabled = false) {
-    // Linha 1: controles principais (5 max)
+function botsRows(){
     const row1 = new ActionRowBuilder().addComponents(
-        new ButtonBuilder().setCustomId("btn_conectar").setLabel("🟢 Conectar").setStyle(ButtonStyle.Success).setDisabled(disabled),
-        new ButtonBuilder().setCustomId("btn_reconectar").setLabel("🔄 Reconectar").setStyle(ButtonStyle.Primary).setDisabled(false),
-        new ButtonBuilder().setCustomId("btn_desligar").setLabel("🔴 Disconnect").setStyle(ButtonStyle.Danger).setDisabled(false),
-        new ButtonBuilder().setCustomId("btn_kill").setLabel("💀 Kill").setStyle(ButtonStyle.Danger).setDisabled(false),
-        new ButtonBuilder().setCustomId("btn_status").setLabel("📊 Status").setStyle(ButtonStyle.Secondary).setDisabled(false),
+        new ButtonBuilder().setCustomId("btn_bot_start").setLabel("▶️ Iniciar Bot").setStyle(ButtonStyle.Success),
+        new ButtonBuilder().setCustomId("btn_bot_stop").setLabel("⏹️ Parar Bot").setStyle(ButtonStyle.Danger),
+        new ButtonBuilder().setCustomId("btn_gamemode").setLabel("🎮 Gamemode").setStyle(ButtonStyle.Primary),
+        new ButtonBuilder().setCustomId("btn_bot_config_ip").setLabel("⚙️ Configurar IP").setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId("btn_bot_rename").setLabel("📝 Renomear").setStyle(ButtonStyle.Secondary),
     );
-    // Linha 2: auto reconnect + logs + ?
-    const autoLabel = autoReconnect ? "🔄 Auto: ON" : "🔄 Auto: OFF";
-    const autoStyle = autoReconnect ? ButtonStyle.Success : ButtonStyle.Secondary;
     const row2 = new ActionRowBuilder().addComponents(
-        new ButtonBuilder().setCustomId("btn_autoreconnect").setLabel(autoLabel).setStyle(autoStyle),
+        new ButtonBuilder().setCustomId("btn_bot_create").setLabel("➕ Criar Bot").setStyle(ButtonStyle.Success),
+        new ButtonBuilder().setCustomId("btn_bot_delete").setLabel("🗑️ Deletar Bot").setStyle(ButtonStyle.Danger),
+        new ButtonBuilder().setCustomId("btn_autoreconnect").setLabel(autoReconnect ? "🔄 Auto: ON" : "🔄 Auto: OFF").setStyle(autoReconnect ? ButtonStyle.Success : ButtonStyle.Secondary),
         new ButtonBuilder().setCustomId("btn_logs").setLabel("📜 Logs").setStyle(ButtonStyle.Primary),
-        new ButtonBuilder().setCustomId("btn_randomize").setLabel("❓ ?").setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId("btn_bot_refresh").setLabel("🔄 Atualizar").setStyle(ButtonStyle.Secondary),
     );
-    return [row1, row2];
+
+    let rows = [row1, row2];
+    if(bots.length > 1){
+        const select = new StringSelectMenuBuilder()
+            .setCustomId("select_bot")
+            .setPlaceholder("🎯 Selecione o bot primário para operar")
+            .addOptions(bots.slice(0, 25).map((b, i) => ({
+                label: `${b.name} (${b.user})`,
+                value: b.id,
+                description: `${b.host}:${b.port} • Versão ${b.version}`,
+                default: i === 0
+            })));
+        rows.push(new ActionRowBuilder().addComponents(select));
+    }
+    return rows;
 }
 
-function statusEmbed() {
-    const stateEmoji = emojiForState(mcState);
-    const stateText = mcState === "online" ? "ONLINE" : mcState === "conectando" ? "CONECTANDO" : mcState === "caido" ? "CAÍDO / DESCONECTADO" : "DESLIGADO";
-    const e = new EmbedBuilder()
-        .setColor(colorForState(mcState))
-        .setTitle(`${stateEmoji} Ph4nt0m — Status`)
-        .setThumbnail("https://mc-heads.net/avatar/Ph4nt0m/100")
+function gamemodeRow() {
+    const select = new StringSelectMenuBuilder()
+        .setCustomId("select_gamemode")
+        .setPlaceholder("🎮 Escolha o modo de jogo (Gamemode)")
+        .addOptions([
+            { label: "Sobrevivência (Survival)", value: "survival", description: "Modo padrão de sobrevivência", emoji: "🟢" },
+            { label: "Criativo (Creative)", value: "creative", description: "Imortalidade e blocos infinitos", emoji: "🟣" },
+            { label: "Aventura (Adventure)", value: "adventure", description: "Modo mapa de aventura", emoji: "🔵" },
+            { label: "Espectador (Spectator)", value: "spectator", description: "Voar livremente pelo mapa", emoji: "👁️" }
+        ]);
+    return new ActionRowBuilder().addComponents(select);
+}
+
+function initiatingEmbed(botCfg = getSelectedBot()) {
+    const user = botCfg ? botCfg.user : MC_USER;
+    const host = botCfg ? botCfg.host : MC_HOST;
+    const port = botCfg ? botCfg.port : MC_PORT;
+    const ver = botCfg ? botCfg.version : MC_VERSION;
+
+    return new EmbedBuilder()
+        .setColor(0xf1c40f)
+        .setTitle(`🔄 ${botCfg ? botCfg.name : "Ph4nt0m"} AFK — INICIANDO CONEXÃO...`)
+        .setDescription(
+            `${mentionOwner()} @everyone\n\n` +
+            `> ⏳ **Estabelecendo handshake TCP & autenticação...**\n` +
+            `> *Esta mensagem será atualizada automaticamente assim que o bot entrar no mundo!*`
+        )
+        .setThumbnail(`https://mc-heads.net/avatar/${encodeURIComponent(user)}/128`)
         .setTimestamp()
-        .setFooter({ text: `Ph4nt0m • ${MC_HOST}:${MC_PORT} • Monitorando há ${getBotUptime()}`, iconURL: "https://mc-heads.net/avatar/Ph4nt0m/32" })
+        .setFooter({ text: `Ph4nt0m AFK Manager • Conectando a ${host}:${port}`, iconURL: `https://mc-heads.net/avatar/${encodeURIComponent(user)}/32` })
         .addFields(
-            { name: "📡 Estado", value: `\`${stateText}\``, inline: true },
-            { name: "⏱️ Uptime (sessão)", value: `\`${mcState === "online" ? getUptime() : "—"}\``, inline: true },
-            { name: "🕐 Monitorando há", value: `\`${getBotUptime()}\``, inline: true },
-            { name: "🔢 Sessão #", value: `\`#${mcInfo.tentativas}\``, inline: true },
-            { name: "🌐 Servidor", value: `\`${MC_HOST}:${MC_PORT}\``, inline: false },
-            { name: "👤 Nick", value: `\`${MC_USER}\``, inline: true },
-            { name: "📦 Versão", value: `\`${MC_VERSION}\``, inline: true },
-            { name: "📍 Coordenadas", value: `\`${mcInfo.coords}\``, inline: true },
-            { name: "💓 KeepAlives", value: `\`${mcInfo.kaCount}\``, inline: true },
-            { name: "🔄 Auto-Reconnect", value: autoReconnect ? "`✅ Ativado`" : "`❌ Desativado`", inline: true },
-            { name: "📜 Logs", value: `\`${allLogs.length} HTMLs\``, inline: true },
+            { name: "🌐 Servidor", value: `\`${host}:${port}\``, inline: true },
+            { name: "👤 Nick do Bot", value: `\`${user}\``, inline: true },
+            { name: "📦 Versão & Protocolo", value: `\`${ver}\``, inline: true },
+            { name: "🔢 Sessão / Tentativa", value: `\`#${mcInfo.tentativas}\``, inline: true },
+            { name: "📡 Status", value: "`🟡 CONECTANDO AO MUNDO...`", inline: true },
+            { name: "🔄 Auto-Reconnect", value: autoReconnect ? "`✅ ATIVADO (5s)`" : "`❌ DESATIVADO`", inline: true },
+            { name: "📍 Posição no Mapa", value: "`⏳ Aguardando spawn...`", inline: true },
+            { name: "🎮 Gamemode", value: "`⏳ Aguardando pacotes...`", inline: true },
+            { name: "💬 Modo de Chat", value: "`⏳ Configurando...`", inline: true },
         );
-    if (mcInfo.motivo) e.addFields({ name: "📄 Último evento", value: `\`\`\`${mcInfo.motivo.slice(0, 1000)}\`\`\``, inline: false });
-    return e;
 }
 
-function connectedEmbed() {
-    return liveConnectedEmbed();
-}
-
-function liveConnectedEmbed() {
+function liveConnectedEmbed(botCfg = getSelectedBot()) {
+    const user = botCfg ? botCfg.user : MC_USER;
+    const host = botCfg ? botCfg.host : MC_HOST;
+    const port = botCfg ? botCfg.port : MC_PORT;
+    const ver = botCfg ? botCfg.version : MC_VERSION;
     const uptime = getUptime();
+
+    let coordStr = mcInfo.coords !== "Desconhecido" ? mcInfo.coords : "📍 Coordenadas em sincronização...";
+    let netherStr = "—";
+    
+    if (mcInfo.coords && mcInfo.coords.includes("X:")) {
+        try {
+            const matches = mcInfo.coords.match(/X:\s*([-\d.]+),\s*Y:\s*([-\d.]+),\s*Z:\s*([-\d.]+)/);
+            if (matches) {
+                const nx = (parseFloat(matches[1]) / 8).toFixed(1);
+                const nz = (parseFloat(matches[3]) / 8).toFixed(1);
+                const cx = Math.floor(parseFloat(matches[1]) / 16);
+                const cz = Math.floor(parseFloat(matches[3]) / 16);
+                netherStr = `Nether: \`X: ${nx}, Z: ${nz}\` • Chunk: \`[${cx}, ${cz}]\``;
+            }
+        } catch {}
+    }
+
+    const gmStr = mcInfo.gamemode !== "?" ? mcInfo.gamemode : "Detectado no Login";
+    const chatStr = mcInfo.chatmode !== "?" ? (mcInfo.chatmode === "enabled" ? "Habilitado (Chat & Comandos)" : mcInfo.chatmode) : "Habilitado";
+
     const e = new EmbedBuilder()
         .setColor(0x2ecc71)
-        .setTitle("✅ Ph4nt0m Conectado — Online")
-        .setDescription(`${mentionOwner()} @everyone • Atualizado <t:${Math.floor(Date.now()/1000)}:R>`)
-        .setThumbnail("https://mc-heads.net/avatar/Ph4nt0m/100")
+        .setTitle(`🟢 ${botCfg ? botCfg.name : "Ph4nt0m"} AFK — ONLINE & CONECTADO`)
+        .setDescription(
+            `${mentionOwner()} @everyone\n\n` +
+            `> ✅ **Bot conectado com sucesso ao servidor Minecraft!**\n` +
+            `> ⏱️ Uptime sincronizado ao vivo • Atualizado <t:${Math.floor(Date.now()/1000)}:R>`
+        )
+        .setThumbnail(`https://mc-heads.net/avatar/${encodeURIComponent(user)}/128`)
         .setTimestamp()
-        .setFooter({ text: `Ph4nt0m Bot • Online • Uptime ${uptime} • Monitorando há ${getBotUptime()}`, iconURL: "https://mc-heads.net/avatar/Ph4nt0m/32" })
+        .setFooter({ text: `Ph4nt0m AFK • 24/7 Ativo • Uptime: ${uptime} • Server ON há ${getBotUptime()}`, iconURL: `https://mc-heads.net/avatar/${encodeURIComponent(user)}/32` })
         .addFields(
-            { name: "🌐 Servidor", value: `\`${MC_HOST}:${MC_PORT}\``, inline: true },
-            { name: "👤 Nick", value: `\`${MC_USER}\``, inline: true },
-            { name: "📦 Protocolo", value: `\`${MC_VERSION}\``, inline: true },
-            { name: "🔢 Sessão", value: `\`#${mcInfo.tentativas}\``, inline: true },
-            { name: "📍 Posição", value: `\`${mcInfo.coords}\``, inline: true },
-            { name: "⏱️ Conectado em", value: `<t:${Math.floor((mcStartTime||Date.now())/1000)}:F>`, inline: true },
-            { name: "⏳ Uptime (sessão)", value: `\`${uptime}\``, inline: true },
-            { name: "🕐 Monitorando há", value: `\`${getBotUptime()}\``, inline: true },
-            { name: "💓 KeepAlives", value: `\`${mcInfo.kaCount}\``, inline: true },
-            { name: "📜 Logs", value: `\`${allLogs.length} salvos\``, inline: true },
+            { name: "🌐 Servidor", value: `\`${host}:${port}\``, inline: true },
+            { name: "👤 Nick", value: `\`${user}\``, inline: true },
+            { name: "📦 Versão & Protocolo", value: `\`${ver}\``, inline: true },
+            { name: "📡 Estado Atual", value: "`🟢 ONLINE (PLAY STATE)`", inline: true },
+            { name: "⏱️ Conectado em", value: `<t:${Math.floor((mcStartTime||Date.now())/1000)}:T>`, inline: true },
+            { name: "⏳ Uptime da Sessão", value: `\`${uptime}\``, inline: true },
+            { name: "🎮 Gamemode", value: `\`${gmStr}\``, inline: true },
+            { name: "💬 Modo de Chat", value: `\`${chatStr}\``, inline: true },
+            { name: "💓 KeepAlives", value: `\`${mcInfo.kaCount} pacotes respondidos\``, inline: true },
+            { name: "📍 Posição Overworld", value: `\`${coordStr}\``, inline: false },
+            { name: "🧭 Navegação & Chunk", value: netherStr !== "—" ? netherStr : "`Sincronizando chunks...`", inline: false },
+            { name: "🔄 Auto-Reconnect", value: autoReconnect ? "`✅ ATIVADO (Reconecta em 5s se cair)`" : "`❌ DESATIVADO (Manual)`", inline: true },
+            { name: "🔢 Sessão #", value: `\`#${mcInfo.tentativas}\``, inline: true },
+            { name: "📜 Eventos Gravados", value: `\`${sessionLogs.length} eventos nesta sessão\``, inline: true }
         );
     return e;
 }
 
-function disconnectedEmbed(reason, type = "desconectado") {
+function disconnectedEmbed(reason, type = "desconectado", botCfg = getSelectedBot()) {
+    const user = botCfg ? botCfg.user : MC_USER;
+    const host = botCfg ? botCfg.host : MC_HOST;
+    const port = botCfg ? botCfg.port : MC_PORT;
+
     let title = "⚠️ Ph4nt0m Desconectado";
     let color = 0xe67e22;
-    let desc = `${mentionOwner()} @everyone`;
     if (type === "kickado") { title = "🥾 Ph4nt0m foi Kickado!"; color = 0xe74c3c; }
     else if (type === "banido") { title = "🔨 Ph4nt0m foi Banido!"; color = 0x992d22; }
-    else if (type === "morto") { title = "💀 Ph4nt0m Morreu!"; color = 0x71368a; }
-    else if (type === "erro") { title = "❌ Erro no Ph4nt0m"; color = 0xe74c3c; }
+    else if (type === "morto") { title = "💀 Ph4nt0m Morreu no Servidor!"; color = 0x71368a; }
+    else if (type === "erro") { title = "❌ Erro de Conexão no Ph4nt0m"; color = 0xe74c3c; }
 
     const uptime = mcStartTime ? getUptime() : "—";
     const e = new EmbedBuilder()
         .setColor(color)
         .setTitle(title)
-        .setDescription(desc)
-        .setThumbnail("https://mc-heads.net/avatar/Ph4nt0m/100")
+        .setDescription(`${mentionOwner()} @everyone\n\n> ⚠️ **A conexão com o servidor foi encerrada.**`)
+        .setThumbnail(`https://mc-heads.net/avatar/${encodeURIComponent(user)}/128`)
         .setTimestamp()
-        .setFooter({ text: `Ph4nt0m Bot • ${type}`, iconURL: "https://mc-heads.net/avatar/Ph4nt0m/32" })
+        .setFooter({ text: `Ph4nt0m Bot • Status: ${type}`, iconURL: `https://mc-heads.net/avatar/${encodeURIComponent(user)}/32` })
         .addFields(
-            { name: "🌐 Servidor", value: `\`${MC_HOST}:${MC_PORT}\``, inline: true },
-            { name: "👤 Nick", value: `\`${MC_USER}\``, inline: true },
+            { name: "🌐 Servidor", value: `\`${host}:${port}\``, inline: true },
+            { name: "👤 Nick", value: `\`${user}\``, inline: true },
             { name: "⏱️ Ficou online por", value: `\`${uptime}\``, inline: true },
             { name: "📍 Última posição", value: `\`${mcInfo.coords}\``, inline: true },
             { name: "💓 KeepAlives", value: `\`${mcInfo.kaCount}\``, inline: true },
-            { name: "🔁 Tentativas", value: `\`${mcInfo.tentativas}\``, inline: true },
-            { name: `📄 Motivo: ${type}`, value: `\`\`\`${(reason || "Desconexão sem motivo (timeout/reinício)").slice(0, 1000)}\`\`\``, inline: false },
-            { name: "🔄 Ação", value: autoReconnect ? "> *Tentando reconectar automaticamente em 5s...*\n> Use **Desligar Tudo** para parar." : "> *Auto-reconnect desativado. Clique em Reconectar.*", inline: false },
+            { name: "🔁 Tentativa #", value: `\`#${mcInfo.tentativas}\``, inline: true },
+            { name: `📄 Motivo do Encerramento (${type})`, value: `\`\`\`${(reason || "Desconexão sem motivo explícito (timeout / reinício do servidor)").slice(0, 1000)}\`\`\``, inline: false },
+            { name: "🔄 Próxima Ação", value: autoReconnect ? "> 🔄 **Tentando reconectar automaticamente em 5s...**\n> *(Clique em Disconnect para cancelar)*" : "> 🛑 **Auto-reconnect desativado.** Clique em **Reconectar Agora** ou no painel `/bots`.", inline: false }
         );
     return e;
 }
@@ -648,28 +1273,25 @@ function fallenRow() {
     const row1 = new ActionRowBuilder().addComponents(
         new ButtonBuilder().setCustomId("btn_reconectar").setLabel("🔄 Reconectar Agora").setStyle(ButtonStyle.Success),
         new ButtonBuilder().setCustomId("btn_desligar").setLabel("🔴 Disconnect").setStyle(ButtonStyle.Danger),
+        new ButtonBuilder().setCustomId("btn_gamemode").setLabel("🎮 Gamemode").setStyle(ButtonStyle.Primary),
         new ButtonBuilder().setCustomId("btn_kill").setLabel("💀 Kill").setStyle(ButtonStyle.Danger),
     );
     const row2 = new ActionRowBuilder().addComponents(
         new ButtonBuilder().setCustomId("btn_autoreconnect").setLabel(autoLabel).setStyle(autoStyle),
         new ButtonBuilder().setCustomId("btn_logs").setLabel("📜 Logs").setStyle(ButtonStyle.Primary),
-        new ButtonBuilder().setCustomId("btn_status").setLabel("📊 Status").setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId("btn_randomize").setLabel("❓ ?").setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId("btn_bot_menu").setLabel("🤖 Painel Bots").setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId("btn_server_refresh").setLabel("🌐 Status Servidor").setStyle(ButtonStyle.Secondary),
     );
     return [row1, row2];
 }
 
-// ============ MC BOT MANAGEMENT ============
-function logMC(line) {
-    console.log(`[MC] ${line}`);
-}
-
+// ============ MC CONNECTION MANAGER ============
 async function sendToChannel(payload) {
     try {
         const ch = await client.channels.fetch(CHANNEL_ID);
         if (!ch) return null;
         return await ch.send(payload);
-    } catch (e) { console.error("Erro ao enviar:", e.message); return null; }
+    } catch (e) { console.error("Erro ao enviar mensagem:", e.message); return null; }
 }
 
 function startLiveUpdate() {
@@ -687,8 +1309,8 @@ function startLiveUpdate() {
                 components: fallenRow(),
                 allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
             });
-        } catch(e) { console.error("Erro ao atualizar uptime:", e.message); }
-    }, 1000); // atualiza a cada 1s na mesma mensagem
+        } catch(e) {}
+    }, 1000);
 }
 
 function stopLiveUpdate() {
@@ -703,26 +1325,67 @@ function killMC() {
     }
 }
 
+function sendBotCommand(cmd) {
+    if (mcProcess && mcProcess.stdin && mcProcess.stdin.writable) {
+        try {
+            mcProcess.stdin.write(`cmd:${cmd}\n`);
+            console.log(`[MC-STDIN] Comando enviado: ${cmd}`);
+            return true;
+        } catch (e) {
+            console.error("Erro ao enviar comando para o bot:", e.message);
+        }
+    }
+    return false;
+}
+
+function setBotGamemode(mode) {
+    if (mcProcess && mcProcess.stdin && mcProcess.stdin.writable) {
+        try {
+            mcProcess.stdin.write(`gm:${mode}\n`);
+            console.log(`[MC-STDIN] Gamemode set: ${mode}`);
+            return true;
+        } catch (e) {
+            console.error("Erro ao setar gamemode:", e.message);
+        }
+    }
+    return false;
+}
+
 function startMC() {
     if (mcProcess) killMC();
     if (shuttingDown) return;
 
+    syncPrimary();
+    const botCfg = getSelectedBot();
+    const host = botCfg ? botCfg.host : MC_HOST;
+    const port = botCfg ? botCfg.port : MC_PORT;
+    const user = botCfg ? botCfg.user : MC_USER;
+
     mcState = "conectando";
     mcInfo.tentativas++;
     mcInfo.kaCount = 0;
+    mcInfo.coords = "Desconhecido";
+    mcInfo.gamemode = "?";
+    mcInfo.chatmode = "?";
+    mcInfo.motivo = "";
     mcStartTime = Date.now();
     clearSessionLogs();
-    const _preBot = getSelectedBot();
-    if(_preBot) runningBotId = _preBot.id;
-    addLog("connect", `Tentativa #${mcInfo.tentativas} — Conectando em ${MC_HOST}:${MC_PORT} como ${MC_USER}`, `Protocolo ${MC_VERSION} • Bot ${_preBot? _preBot.name : "?"}`);
-    console.log(`[MC] Iniciando tentativa #${mcInfo.tentativas}...`);
+    runningBotId = botCfg ? botCfg.id : "phant0m";
 
-    const botCfg = getSelectedBot() || { host: MC_HOST, port: MC_PORT, user: MC_USER };
-    console.log(`[MC] Conectando bot "${botCfg.name}" em ${botCfg.host}:${botCfg.port} como ${botCfg.user}`);
-    addLog("connect", `Iniciando "${botCfg.name}" em ${botCfg.host}:${botCfg.port} como ${botCfg.user}`, `ID ${botCfg.id}`);
-    const pyPath = "py";
+    addLog("connect", `Tentativa #${mcInfo.tentativas} — Conectando em ${host}:${port} como ${user}`, `Bot: ${botCfg ? botCfg.name : "Ph4nt0m"}`);
+    console.log(`[MC] Iniciando conexão (#${mcInfo.tentativas}) → ${host}:${port} como ${user}`);
+
+    sendToChannel({
+        content: `${mentionOwner()} @everyone`,
+        embeds: [initiatingEmbed(botCfg)],
+        components: fallenRow(),
+        allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
+    }).then(msg => {
+        if (msg) liveMessage = msg;
+    });
+
     const botPath = path.join(__dirname, "bot.py");
-    mcProcess = spawn(pyPath, [botPath, botCfg.host, String(botCfg.port), botCfg.user], { cwd: __dirname });
+    mcProcess = spawn(PYTHON_EXE, [botPath, host, String(port), user], { cwd: __dirname });
 
     let buffer = "";
     mcProcess.stdout.on("data", (data) => {
@@ -732,25 +1395,79 @@ function startMC() {
         for (const raw of lines) {
             const line = raw.trim();
             if (!line) continue;
-            logMC(line);
+            console.log(`[MC] ${line}`);
 
-            // Parse events
-            if (line.includes("[+] PLAY STATE!") || line.includes("PLAY STATE")) {
+            if (line.startsWith("[COORDS]")) {
+                const m = line.match(/X=([-\d.]+)\s+Y=([-\d.]+)\s+Z=([-\d.]+)/);
+                if (m) {
+                    const x = parseFloat(m[1]), y = parseFloat(m[2]), z = parseFloat(m[3]);
+                    mcInfo.coords = `X: ${x.toFixed(1)}, Y: ${y.toFixed(1)}, Z: ${z.toFixed(1)}`;
+                }
+            } else if (line.startsWith("[GAMEMODE]")) {
+                const m = line.match(/\[GAMEMODE\]\s*(\d+)\s*\(([^)]+)\)/);
+                if (m) mcInfo.gamemode = `${m[2]} (${m[1]})`;
+                else { const raw2 = line.replace("[GAMEMODE]","").trim(); if(raw2) mcInfo.gamemode = raw2; }
+            } else if (line.startsWith("[CHATMODE]")) {
+                const val = line.replace("[CHATMODE]","").trim();
+                if (val) mcInfo.chatmode = val;
+            } else if (line.includes("[+] PLAY STATE!") || line.includes("PLAY STATE")) {
                 mcState = "online";
                 mcStartTime = Date.now();
                 addLog("play", "Entrou no servidor — PLAY STATE", `Coords: ${mcInfo.coords}`);
-                // Envia e guarda mensagem para editar uptime na mesma mensagem
-                sendToChannel({
-                    content: `${mentionOwner()} @everyone`,
-                    embeds: [liveConnectedEmbed()],
-                    components: fallenRow(),
-                    allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
-                }).then(msg => {
-                    if (msg) { liveMessage = msg; startLiveUpdate(); }
-                });
+                
+                // Notificação de Rejoin/Conexão no WhatsApp!
+                whatsappManager.sendAdminAlert(
+                    `╭──────────────────────────────╮\n` +
+                    `│ 🟢 *PH4NT0M — ONLINE & CONECTADO* │\n` +
+                    `╰──────────────────────────────╯\n` +
+                    `> 🌐 *Servidor:* ${host}:${port}\n` +
+                    `> 👤 *Nick:* ${user}\n` +
+                    `> 📦 *Versão:* ${MC_VERSION}\n` +
+                    `> 📡 *Estado:* 🟢 ONLINE (PLAY STATE)\n` +
+                    `> ⏱️ *Conectado em:* ${new Date().toLocaleTimeString('pt-BR')}\n` +
+                    `> ⏳ *Uptime:* 0s\n` +
+                    `> 🎮 *Gamemode:* ${mcInfo.gamemode}\n` +
+                    `> 📍 *Posição:* ${mcInfo.coords}\n` +
+                    `> 🔄 *Auto-Reconnect:* ${autoReconnect ? "✅ ATIVADO (5s)" : "❌ DESATIVADO"}\n` +
+                    `> 🔢 *Sessão:* #${mcInfo.tentativas}\n\n` +
+                    `┌────────────────────────────┐\n` +
+                    `│   🎮 *AÇÕES RÁPIDAS*         │\n` +
+                    `└────────────────────────────┘\n` +
+                    `[1] Iniciar  [2] Parar  [3] Reconectar  [4] Gamemode\n` +
+                    `[5] Status   [6] Auto   [7] Players     [8] Chat/Cmd   [0] Menu`
+                );
+
+                if (liveMessage) {
+                    liveMessage.edit({
+                        content: `${mentionOwner()} @everyone`,
+                        embeds: [liveConnectedEmbed(botCfg)],
+                        components: fallenRow(),
+                        allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
+                    }).catch(() => {
+                        sendToChannel({
+                            content: `${mentionOwner()} @everyone`,
+                            embeds: [liveConnectedEmbed(botCfg)],
+                            components: fallenRow(),
+                            allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
+                        }).then(msg => { if (msg) liveMessage = msg; });
+                    });
+                } else {
+                    sendToChannel({
+                        content: `${mentionOwner()} @everyone`,
+                        embeds: [liveConnectedEmbed(botCfg)],
+                        components: fallenRow(),
+                        allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
+                    }).then(msg => { if (msg) liveMessage = msg; });
+                }
+                startLiveUpdate();
             } else if (line.includes("[KA #")) {
                 const m = line.match(/\[KA #(\d+)\]/);
-                if (m) { mcInfo.kaCount = parseInt(m[1]); addLog("keepalive", `KeepAlive #${m[1]} respondido`, `Uptime ${getUptime()}`); }
+                if (m) {
+                    mcInfo.kaCount = parseInt(m[1]);
+                    if (mcInfo.kaCount % 5 === 0) {
+                        addLog("keepalive", `KeepAlive #${m[1]} respondido com sucesso`, `Uptime ${getUptime()}`);
+                    }
+                }
             } else if (line.includes("[!] Kick")) {
                 mcInfo.motivo = line;
                 const lower = line.toLowerCase();
@@ -758,30 +1475,49 @@ function startMC() {
                 if (lower.includes("ban")) type = "banido";
                 mcState = "caido";
                 addLog(type, line.slice(0,200), `Uptime ${getUptime()} KA ${mcInfo.kaCount}`);
+                
+                // Notificação no WhatsApp de Kick/Ban!
+                whatsappManager.sendAdminAlert(
+                    `╭──────────────────────────────╮\n` +
+                    `│ 🚨 *ALERTA: PH4NT0M FOI ${type.toUpperCase()}!* │\n` +
+                    `╰──────────────────────────────╯\n` +
+                    `> 🌐 *Servidor:* ${host}:${port}\n` +
+                    `> 👤 *Nick:* ${user}\n` +
+                    `> ⏱️ *Ficou online por:* ${getUptime()}\n` +
+                    `> 📍 *Últimas Coords:* ${mcInfo.coords}\n` +
+                    `> 💓 *KeepAlives:* ${mcInfo.kaCount}\n` +
+                    `> 📄 *Motivo:* ${(line || "Kick").slice(0, 200)}\n` +
+                    `> 🔄 *Próxima Ação:* ${autoReconnect ? "Tentando reconectar automaticamente em 5s..." : "Auto-reconnect desativado."}\n\n` +
+                    `┌────────────────────────────┐\n` +
+                    `│   🎮 *AÇÕES RÁPIDAS*         │\n` +
+                    `└────────────────────────────┘\n` +
+                    `[1] Reconectar Agora  [2] Desligar  [5] Status  [0] Menu`
+                );
+
+                if (alertsChannel) {
+                    alertsChannel.send({
+                        content: `${mentionOwner()} @everyone 🚨 **ALERTA: O BOT FOI KICKADO/BANIDO!**`,
+                        embeds: [disconnectedEmbed(line, type, botCfg)]
+                    }).catch(()=>{});
+                }
+
                 stopLiveUpdate();
-                // Edita a mesma mensagem de uptime se existir, senao manda nova
                 if (liveMessage) {
                     liveMessage.edit({
                         content: `${mentionOwner()} @everyone`,
-                        embeds: [disconnectedEmbed(line, type)],
+                        embeds: [disconnectedEmbed(line, type, botCfg)],
                         components: fallenRow(),
                         allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
-                    }).catch(()=> sendToChannel({ content: `${mentionOwner()} @everyone`, embeds: [disconnectedEmbed(line, type)], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }));
+                    }).catch(() => sendToChannel({ content: `${mentionOwner()} @everyone`, embeds: [disconnectedEmbed(line, type, botCfg)], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }));
                     liveMessage = null;
-                } else {
-                    sendToChannel({
-                        content: `${mentionOwner()} @everyone`,
-                        embeds: [disconnectedEmbed(line, type)],
-                        components: fallenRow(),
-                        allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
-                    });
                 }
-            } else if (line.includes("Conexao perdida") || line.includes("Desconectado")) {
-                // will be handled on close
             } else if (line.includes("Player morreu")) {
                 mcInfo.motivo = "Morto por Phantom/mob — respawn automático";
-                // nao spamma, apenas deixa o live update mostrar; se morrer de verdade, o close handler vai editar
-                console.log("[MC] Morte detectada, respawn automatico...");
+                console.log("[MC] Morte detectada, respawnando...");
+                addLog("death", "Player morreu — respawn automático enviado", `Coords: ${mcInfo.coords}`);
+                if (serverChatChannel) {
+                    serverChatChannel.send(`💀 **\`${MC_USER}\`** morreu no servidor (respawn automático acionado).`).catch(()=>{});
+                }
             }
         }
     });
@@ -789,93 +1525,77 @@ function startMC() {
     mcProcess.stderr.on("data", (data) => {
         const txt = data.toString().trim();
         if (txt) console.error(`[MC-ERR] ${txt}`);
-        // Detect ban/kick via stderr
-        if (txt.toLowerCase().includes("ban")) {
-            mcInfo.motivo = txt;
-        }
+        if (txt.toLowerCase().includes("ban")) mcInfo.motivo = txt;
     });
 
     mcProcess.on("close", (code) => {
-        console.log(`[MC] Processo finalizado code=${code} state=${mcState}`);
-        const wasOnline = mcState === "online";
+        console.log(`[MC] Processo finalizado (code=${code}) state=${mcState}`);
         const uptime = mcStartTime ? getUptime() : "—";
+        if (shuttingDown) { mcState = "desligado"; return; }
 
-        if (shuttingDown) {
-            mcState = "desligado";
-            return;
-        }
-
-        // Se autoreconnect desligado, apenas edita a LIVE mensagem e para
         stopLiveUpdate();
-        let htmlPath = null;
         let sendType = "desconectado";
-
         if (mcState === "conectando") {
             mcState = "caido";
-            mcInfo.motivo = `Falha ao conectar (code ${code})`;
+            mcInfo.motivo = `Falha ao conectar no servidor (code ${code})`;
             sendType = "erro";
-            addLog("error", mcInfo.motivo, `Code ${code}`);
-            htmlPath = generateHTMLLog(mcInfo.motivo, sendType);
-            const embed = disconnectedEmbed(mcInfo.motivo, sendType);
-            if (liveMessage) {
-                liveMessage.edit({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }).catch(()=> sendToChannel({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }));
-            } else {
-                sendToChannel({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } });
-            }
-            liveMessage = null;
         } else if (mcState === "online") {
             mcState = "caido";
-            if (!mcInfo.motivo || mcInfo.motivo === "") mcInfo.motivo = `Desconectado após ${uptime} online`;
-            sendType = "desconectado";
-            if (buffer.includes("morreu") || buffer.toLowerCase().includes("slain")) sendType = "morto";
-            if (!buffer.includes("[!] Kick")) {
-                addLog(sendType, mcInfo.motivo, `Uptime ${uptime} KA ${mcInfo.kaCount}`);
-                htmlPath = generateHTMLLog(mcInfo.motivo, sendType);
-                const embed = disconnectedEmbed(mcInfo.motivo, sendType);
-                if (liveMessage) {
-                    liveMessage.edit({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }).catch(()=> sendToChannel({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }));
-                    liveMessage = null;
-                } else {
-                    sendToChannel({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } });
-                }
-            } else {
-                // ja foi enviado no Kick handler, mas ainda gera log — garante que se o edit falhou, força envio
-                htmlPath = generateHTMLLog(mcInfo.motivo, "kickado");
-                // se liveMessage ainda existe (edit do Kick falhou), força envio agora
-                if (liveMessage) {
-                    const embed = disconnectedEmbed(mcInfo.motivo, "kickado");
-                    liveMessage.edit({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }).catch(()=> sendToChannel({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }));
-                }
-                liveMessage = null;
-            }
+            if (!mcInfo.motivo) mcInfo.motivo = `Desconectado após ${uptime} online`;
+            if (buffer.includes("morreu")) sendType = "morto";
         } else {
             mcState = "caido";
-            if (!mcInfo.motivo) mcInfo.motivo = `Saiu/Desconectado (code ${code}) ${buffer.slice(-300).trim() || "sem motivo explicito"}`;
-            sendType = "desconectado";
-            if (mcInfo.motivo.toLowerCase().includes("ban")) sendType = "banido";
-            else if (buffer.toLowerCase().includes("kick") || mcInfo.motivo.toLowerCase().includes("kick")) sendType = "kickado";
-            addLog(sendType, mcInfo.motivo.slice(0,300), `Uptime ${uptime} KA ${mcInfo.kaCount} Code ${code}`);
-            htmlPath = generateHTMLLog(mcInfo.motivo, sendType);
-            const embed = disconnectedEmbed(mcInfo.motivo, sendType);
-            // FORCE: sempre manda embed, por qualquer motivo
-            if (liveMessage) {
-                liveMessage.edit({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }).catch(()=> sendToChannel({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }));
-                liveMessage = null;
-            } else {
-                sendToChannel({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } });
-            }
+            if (!mcInfo.motivo) mcInfo.motivo = `Desconectado (code ${code})`;
         }
-        // Apenas gera o HTML, NAO envia automaticamente — só via botão 📜 Logs
-        if (htmlPath) console.log(`[LOG] HTML salvo: ${htmlPath} (ver via botão Logs)`);
+
+        if (mcInfo.motivo.toLowerCase().includes("ban")) sendType = "banido";
+        else if (mcInfo.motivo.toLowerCase().includes("kick")) sendType = "kickado";
+
+        addLog(sendType, mcInfo.motivo.slice(0,300), `Uptime ${uptime} KA ${mcInfo.kaCount} Code ${code}`);
+        generateHTMLLog(mcInfo.motivo, sendType);
+
+        // Notifica queda no WhatsApp se não foi kick (kick já notificou)
+        if (sendType !== "kickado" && sendType !== "banido") {
+            whatsappManager.sendAdminAlert(
+                `╭──────────────────────────────╮\n` +
+                `│ ⚠️ *PH4NT0M DESCONECTADO*     │\n` +
+                `╰──────────────────────────────╯\n` +
+                `> 🌐 *Servidor:* ${host}:${port}\n` +
+                `> 👤 *Nick:* ${user}\n` +
+                `> ⏱️ *Ficou online por:* ${uptime}\n` +
+                `> 📍 *Últimas Coords:* ${mcInfo.coords}\n` +
+                `> 💓 *KeepAlives:* ${mcInfo.kaCount}\n` +
+                `> 📄 *Motivo:* ${mcInfo.motivo}\n` +
+                `> 🔄 *Auto-Reconnect:* ${autoReconnect ? "Reconectando em 5s..." : "Desativado"}\n\n` +
+                `┌────────────────────────────┐\n` +
+                `│   🎮 *AÇÕES RÁPIDAS*         │\n` +
+                `└────────────────────────────┘\n` +
+                `[1] Reconectar Agora  [2] Desligar  [5] Status  [0] Menu`
+            );
+        }
+
+        if (alertsChannel && (sendType === "kickado" || sendType === "banido" || sendType === "erro")) {
+            alertsChannel.send({
+                content: `${mentionOwner()} @everyone 🚨 **O bot AFK foi desconectado do servidor!**`,
+                embeds: [disconnectedEmbed(mcInfo.motivo, sendType, botCfg)]
+            }).catch(()=>{});
+        }
+
+        const embed = disconnectedEmbed(mcInfo.motivo, sendType, botCfg);
+        if (liveMessage) {
+            liveMessage.edit({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } })
+                .catch(() => sendToChannel({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }));
+            liveMessage = null;
+        } else {
+            sendToChannel({ content: `${mentionOwner()} @everyone`, embeds: [embed], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } });
+        }
 
         runningBotId = null;
         mcProcess = null;
 
-        if (autoReconnect && !shuttingDown) {
-            console.log("[MC] Reconectando em 5s...");
+        if (autoReconnect && !shuttingDown && serverState.online) {
+            console.log("[MC] Auto-reconnect ATIVADO: reconectando em 5 segundos...");
             setTimeout(() => startMC(), 5000);
-        } else {
-            console.log("[MC] Auto-reconnect DESATIVADO — aguardando comando manual");
         }
     });
 
@@ -883,155 +1603,199 @@ function startMC() {
         console.error("[MC] Spawn error:", err.message);
         mcState = "caido";
         runningBotId = null;
-        mcInfo.motivo = `Erro ao iniciar: ${err.message}`;
+        mcInfo.motivo = `Erro ao iniciar processo Python: ${err.message}`;
         addLog("error", mcInfo.motivo, err.stack?.slice(0,500)||"");
-        const htmlPath = generateHTMLLog(mcInfo.motivo, "erro");
+        generateHTMLLog(mcInfo.motivo, "erro");
         sendToChannel({
             content: `${mentionOwner()} @everyone`,
-            embeds: [disconnectedEmbed(mcInfo.motivo, "erro")],
+            embeds: [disconnectedEmbed(mcInfo.motivo, "erro", botCfg)],
             components: fallenRow(),
             allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
         });
-        if (autoReconnect) setTimeout(() => startMC(), 5000);
+        if (autoReconnect && serverState.online) setTimeout(() => startMC(), 5000);
     });
 }
 
-// ============ DISCORD EVENTS ============
-client.on("ready", async () => {
-    console.log(`[DISCORD] Logado como ${client.user.tag}`);
+// ============ DISCORD CLIENT & EVENTS ============
+const client = new Client({
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]
+});
 
-    // Register slash command
+client.on("ready", async () => {
+    console.log(`[DISCORD] Logado com sucesso como ${client.user.tag}`);
+
     const rest = new REST({ version: "10" }).setToken(DISCORD_TOKEN);
     const commands = [
-        new SlashCommandBuilder()
-            .setName("conectar")
-            .setDescription("Conecta o Ph4nt0m no servidor Minecraft")
-            .addStringOption(o => o.setName("token").setDescription("Token (opcional, usa o padrão se vazio)").setRequired(false))
-            .toJSON(),
-        new SlashCommandBuilder().setName("status").setDescription("Mostra status do Ph4nt0m").toJSON(),
-        new SlashCommandBuilder().setName("desconectar").setDescription("Desconecta o Ph4nt0m").toJSON(),
-        new SlashCommandBuilder().setName("reconectar").setDescription("Reconecta o Ph4nt0m").toJSON(),
-        new SlashCommandBuilder().setName("bots").setDescription("🤖 Gerencia todos os bots — criar, configurar IP, nick, etc").toJSON(),
+        new SlashCommandBuilder().setName("bots").setDescription("🤖 Painel Central de Gerenciamento de Bots").toJSON(),
+        new SlashCommandBuilder().setName("whatsapp").setDescription("📱 Abre o painel de pareamento e controle do WhatsApp").toJSON(),
+        new SlashCommandBuilder().setName("servidor").setDescription("🟢 Exibe o status ao vivo do servidor Minecraft").toJSON(),
+        new SlashCommandBuilder().setName("conectar").setDescription("🟢 Conecta o bot principal no servidor Minecraft").toJSON(),
+        new SlashCommandBuilder().setName("desconectar").setDescription("🔴 Desconecta o bot do servidor Minecraft").toJSON(),
+        new SlashCommandBuilder().setName("reconectar").setDescription("🔄 Força a reconexão imediata do bot").toJSON(),
+        new SlashCommandBuilder().setName("gamemode").setDescription("🎮 Altera o modo de jogo do bot no servidor").toJSON(),
+        new SlashCommandBuilder().setName("status").setDescription("📊 Exibe o status completo e métricas do bot").toJSON(),
+        new SlashCommandBuilder().setName("logs").setDescription("📜 Baixa e visualiza os logs detalhados em HTML").toJSON(),
     ];
     try {
         await rest.put(Routes.applicationCommands(client.user.id), { body: commands });
-        console.log("[DISCORD] Slash commands registrados");
+        console.log("[DISCORD] Slash commands registrados com sucesso");
     } catch (e) { console.error("Erro ao registrar comandos:", e.message); }
 
-    // Send menu
     try {
         const ch = await client.channels.fetch(CHANNEL_ID);
         if (ch) {
+            if (ch.guild) {
+                await setupLogChannels(ch.guild);
+            }
             await ch.send({
                 content: `${mentionOwner()} @everyone`,
-                embeds: [menuEmbed()],
-                components: menuRow(),
+                embeds: [botsEmbed()],
+                components: botsRows(),
                 allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
             });
-            console.log("[DISCORD] Menu enviado");
+            console.log("[DISCORD] Painel /bots inicial enviado");
         }
-    } catch (e) { console.error("Erro ao enviar menu:", e.message); }
+    } catch (e) { console.error("Erro ao enviar painel inicial:", e.message); }
 
-    // NAO inicia automaticamente — autoreconnect desligado, usuario clica Conectar
-    console.log("[DISCORD] Auto-reconnect DESATIVADO. Aguardando /conectar ou botao Conectar.");
+    // Inicializa WhatsApp Manager
+    console.log("[WA] Inicializando WhatsApp Manager...");
+    whatsappManager.init();
+
+    // Inicia loop de ping e monitoramento do servidor Minecraft (a cada 6s)
+    updateServerStatusLoop();
+    setInterval(updateServerStatusLoop, 6000);
 });
 
 client.on("interactionCreate", async (interaction) => {
     try {
         if (interaction.isChatInputCommand()) {
-            if (interaction.commandName === "conectar") {
-                await interaction.deferReply({ ephemeral: false });
-                const tokenOpt = interaction.options.getString("token");
-                if (tokenOpt && tokenOpt !== DISCORD_TOKEN) {
-                    await interaction.editReply({ content: "⚠️ Token diferente do configurado, usando token padrão...", embeds: [] });
-                }
+            const cmd = interaction.commandName;
+            if (cmd === "bots") {
+                await interaction.reply({ embeds: [botsEmbed()], components: botsRows(), ephemeral: false });
+            } else if (cmd === "whatsapp") {
+                await updateWhatsAppControlPanel();
+                await interaction.reply({ content: "📱 **Painel do WhatsApp atualizado no canal dedicado!**", ephemeral: true });
+            } else if (cmd === "servidor") {
+                await interaction.reply({ embeds: [serverStatusEmbed()], components: serverStatusRow(), ephemeral: false });
+            } else if (cmd === "conectar") {
+                await interaction.deferReply();
                 if (mcState === "online") {
-                    const e = new EmbedBuilder().setColor(0xf1c40f).setTitle("⚠️ Já Conectado").setDescription(`Ph4nt0m já está online há \`${getUptime()}\` em \`${MC_HOST}:${MC_PORT}\``).setTimestamp();
-                    await interaction.editReply({ embeds: [e] });
+                    await interaction.editReply({ content: `⚠️ **O bot já está online há \`${getUptime()}\` em \`${MC_HOST}:${MC_PORT}\`!**` });
                     return;
                 }
                 shuttingDown = false;
-                const e = new EmbedBuilder().setColor(0x2ecc71).setTitle("🔄 Conectando...").setDescription(`Iniciando conexão de \`${MC_USER}\` em \`${MC_HOST}:${MC_PORT}\``).setTimestamp();
-                await interaction.editReply({ embeds: [e] });
-                if (!mcProcess) startMC();
-                else {
-                    killMC();
-                    setTimeout(() => startMC(), 1000);
-                }
-            } else if (interaction.commandName === "status") {
-                await interaction.reply({ embeds: [statusEmbed()], ephemeral: false });
-            } else if (interaction.commandName === "desconectar") {
+                await interaction.editReply({ content: "🚀 **Iniciando conexão... Acompanhe o embed abaixo!**" });
+                startMC();
+            } else if (cmd === "desconectar") {
                 await interaction.deferReply();
+                shuttingDown = true;
                 killMC();
                 mcState = "desligado";
-                const e = new EmbedBuilder().setColor(0xe74c3c).setTitle("🔴 Desconectado").setDescription("Ph4nt0m desconectado.").setTimestamp();
-                await interaction.editReply({ embeds: [e] });
-            } else if (interaction.commandName === "reconectar") {
+                shuttingDown = false;
+                await interaction.editReply({ content: "🔴 **Bot desconectado manualmente.**" });
+            } else if (cmd === "reconectar") {
                 await interaction.deferReply();
                 killMC();
-                const e = new EmbedBuilder().setColor(0xf1c40f).setTitle("🔄 Reconectando...").setDescription("Reiniciando conexão...").setTimestamp();
-                await interaction.editReply({ embeds: [e] });
+                await interaction.editReply({ content: "🔄 **Reiniciando conexão em 1.5s...**" });
                 setTimeout(() => startMC(), 1500);
-            } else if (interaction.commandName === "bots") {
-                await interaction.reply({ embeds: [botsEmbed()], components: botsRows(), ephemeral: false });
+            } else if (cmd === "gamemode") {
+                await interaction.reply({ content: "🎮 **Selecione o modo de jogo desejado abaixo:**", components: [gamemodeRow()], ephemeral: true });
+            } else if (cmd === "status") {
+                const isOnline = mcState === "online";
+                const embed = isOnline ? liveConnectedEmbed() : disconnectedEmbed(mcInfo.motivo, mcState);
+                await interaction.reply({ embeds: [embed], ephemeral: false });
+            } else if (cmd === "logs") {
+                await showLogsModalOrEmbed(interaction);
             }
         } else if (interaction.isButton()) {
             const id = interaction.customId;
-            if (id === "btn_conectar") {
+            if (id === "btn_bot_start" || id === "btn_conectar") {
                 await interaction.deferUpdate();
                 if (mcState === "online") {
-                    await interaction.followUp({ content: `⚠️ Já está online há \`${getUptime()}\`!`, ephemeral: true });
+                    await interaction.followUp({ content: `⚠️ **O bot já está online há \`${getUptime()}\`!**`, ephemeral: true });
                     return;
                 }
                 shuttingDown = false;
-                await sendToChannel({
-                    content: `${mentionOwner()}`,
-                    embeds: [new EmbedBuilder().setColor(0xf1c40f).setTitle("🔄 Conectando...").setDescription(`Iniciando \`${MC_USER}\` em \`${MC_HOST}:${MC_PORT}\``).setTimestamp()],
-                    allowedMentions: { users: [OWNER_ID] }
-                });
-                if (!mcProcess) startMC();
-                else { killMC(); setTimeout(() => startMC(), 1000); }
-            } else if (id === "btn_reconectar") {
-                await interaction.deferUpdate();
-                shuttingDown = false;
-                killMC();
-                await sendToChannel({
-                    content: `${mentionOwner()}`,
-                    embeds: [new EmbedBuilder().setColor(0x3498db).setTitle("🔄 Reconectando...").setDescription("Forçando reconexão em 1.5s...").setTimestamp()],
-                    allowedMentions: { users: [OWNER_ID] }
-                });
-                setTimeout(() => startMC(), 1500);
-            } else if (id === "btn_desligar") {
+                startMC();
+            } else if (id === "btn_bot_stop" || id === "btn_desligar") {
                 await interaction.deferUpdate();
                 shuttingDown = true;
                 killMC();
                 mcState = "desligado";
-                // Edita a live message se existir
                 if (liveMessage) {
-                    try { await liveMessage.edit({ content: `${mentionOwner()} @everyone`, embeds: [new EmbedBuilder().setColor(0xe67e22).setTitle("🔌 Ph4nt0m Desconectado").setDescription(`Desconectado por <@${interaction.user.id}>`).setTimestamp().setFooter({ text: `Disconnect por ${interaction.user.tag}` })], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }); } catch {}
+                    try {
+                        await liveMessage.edit({
+                            content: `${mentionOwner()} @everyone`,
+                            embeds: [new EmbedBuilder().setColor(0xe67e22).setTitle("🔌 Ph4nt0m Desconectado").setDescription(`Bot desconectado manualmente por <@${interaction.user.id}>.\nUse **▶️ Iniciar Bot** para religar.`).setTimestamp()],
+                            components: fallenRow(),
+                            allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
+                        });
+                    } catch {}
                     liveMessage = null;
-                } else {
-                    await sendToChannel({
-                        content: `${mentionOwner()} @everyone`,
-                        embeds: [new EmbedBuilder().setColor(0xe67e22).setTitle("🔌 Ph4nt0m Desconectado").setDescription(`Desconectado por <@${interaction.user.id}>.\nUse **Conectar** para religar.`).setTimestamp().setFooter({ text: `Disconnect por ${interaction.user.tag}` })],
-                        allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
-                    });
                 }
                 shuttingDown = false;
+            } else if (id === "btn_reconectar") {
+                await interaction.deferUpdate();
+                shuttingDown = false;
+                killMC();
+                setTimeout(() => startMC(), 1500);
+            } else if (id === "btn_gamemode") {
+                await interaction.reply({ content: "🎮 **Escolha o Gamemode para aplicar no bot:**", components: [gamemodeRow()], ephemeral: true });
+            } else if (id === "btn_server_refresh") {
+                await updateServerStatusLoop();
+                if (interaction.message) {
+                    await interaction.update({ embeds: [serverStatusEmbed()], components: serverStatusRow() });
+                } else {
+                    await interaction.reply({ embeds: [serverStatusEmbed()], components: serverStatusRow(), ephemeral: true });
+                }
+            } else if (id === "btn_wa_connect_qr") {
+                await interaction.deferReply({ ephemeral: true });
+                await whatsappManager.connect();
+                await interaction.editReply({ content: "📱 **Tentando gerar novo QR Code... Verifique o painel do WhatsApp!**" });
+                await updateWhatsAppControlPanel();
+            } else if (id === "btn_wa_pairing_code") {
+                const modal = new ModalBuilder().setCustomId("modal_wa_pairing").setTitle("🔢 Conectar WhatsApp por Código");
+                modal.addComponents(
+                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("wa_phone_number").setLabel("Número com DDD (ex: 5511999999999)").setStyle(TextInputStyle.Short).setPlaceholder("5511999999999").setRequired(true))
+                );
+                await interaction.showModal(modal);
+            } else if (id === "btn_wa_disconnect") {
+                await interaction.deferReply({ ephemeral: true });
+                await whatsappManager.logout();
+                await interaction.editReply({ content: "🔌 **Sessão do WhatsApp deslogada e resetada com sucesso.**" });
+                await updateWhatsAppControlPanel();
+            } else if (id === "btn_wa_refresh") {
+                await interaction.deferUpdate();
+                await updateWhatsAppControlPanel();
+            } else if (id === "btn_wa_confirm_admin") {
+                if (whatsappManager.config.pendingAdminRequest) {
+                    const req = whatsappManager.config.pendingAdminRequest;
+                    whatsappManager.confirmAdmin(req.jid, req.name);
+                    await interaction.update({
+                        content: `✅ **Número \`+${req.number}\` (${req.name}) foi AUTORIZADO como Administrador do WhatsApp com sucesso!**`,
+                        embeds: [],
+                        components: []
+                    });
+                    await updateWhatsAppControlPanel();
+                } else {
+                    await interaction.reply({ content: "❌ Nenhuma solicitação pendente no momento.", ephemeral: true });
+                }
+            } else if (id === "btn_wa_reject_admin") {
+                whatsappManager.rejectAdmin();
+                await interaction.update({
+                    content: `❌ **Solicitação de vinculação de administrador foi recusada.**`,
+                    embeds: [],
+                    components: []
+                });
             } else if (id === "btn_kill") {
                 await interaction.deferUpdate();
-                // Mata TODOS os bots (multi + single)
-                let killed = 0;
-                for(const [bid, inst] of botInstances.entries()){
-                    try{ if(inst.liveInterval) clearInterval(inst.liveInterval); inst.process.kill(); }catch{}
-                    killed++;
-                }
-                botInstances.clear();
-                stopLiveUpdate(); killMC(); mcState = "desligado"; runningBotId=null; shuttingDown = true;
+                shuttingDown = true;
+                killMC();
+                mcState = "desligado";
                 try {
                     await sendToChannel({
                         content: `${mentionOwner()} @everyone`,
-                        embeds: [new EmbedBuilder().setColor(0x000000).setTitle("💀 BOT KILLADO").setDescription(`**Tudo foi encerrado por <@${interaction.user.id}>**\n\n> Minecraft: \`${killed} bots multi + single\` desconectados\n> Discord bot: Desligando...\n> Auto-reconnect: OFF\n\n*Para religar, inicie manualmente \`node discord_bot.js\`*`).setTimestamp().setFooter({ text: `Kill por ${interaction.user.tag} • Bot offline • ${killed} bots` })],
+                        embeds: [new EmbedBuilder().setColor(0x000000).setTitle("💀 PROCESSO ENCERRADO").setDescription(`**Aplicação finalizada por <@${interaction.user.id}>**\nAuto-reconnect desativado.`).setTimestamp()],
                         allowedMentions: { parse: ["everyone"], users: [OWNER_ID] }
                     });
                 } catch {}
@@ -1041,232 +1805,201 @@ client.on("interactionCreate", async (interaction) => {
                 }, 1500);
             } else if (id === "btn_autoreconnect") {
                 autoReconnect = !autoReconnect;
-                addLog("info", `Auto-Reconnect ${autoReconnect ? "ATIVADO" : "DESATIVADO"} por ${interaction.user.tag}`, `Estado: ${autoReconnect ? "ON" : "OFF"}`);
-                // Atualiza botoes da live message se existir
-                if (liveMessage && mcState === "online") {
-                    try { await liveMessage.edit({ content: `${mentionOwner()} @everyone`, embeds: [liveConnectedEmbed()], components: fallenRow(), allowedMentions: { parse: ["everyone"], users: [OWNER_ID] } }); } catch {}
-                }
-                await interaction.reply({ embeds: [new EmbedBuilder().setColor(autoReconnect?0x2ecc71:0x95a5a6).setTitle(autoReconnect?"✅ Auto-Reconnect ATIVADO":"❌ Auto-Reconnect DESATIVADO").setDescription(autoReconnect?"> Agora quando cair, reconecta sozinho em 5s.":"> Quando cair, ficará offline até você clicar em Reconectar.").setTimestamp()], ephemeral: true });
-            } else if (id === "btn_logs") {
-                const count = allLogs.length;
-                const sessionCount = sessionLogs.length;
-                const e = new EmbedBuilder()
-                    .setColor(0x5865F2)
-                    .setTitle("📜 Logs — Ph4nt0m")
-                    .setDescription(`**Monitorando há:** \`${getBotUptime()}\` • **Sessão atual:** \`${mcState==="online"?getUptime():"—"}\` (\`#${mcInfo.tentativas}\`)\n**Logs salvos:** \`${count}\` • **Eventos na sessão:** \`${sessionCount}\``)
-                    .setThumbnail("https://mc-heads.net/avatar/Ph4nt0m/100")
-                    .setTimestamp()
-                    .setFooter({ text: `Ph4nt0m • Clique nos botões abaixo para baixar cada HTML` })
-                    .addFields(
-                        { name: "📊 Sessão Atual", value: `> **Estado:** \`${mcState}\`\n> **Uptime:** \`${mcState==="online"?getUptime():"—"}\`\n> **KA:** \`${mcInfo.kaCount}\` • **Tentativa #${mcInfo.tentativas}**\n> **Eventos:** \`${sessionCount}\``, inline: false },
-                        { name: `📁 Histórico — ${count} logs (cada disconnect = 1 HTML)`, value: count>0 ? allLogs.slice(0,5).map((l,i)=>{
-                            const d = new Date(l.time);
-                            const dt = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-                            return `\`${i+1}.\` **#${l.tent||"?"}** — ${dt} — \`${l.type}\` • \`${l.uptime}\` • \`${l.fname}\``;
-                        }).join("\n") : "> *Nenhum log ainda. Cada disconnect gera um .html lindo em `logs/` com timeline completa* ", inline: false },
-                    );
-                if (sessionLogs.length>0) {
-                    const last10 = sessionLogs.slice(-10).map(l=>`\`${new Date(l.ts).toLocaleTimeString('pt-BR')}\` **${l.type}** — ${l.msg}`).join("\n");
-                    e.addFields({ name: `🕒 Últimos ${Math.min(10,sessionLogs.length)} eventos (sessão atual)`, value: "```"+last10.slice(0,1000)+"```", inline: false });
-                }
-                // Cria botoes para cada log
-                const comps = [];
-                if (count>0) {
-                    const row = new ActionRowBuilder();
-                    const maxBtns = Math.min(5, count);
-                    for(let i=0;i<maxBtns;i++){
-                        const l = allLogs[i];
-                        const d = new Date(l.time);
-                        const label = `#${l.tent||i+1} ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-                        row.addComponents(new ButtonBuilder().setCustomId(`btn_viewlog_${i}`).setLabel(`📄 ${label}`).setStyle(ButtonStyle.Primary));
+                addLog("info", `Auto-Reconnect alterado para: ${autoReconnect ? "ATIVADO (5s)" : "DESATIVADO"}`);
+
+                try {
+                    if (interaction.message) {
+                        if (interaction.message.embeds?.[0]?.title?.includes("Manager")) {
+                            await interaction.update({ embeds: [botsEmbed()], components: botsRows() });
+                        } else {
+                            await interaction.update({ components: fallenRow() });
+                        }
+                    } else {
+                        await interaction.deferUpdate();
                     }
-                    comps.push(row);
+                } catch {
+                    try { await interaction.deferUpdate(); } catch {}
                 }
-                await interaction.reply({ embeds: [e], components: comps, ephemeral: true });
-            } else if (id === "btn_randomize") {
-                await interaction.deferReply({ ephemeral: true });
-                const profile = generateUniqueProfile();
-                let avatarSuccess = false, nameSuccess = false;
-                let details = "";
-                // Nome — tenta com criatividade extra
-                try{
-                    await client.user.setUsername(profile.name);
-                    nameSuccess = true; details += `✅ Nome: \`${profile.name}\`\n`;
-                }catch(err){ details += `❌ Nome falhou (rate limit Discord: 2/h): \`${profile.name}\` — ${err.message.slice(0,120)}\n`; }
-                // Avatar — tenta QUALQUER foto, múltiplos fallbacks com PNG garantido
-                const avatarCandidates = [
-                    profile.avatar,
-                    `https://mc-heads.net/avatar/${encodeURIComponent(profile.name)}/512`,
-                    `https://robohash.org/${encodeURIComponent(profile.name+Date.now())}.png?set=set1`,
-                    `https://i.pravatar.cc/512?u=${encodeURIComponent(profile.name+Math.random())}`,
-                    `https://picsum.photos/seed/${encodeURIComponent(profile.name)}/512/512`
-                ];
-                for(const url of avatarCandidates){
-                    try{
-                        const buf = await fetchAvatarBuffer(url);
-                        // Verifica se é imagem válida (PNG/JPG/WEBP, não SVG vazio)
-                        if(buf.length < 100) throw new Error("imagem muito pequena");
-                        await client.user.setAvatar(buf);
-                        avatarSuccess = true; details += `✅ Avatar: [${url.slice(0,60)}](${url})\n`; profile.avatar = url; break;
-                    }catch(err){ details += `⚠️ Tentativa avatar falhou ${url.slice(0,40)}: ${err.message.slice(0,60)}\n`; }
+
+                if (autoReconnect && mcState !== "online" && mcState !== "conectando" && serverState.online) {
+                    console.log("[MC] Auto-reconnect ativado: iniciando conexão em 2s...");
+                    setTimeout(() => startMC(), 2000);
                 }
-                if(!avatarSuccess){
-                    try{ await client.user.setAvatar(profile.avatar); avatarSuccess=true; details += `✅ Avatar (URL direto): \`${profile.avatar.slice(0,80)}\`\n`; }catch(e2){ details += `❌ Avatar todas tentativas falharam: ${e2.message.slice(0,120)}\n`; }
-                }
-                // Bio/descrição — MUITO mais criativo, garante funcionar
-                let bioSuccess=false;
-                try{
-                    // Discord bots: presence com Custom Status (type 4) às vezes bloqueia, tenta Playing (0)
-                    await client.user.setPresence({ activities:[{ name: profile.bio.slice(0,128), type: 0 }], status:'online' });
-                    bioSuccess=true; details += `✅ Bio (Presence): \`${profile.bio}\`\n`;
-                }catch{
-                    try{ await client.user.setPresence({ activities:[{ name: profile.desc.slice(0,128), type: 2 }], status:'online' }); bioSuccess=true; details += `✅ Bio fallback: \`${profile.desc.slice(0,100)}\`\n`; }catch(e3){ details += `❌ Bio falhou: ${e3.message.slice(0,80)}\n`; }
-                }
-                // Descrição extra — salva e vai aparecer nos próximos embeds gigantes
-                try{
-                    const bioFile = path.join(__dirname, "logs", "bot_bio.json");
-                    fs.writeFileSync(bioFile, JSON.stringify({ name: profile.name, bio: profile.bio, desc: profile.desc, avatar: profile.avatar, at: new Date().toISOString(), by: interaction.user.tag, avatarOk: avatarSuccess, nameOk: nameSuccess }, null, 2));
-                    details += `✅ Desc salva: \`${profile.desc.slice(0,80)}\`\n`;
-                }catch{}
-                addLog("info", `Randomizado ? → ${profile.name} (avatar:${avatarSuccess?'OK':'FAIL'} bio:${bioSuccess?'OK':'FAIL'})`, `${profile.bio} | ${profile.avatar.slice(0,60)}`);
-                const e2 = new EmbedBuilder()
-                    .setColor(avatarSuccess && nameSuccess ? 0x2ecc71 : 0x9b59b6)
-                    .setTitle(avatarSuccess && nameSuccess ? "❓ RANDOMIZADO COM SUCESSO! — Tudo Unico" : "❓ Randomizado — Parcial")
-                    .setDescription(`**Nunca vai ser igual — hash:** \`${profile.key.slice(0,16)}\``)
-                    .setThumbnail(profile.avatar)
-                    .setTimestamp()
-                    .setFooter({ text: `Randomizado por ${interaction.user.tag} • Único garantido` })
-                    .addFields(
-                        { name: "👤 Novo Nome", value: `\`${profile.name}\` ${nameSuccess?"✅":"❌ rate limit"}`, inline: true },
-                        { name: "🖼️ Novo Avatar", value: avatarSuccess ? `✅ Aplicado` : `❌ Falhou`, inline: true },
-                        { name: "📝 Nova Bio", value: `\`\`\`${profile.bio}\`\`\``, inline: false },
-                        { name: "📄 Descrição", value: `\`\`\`${profile.desc}\`\`\``, inline: false },
-                        { name: "🔑 Detalhes", value: details.slice(0,1000) || "—", inline: false },
-                        { name: "💡", value: `> Nome e avatar são do bot do Discord (\`tet\`), mudam globalmente. Bio salva em \`logs/bot_bio.json\` e aparece nos próximos embeds.`, inline: false },
-                    );
-                await interaction.editReply({ embeds:[e2] });
+            } else if (id === "btn_bot_refresh") {
+                await interaction.update({ embeds: [botsEmbed()], components: botsRows() });
+            } else if (id === "btn_bot_menu") {
+                await interaction.reply({ embeds: [botsEmbed()], components: botsRows(), ephemeral: true });
+            } else if (id === "btn_logs") {
+                await showLogsModalOrEmbed(interaction);
             } else if (id.startsWith("btn_viewlog_")) {
                 const idx = parseInt(id.split("_").pop());
                 const log = allLogs[idx];
-                if (!log) { await interaction.reply({ content: "❌ Log não encontrado.", ephemeral: true }); return; }
-                try {
-                    if (!fs.existsSync(log.fpath)) { await interaction.reply({ content: `❌ Arquivo não encontrado: \`${log.fname}\``, ephemeral: true }); return; }
-                    const file = new AttachmentBuilder(log.fpath);
-                    const e = new EmbedBuilder().setColor(0x5865F2).setTitle(`📜 Log #${log.tent||idx+1} — ${log.fname}`).setDescription(`**Tipo:** \`${log.type}\` • **Uptime:** \`${log.uptime}\` • **KA:** \`${log.ka||"?"}\`\n**Data:** <t:${Math.floor(new Date(log.time).getTime()/1000)}:F>\n**Motivo:**\n\`\`\`${(log.reason||"").slice(0,800)}\`\`\``).setTimestamp(new Date(log.time));
-                    await interaction.reply({ content: `📎 **Log #${log.tent||idx+1}** — \`${log.fname}\``, embeds: [e], files: [file], ephemeral: true });
-                } catch(err){ await interaction.reply({ content: `❌ Erro: ${err.message}`, ephemeral: true }); }
+                if (!log || !fs.existsSync(log.fpath)) {
+                    await interaction.reply({ content: "❌ Arquivo de log não encontrado.", ephemeral: true });
+                    return;
+                }
+                const file = new AttachmentBuilder(log.fpath);
+                const e = new EmbedBuilder().setColor(0x5865F2).setTitle(`📜 Log #${log.tent||idx+1} — ${log.fname}`).setDescription(`**Tipo:** \`${log.type}\` • **Uptime:** \`${log.uptime}\`\n**Data:** <t:${Math.floor(new Date(log.time).getTime()/1000)}:F>\n\`\`\`${(log.reason||"").slice(0, 500)}\`\`\``).setTimestamp(new Date(log.time));
+                await interaction.reply({ embeds: [e], files: [file], ephemeral: true });
             } else if (id === "btn_bot_create") {
                 const modal = new ModalBuilder().setCustomId("modal_bot_create").setTitle("➕ Criar Novo Bot");
                 modal.addComponents(
-                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("bot_name").setLabel("Nome do Bot").setStyle(TextInputStyle.Short).setPlaceholder("Ex: Ph4nt0m2").setRequired(true).setMaxLength(32)),
-                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("bot_host").setLabel("IP / Host").setStyle(TextInputStyle.Short).setPlaceholder("Ex: 3ww123.play.hosting").setRequired(true)),
-                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("bot_port").setLabel("Porta").setStyle(TextInputStyle.Short).setPlaceholder("25565").setValue("25565").setRequired(true)),
-                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("bot_nick").setLabel("Nick no Minecraft").setStyle(TextInputStyle.Short).setPlaceholder("Ex: Ph4nt0m2").setRequired(true)),
-                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("bot_version").setLabel("Versão / Protocolo").setStyle(TextInputStyle.Short).setPlaceholder("26.2").setValue("26.2").setRequired(false))
+                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("bot_name").setLabel("Nome de Identificação").setStyle(TextInputStyle.Short).setPlaceholder("Ex: Ph4nt0m_Overworld").setRequired(true).setMaxLength(32)),
+                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("bot_host").setLabel("IP / Host").setStyle(TextInputStyle.Short).setValue(MC_HOST).setRequired(true)),
+                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("bot_port").setLabel("Porta").setStyle(TextInputStyle.Short).setValue(String(MC_PORT)).setRequired(true)),
+                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("bot_nick").setLabel("Nick no Minecraft").setStyle(TextInputStyle.Short).setPlaceholder("Ex: Ph4nt0m").setRequired(true)),
+                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("bot_version").setLabel("Versão").setStyle(TextInputStyle.Short).setValue(MC_VERSION).setRequired(false))
                 );
                 await interaction.showModal(modal);
             } else if (id === "btn_bot_config_ip") {
-                const bot = getSelectedBot();
-                const modal = new ModalBuilder().setCustomId("modal_bot_config_ip").setTitle(`⚙️ Configurar IP — ${bot.name}`);
+                const sel = getSelectedBot();
+                const modal = new ModalBuilder().setCustomId("modal_bot_config_ip").setTitle(`⚙️ Configurar IP — ${sel.name}`);
                 modal.addComponents(
-                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("cfg_host").setLabel("IP / Host").setStyle(TextInputStyle.Short).setValue(bot.host).setRequired(true)),
-                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("cfg_port").setLabel("Porta").setStyle(TextInputStyle.Short).setValue(String(bot.port)).setRequired(true)),
-                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("cfg_version").setLabel("Versão").setStyle(TextInputStyle.Short).setValue(bot.version).setRequired(false))
+                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("cfg_host").setLabel("IP / Host").setStyle(TextInputStyle.Short).setValue(sel.host).setRequired(true)),
+                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("cfg_port").setLabel("Porta").setStyle(TextInputStyle.Short).setValue(String(sel.port)).setRequired(true)),
+                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("cfg_version").setLabel("Versão").setStyle(TextInputStyle.Short).setValue(sel.version).setRequired(false))
                 );
                 await interaction.showModal(modal);
             } else if (id === "btn_bot_rename") {
-                const bot = getSelectedBot();
-                const modal = new ModalBuilder().setCustomId("modal_bot_rename").setTitle(`📝 Renomear — ${bot.name}`);
-                modal.addComponents(new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("new_name").setLabel("Novo Nick").setStyle(TextInputStyle.Short).setValue(bot.user).setRequired(true).setMaxLength(16)));
+                const sel = getSelectedBot();
+                const modal = new ModalBuilder().setCustomId("modal_bot_rename").setTitle(`📝 Renomear — ${sel.name}`);
+                modal.addComponents(
+                    new ActionRowBuilder().addComponents(new TextInputBuilder().setCustomId("new_nick").setLabel("Novo Nick no Minecraft").setStyle(TextInputStyle.Short).setValue(sel.user).setRequired(true).setMaxLength(16))
+                );
                 await interaction.showModal(modal);
             } else if (id === "btn_bot_delete") {
-                if (bots.length<=1) { await interaction.reply({ content:"❌ Não pode deletar o último bot!", ephemeral:true }); return; }
-                const bot = bots[0];
-                bots.shift(); saveBots(); syncPrimary();
-                await interaction.reply({ embeds: [new EmbedBuilder().setColor(0xe74c3c).setTitle("🗑️ Bot Deletado").setDescription(`Bot \`${bot.name}\` (\`${bot.host}:${bot.port}\`) removido.\nRestam \`${bots.length}\` bots.`).setTimestamp()], ephemeral:false });
-            } else if (id === "btn_bot_start") {
-                const sel = getSelectedBot();
-                if(!sel){ await interaction.reply({content:"❌ Nenhum bot selecionado", ephemeral:true}); return; }
-                if(botInstances.has(sel.id) && botInstances.get(sel.id).state==="online"){
-                    await interaction.reply({ content:`⚠️ **${sel.name}** já está online!`, ephemeral:true }); return;
+                if (bots.length <= 1) {
+                    await interaction.reply({ content: "❌ **Você não pode deletar o único bot cadastrado!**", ephemeral: true });
+                    return;
                 }
-                if(botInstances.has(sel.id)){
-                    await interaction.reply({ content:`⚠️ **${sel.name}** já está conectando...`, ephemeral:true }); return;
-                }
-                await interaction.deferUpdate();
-                // MULTI: inicia em paralelo, NAO mata outros bots
-                addLog("info", `Iniciando bot "${sel.name}" (${sel.host}:${sel.port}) em paralelo`, `Por ${interaction.user.tag} • Total antes: ${botInstances.size}`);
-                await sendToChannel({ content:`${mentionOwner()}`, embeds:[new EmbedBuilder().setColor(0x2ecc71).setTitle(`▶️ Iniciando ${sel.name}...`).setDescription(`Bot **${sel.name}** (\`${sel.user}\`) em \`${sel.host}:${sel.port}\`\nRodando em paralelo — total **${botInstances.size+1}** bots`).setTimestamp()], allowedMentions:{users:[OWNER_ID]}});
-                startBotMulti(sel.id);
-            } else if (id === "btn_bot_stop") {
-                const sel = getSelectedBot();
-                await interaction.deferUpdate();
-                const stopped = stopBotMulti(sel.id);
-                if(stopped){
-                    await sendToChannel({ content:`${mentionOwner()} @everyone`, embeds:[new EmbedBuilder().setColor(0xe67e22).setTitle(`⏹️ ${sel.name} Parado`).setDescription(`Bot **${sel.name}** parado por <@${interaction.user.id}>\nRestam **${botInstances.size}** bots rodando`).setTimestamp()], allowedMentions:{parse:["everyone"],users:[OWNER_ID]}});
-                    addLog("info", `Bot ${sel.name} parado`, `Por ${interaction.user.tag}`);
-                } else {
-                    // fallback single
-                    shuttingDown=true; killMC(); mcState="desligado";
-                    await sendToChannel({ content:`${mentionOwner()} @everyone`, embeds:[new EmbedBuilder().setColor(0xe67e22).setTitle("⏹️ Bot Parado").setDescription(`Parado via painel /bots por <@${interaction.user.id}>`).setTimestamp()], allowedMentions:{parse:["everyone"],users:[OWNER_ID]}});
-                    shuttingDown=false;
-                }
-            } else if (id === "btn_bot_refresh") {
-                await interaction.update({ embeds:[botsEmbed()], components: botsRows() });
-            } else if (id === "btn_status") {
-                await interaction.reply({ embeds: [statusEmbed()], ephemeral: true });
+                const removed = bots.shift();
+                saveBots();
+                syncPrimary();
+                await interaction.reply({ embeds: [new EmbedBuilder().setColor(0xe74c3c).setTitle("🗑️ Bot Deletado").setDescription(`O bot \`${removed.name}\` foi removido com sucesso.`).setTimestamp()] });
             }
         } else if (interaction.isStringSelectMenu()) {
             if (interaction.customId === "select_bot") {
-                const chosen = interaction.values[0];
-                const idx = bots.findIndex(b=>b.id===chosen);
-                if(idx>0){ const [bot]=bots.splice(idx,1); bots.unshift(bot); saveBots(); syncPrimary(); }
-                await interaction.update({ embeds:[botsEmbed()], components: botsRows() });
+                const chosenId = interaction.values[0];
+                const idx = bots.findIndex(b => b.id === chosenId);
+                if (idx > 0) {
+                    const [bot] = bots.splice(idx, 1);
+                    bots.unshift(bot);
+                    saveBots();
+                    syncPrimary();
+                }
+                await interaction.update({ embeds: [botsEmbed()], components: botsRows() });
+            } else if (interaction.customId === "select_gamemode") {
+                const selectedMode = interaction.values[0];
+                const modesPt = { survival: "Sobrevivência", creative: "Criativo", adventure: "Aventura", spectator: "Espectador" };
+                
+                setBotGamemode(selectedMode);
+                mcInfo.gamemode = `${modesPt[selectedMode] || selectedMode} (${selectedMode})`;
+                addLog("info", `Comando /gamemode ${selectedMode} enviado`, `Executado por ${interaction.user.tag}`);
+
+                if (liveMessage && mcState === "online") {
+                    try {
+                        await liveMessage.edit({ content: `${mentionOwner()} @everyone`, embeds: [liveConnectedEmbed()], components: fallenRow() });
+                    } catch {}
+                }
+
+                await interaction.update({
+                    content: `✅ **Modo de jogo alterado para \`${modesPt[selectedMode] || selectedMode}\`!**\n> *(Comando \`/gamemode ${selectedMode}\` emitido no servidor)*`,
+                    components: []
+                });
             }
         } else if (interaction.isModalSubmit()) {
             if (interaction.customId === "modal_bot_create") {
                 const name = interaction.fields.getTextInputValue("bot_name").trim();
                 const host = interaction.fields.getTextInputValue("bot_host").trim();
-                const port = parseInt(interaction.fields.getTextInputValue("bot_port"))||25565;
+                const port = parseInt(interaction.fields.getTextInputValue("bot_port")) || 25565;
                 const nick = interaction.fields.getTextInputValue("bot_nick").trim();
-                const ver = interaction.fields.getTextInputValue("bot_version")?.trim() || "26.2";
-                const id = name.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,16) || `bot${Date.now()}`;
-                bots.push({ id, name, host, port, user:nick, version:ver, enabled:true, createdAt:new Date().toISOString() });
+                const ver = interaction.fields.getTextInputValue("bot_version")?.trim() || "26.2 (776)";
+                const id = name.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 16) || `bot${Date.now()}`;
+                bots.push({ id, name, host, port, user: nick, version: ver, enabled: true, createdAt: new Date().toISOString() });
                 saveBots();
-                await interaction.reply({ embeds:[new EmbedBuilder().setColor(0x2ecc71).setTitle("✅ Bot Criado!").setDescription(`**${name}** (\`${host}:${port}\` • \`${nick}\`) criado!\nTotal: \`${bots.length}\` bots.`).setTimestamp()], ephemeral:false });
+                await interaction.reply({ embeds: [new EmbedBuilder().setColor(0x2ecc71).setTitle("✅ Bot Criado!").setDescription(`**${name}** (\`${host}:${port}\` • Nick: \`${nick}\`) foi adicionado.`).setTimestamp()] });
             } else if (interaction.customId === "modal_bot_config_ip") {
                 const host = interaction.fields.getTextInputValue("cfg_host").trim();
-                const port = parseInt(interaction.fields.getTextInputValue("cfg_port"))||25565;
+                const port = parseInt(interaction.fields.getTextInputValue("cfg_port")) || 25565;
                 const ver = interaction.fields.getTextInputValue("cfg_version")?.trim() || bots[0].version;
-                bots[0].host = host; bots[0].port = port; bots[0].version = ver; saveBots(); syncPrimary();
-                await interaction.reply({ embeds:[new EmbedBuilder().setColor(0x3498db).setTitle("⚙️ IP Atualizado!").setDescription(`Novo endereço: \`${host}:${port}\` • Versão \`${ver}\`\nBot **${bots[0].name}** atualizado. Use **▶️ Iniciar** para conectar.`).setTimestamp()], ephemeral:false });
+                bots[0].host = host; bots[0].port = port; bots[0].version = ver;
+                saveBots(); syncPrimary();
+                await interaction.reply({ embeds: [new EmbedBuilder().setColor(0x3498db).setTitle("⚙️ Configurações Atualizadas!").setDescription(`Novo endereço do bot **${bots[0].name}**: \`${host}:${port}\` (Versão: \`${ver}\`).`).setTimestamp()] });
             } else if (interaction.customId === "modal_bot_rename") {
-                const nick = interaction.fields.getTextInputValue("new_name").trim();
-                bots[0].user = nick; bots[0].name = nick; saveBots(); syncPrimary();
-                await interaction.reply({ embeds:[new EmbedBuilder().setColor(0x2ecc71).setTitle("📝 Renomeado!").setDescription(`Bot agora é \`${nick}\` (\`${bots[0].host}:${bots[0].port}\`)`).setTimestamp()], ephemeral:false });
+                const nick = interaction.fields.getTextInputValue("new_nick").trim();
+                bots[0].user = nick;
+                saveBots(); syncPrimary();
+                await interaction.reply({ embeds: [new EmbedBuilder().setColor(0x2ecc71).setTitle("📝 Nick Atualizado!").setDescription(`Nick do bot no Minecraft alterado para: \`${nick}\`.`).setTimestamp()] });
+            } else if (interaction.customId === "modal_wa_pairing") {
+                const phone = interaction.fields.getTextInputValue("wa_phone_number").trim();
+                await interaction.deferReply({ ephemeral: true });
+                await whatsappManager.connect(phone);
+                await interaction.editReply({ content: `🔢 **Gerando código de emparelhamento para \`${phone}\`... Acompanhe no canal 📱・whatsapp!**` });
             }
         }
-    } catch (e) { console.error("Interaction error:", e); }
+    } catch (e) { console.error("Erro na interação:", e); }
 });
 
-// ============ RENDER KEEP-ALIVE WEB SERVER (não deixa o Render dormir) ============
+async function showLogsModalOrEmbed(interaction) {
+    const count = allLogs.length;
+    const sessionCount = sessionLogs.length;
+    const e = new EmbedBuilder()
+        .setColor(0x5865F2)
+        .setTitle("📜 Histórico de Logs & Sessões — Ph4nt0m")
+        .setDescription(`**Monitorando há:** \`${getBotUptime()}\` • **Sessão atual:** \`${mcState === "online" ? getUptime() : "—"}\` (\`#${mcInfo.tentativas}\`)\n**Logs HTML salvos:** \`${count}\` • **Eventos nesta sessão:** \`${sessionCount}\``)
+        .setThumbnail(`https://mc-heads.net/avatar/${encodeURIComponent(MC_USER)}/100`)
+        .setTimestamp();
+
+    if (count > 0) {
+        e.addFields({
+            name: `📁 Últimos ${Math.min(5, count)} Logs de Desconexão`,
+            value: allLogs.slice(0, 5).map((l, i) => {
+                const d = new Date(l.time);
+                const dt = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+                return `\`${i+1}.\` **#${l.tent||"?"}** — ${dt} • \`${l.type.toUpperCase()}\` • Uptime: \`${l.uptime}\``;
+            }).join("\n"),
+            inline: false
+        });
+    }
+
+    const comps = [];
+    if (count > 0) {
+        const row = new ActionRowBuilder();
+        for (let i = 0; i < Math.min(5, count); i++) {
+            const l = allLogs[i];
+            const d = new Date(l.time);
+            const label = `#${l.tent||i+1} (${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')})`;
+            row.addComponents(new ButtonBuilder().setCustomId(`btn_viewlog_${i}`).setLabel(`📄 ${label}`).setStyle(ButtonStyle.Primary));
+        }
+        comps.push(row);
+    }
+
+    if (interaction.replied || interaction.deferred) {
+        await interaction.followUp({ embeds: [e], components: comps, ephemeral: true });
+    } else {
+        await interaction.reply({ embeds: [e], components: comps, ephemeral: true });
+    }
+}
+
+// ============ WEB SERVER (Render keep-alive) ============
 const WEB_PORT = process.env.PORT || 3000;
 try {
     const express = require('express');
     const web = express();
-    web.get('/', (req,res)=> res.send(`<h1>Ph4nt0m Bot Online ✅</h1><p>Uptime: ${getBotUptime()}<br>Bots: ${bots.length}<br>MC: ${mcState}<br>Multi: ${botInstances.size} bots<br>${new Date().toISOString()}</p><p><a href="/health">/health</a> • <a href="https://discord.com">Discord</a></p>`));
-    web.get('/health', (req,res)=> res.json({ status:'ok', uptime: getBotUptime(), botUptime: botInitTime, bots: bots.length, running: botInstances.size + (mcState==="online"?1:0), mcState, timestamp: new Date().toISOString() }));
-    web.get('/ping', (req,res)=> res.send('pong'));
-    web.listen(WEB_PORT, ()=> console.log(`[WEB] ✅ Health check ouvindo em :${WEB_PORT} — Render não vai dormir`));
-    // Self-ping a cada 9 min (Render free dorme em 15 min sem tráfego)
+    web.get('/', (req,res)=> res.send(`<h1>Ph4nt0m Bot & WhatsApp Online ✅</h1><p>Bot Uptime: ${getBotUptime()}<br>Server Uptime: ${getServerUptime()}<br>MC State: ${mcState}<br>WA State: ${whatsappManager.state}<br>${new Date().toISOString()}</p>`));
+    web.get('/health', (req,res)=> res.json({ status:'ok', botUptime: getBotUptime(), serverUptime: getServerUptime(), mcState, serverState, waState: whatsappManager.state, timestamp: new Date().toISOString() }));
+    const server = web.listen(WEB_PORT, ()=> console.log(`[WEB] ✅ Health check ouvindo em :${WEB_PORT}`));
+    server.on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            web.listen(0, function() { console.log(`[WEB] ✅ Health check ouvindo na porta dinâmica :${this.address().port}`); });
+        }
+    });
     setInterval(()=> { try{ require('http').get(`http://localhost:${WEB_PORT}/health`,()=>{}).on('error',()=>{}); }catch{} }, 9*60*1000);
-    // Keep-alive externo opcional: UptimeRobot pode pingar /health
-} catch(e){ console.log("[WEB] Sem express, sem web server:", e.message); }
+} catch(e){ console.log("[WEB] Sem web server:", e.message); }
 
-// Graceful shutdown
-process.on("SIGINT", () => { shuttingDown = true; for(const inst of botInstances.values()){ try{inst.process.kill()}catch{} } killMC(); client.destroy(); process.exit(0); });
-process.on("SIGTERM", () => { shuttingDown = true; for(const inst of botInstances.values()){ try{inst.process.kill()}catch{} } killMC(); client.destroy(); process.exit(0); });
+// Shutdown
+process.on("SIGINT", () => { shuttingDown = true; killMC(); client.destroy(); process.exit(0); });
+process.on("SIGTERM", () => { shuttingDown = true; killMC(); client.destroy(); process.exit(0); });
 
 client.login(DISCORD_TOKEN).catch(e => { console.error("Login falhou:", e.message); process.exit(1); });
-
-console.log("[DISCORD] Iniciando...");
+console.log("[DISCORD] Inicializando Ph4nt0m Bot, Monitor de Servidor & WhatsApp...");

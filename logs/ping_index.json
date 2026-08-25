@@ -1,0 +1,5290 @@
+[
+  {
+    "time": "2026-08-25T04:56:48.536Z",
+    "ts": 1787633808536,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 85,
+    "details": "[Ph4nt0m] KeepAlive #83 • Uptime 1246s"
+  },
+  {
+    "time": "2026-08-25T04:56:33.537Z",
+    "ts": 1787633793537,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 84,
+    "details": "[Ph4nt0m] KeepAlive #82 • Uptime 1231s"
+  },
+  {
+    "time": "2026-08-25T04:56:18.537Z",
+    "ts": 1787633778537,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 83,
+    "details": "[Ph4nt0m] KeepAlive #81 • Uptime 1216s"
+  },
+  {
+    "time": "2026-08-25T04:56:03.488Z",
+    "ts": 1787633763488,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 82,
+    "details": "[Ph4nt0m] KeepAlive #80 • Uptime 1201s"
+  },
+  {
+    "time": "2026-08-25T04:55:48.489Z",
+    "ts": 1787633748489,
+    "source": "mc_keepalive",
+    "interval": 15048,
+    "count": 81,
+    "details": "[Ph4nt0m] KeepAlive #79 • Uptime 1186s"
+  },
+  {
+    "time": "2026-08-25T04:55:33.441Z",
+    "ts": 1787633733441,
+    "source": "mc_keepalive",
+    "interval": 15002,
+    "count": 80,
+    "details": "[Ph4nt0m] KeepAlive #78 • Uptime 1171s"
+  },
+  {
+    "time": "2026-08-25T04:55:18.439Z",
+    "ts": 1787633718439,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 79,
+    "details": "[Ph4nt0m] KeepAlive #77 • Uptime 1156s"
+  },
+  {
+    "time": "2026-08-25T04:55:03.439Z",
+    "ts": 1787633703439,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 78,
+    "details": "[Ph4nt0m] KeepAlive #76 • Uptime 1141s"
+  },
+  {
+    "time": "2026-08-25T04:54:48.390Z",
+    "ts": 1787633688390,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 77,
+    "details": "[Ph4nt0m] KeepAlive #75 • Uptime 1126s"
+  },
+  {
+    "time": "2026-08-25T04:54:33.390Z",
+    "ts": 1787633673390,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 76,
+    "details": "[Ph4nt0m] KeepAlive #74 • Uptime 1111s"
+  },
+  {
+    "time": "2026-08-25T04:54:18.390Z",
+    "ts": 1787633658390,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 75,
+    "details": "[Ph4nt0m] KeepAlive #73 • Uptime 1096s"
+  },
+  {
+    "time": "2026-08-25T04:54:03.341Z",
+    "ts": 1787633643341,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 74,
+    "details": "[Ph4nt0m] KeepAlive #72 • Uptime 1081s"
+  },
+  {
+    "time": "2026-08-25T04:53:48.340Z",
+    "ts": 1787633628340,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 73,
+    "details": "[Ph4nt0m] KeepAlive #71 • Uptime 1066s"
+  },
+  {
+    "time": "2026-08-25T04:53:33.291Z",
+    "ts": 1787633613291,
+    "source": "mc_keepalive",
+    "interval": 15050,
+    "count": 72,
+    "details": "[Ph4nt0m] KeepAlive #70 • Uptime 1051s"
+  },
+  {
+    "time": "2026-08-25T04:53:18.241Z",
+    "ts": 1787633598241,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 71,
+    "details": "[Ph4nt0m] KeepAlive #69 • Uptime 1036s"
+  },
+  {
+    "time": "2026-08-25T04:53:03.241Z",
+    "ts": 1787633583241,
+    "source": "mc_keepalive",
+    "interval": 14997,
+    "count": 70,
+    "details": "[Ph4nt0m] KeepAlive #68 • Uptime 1021s"
+  },
+  {
+    "time": "2026-08-25T04:52:48.244Z",
+    "ts": 1787633568244,
+    "source": "mc_keepalive",
+    "interval": 15038,
+    "count": 69,
+    "details": "[Ph4nt0m] KeepAlive #67 • Uptime 1006s"
+  },
+  {
+    "time": "2026-08-25T04:52:33.206Z",
+    "ts": 1787633553206,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 68,
+    "details": "[Ph4nt0m] KeepAlive #66 • Uptime 991s"
+  },
+  {
+    "time": "2026-08-25T04:52:18.205Z",
+    "ts": 1787633538205,
+    "source": "mc_keepalive",
+    "interval": 3038,
+    "count": 67,
+    "details": "[Ph4nt0m] KeepAlive #65 • Uptime 976s"
+  },
+  {
+    "time": "2026-08-25T04:52:15.167Z",
+    "ts": 1787633535167,
+    "source": "health_external",
+    "interval": 11963,
+    "count": 66,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-25T04:52:03.204Z",
+    "ts": 1787633523204,
+    "source": "mc_keepalive",
+    "interval": 15012,
+    "count": 65,
+    "details": "[Ph4nt0m] KeepAlive #64 • Uptime 961s"
+  },
+  {
+    "time": "2026-08-25T04:51:48.192Z",
+    "ts": 1787633508192,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 64,
+    "details": "[Ph4nt0m] KeepAlive #63 • Uptime 946s"
+  },
+  {
+    "time": "2026-08-25T04:51:33.193Z",
+    "ts": 1787633493193,
+    "source": "mc_keepalive",
+    "interval": 14987,
+    "count": 63,
+    "details": "[Ph4nt0m] KeepAlive #62 • Uptime 931s"
+  },
+  {
+    "time": "2026-08-25T04:51:18.206Z",
+    "ts": 1787633478206,
+    "source": "mc_keepalive",
+    "interval": 14998,
+    "count": 62,
+    "details": "[Ph4nt0m] KeepAlive #61 • Uptime 916s"
+  },
+  {
+    "time": "2026-08-25T04:51:03.208Z",
+    "ts": 1787633463208,
+    "source": "mc_keepalive",
+    "interval": 15004,
+    "count": 61,
+    "details": "[Ph4nt0m] KeepAlive #60 • Uptime 901s"
+  },
+  {
+    "time": "2026-08-25T04:50:48.204Z",
+    "ts": 1787633448204,
+    "source": "mc_keepalive",
+    "interval": 15003,
+    "count": 60,
+    "details": "[Ph4nt0m] KeepAlive #59 • Uptime 886s"
+  },
+  {
+    "time": "2026-08-25T04:50:33.201Z",
+    "ts": 1787633433201,
+    "source": "mc_keepalive",
+    "interval": 15007,
+    "count": 59,
+    "details": "[Ph4nt0m] KeepAlive #58 • Uptime 871s"
+  },
+  {
+    "time": "2026-08-25T04:50:18.194Z",
+    "ts": 1787633418194,
+    "source": "mc_keepalive",
+    "interval": 15201,
+    "count": 58,
+    "details": "[Ph4nt0m] KeepAlive #57 • Uptime 856s"
+  },
+  {
+    "time": "2026-08-25T04:50:02.993Z",
+    "ts": 1787633402993,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 57,
+    "details": "[Ph4nt0m] KeepAlive #56 • Uptime 841s"
+  },
+  {
+    "time": "2026-08-25T04:49:47.994Z",
+    "ts": 1787633387994,
+    "source": "mc_keepalive",
+    "interval": 14998,
+    "count": 56,
+    "details": "[Ph4nt0m] KeepAlive #55 • Uptime 826s"
+  },
+  {
+    "time": "2026-08-25T04:49:32.996Z",
+    "ts": 1787633372996,
+    "source": "mc_keepalive",
+    "interval": 15051,
+    "count": 55,
+    "details": "[Ph4nt0m] KeepAlive #54 • Uptime 811s"
+  },
+  {
+    "time": "2026-08-25T04:49:17.945Z",
+    "ts": 1787633357945,
+    "source": "mc_keepalive",
+    "interval": 15002,
+    "count": 54,
+    "details": "[Ph4nt0m] KeepAlive #53 • Uptime 796s"
+  },
+  {
+    "time": "2026-08-25T04:49:02.943Z",
+    "ts": 1787633342943,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 53,
+    "details": "[Ph4nt0m] KeepAlive #52 • Uptime 781s"
+  },
+  {
+    "time": "2026-08-25T04:48:47.944Z",
+    "ts": 1787633327944,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 52,
+    "details": "[Ph4nt0m] KeepAlive #51 • Uptime 766s"
+  },
+  {
+    "time": "2026-08-25T04:48:32.943Z",
+    "ts": 1787633312943,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 51,
+    "details": "[Ph4nt0m] KeepAlive #50 • Uptime 751s"
+  },
+  {
+    "time": "2026-08-25T04:48:17.944Z",
+    "ts": 1787633297944,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 50,
+    "details": "[Ph4nt0m] KeepAlive #49 • Uptime 736s"
+  },
+  {
+    "time": "2026-08-25T04:48:02.944Z",
+    "ts": 1787633282944,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 49,
+    "details": "[Ph4nt0m] KeepAlive #48 • Uptime 721s"
+  },
+  {
+    "time": "2026-08-25T04:47:47.895Z",
+    "ts": 1787633267895,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 48,
+    "details": "[Ph4nt0m] KeepAlive #47 • Uptime 706s"
+  },
+  {
+    "time": "2026-08-25T04:47:32.895Z",
+    "ts": 1787633252895,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 47,
+    "details": "[Ph4nt0m] KeepAlive #46 • Uptime 691s"
+  },
+  {
+    "time": "2026-08-25T04:47:17.894Z",
+    "ts": 1787633237894,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 46,
+    "details": "[Ph4nt0m] KeepAlive #45 • Uptime 676s"
+  },
+  {
+    "time": "2026-08-25T04:47:02.895Z",
+    "ts": 1787633222895,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 45,
+    "details": "[Ph4nt0m] KeepAlive #44 • Uptime 661s"
+  },
+  {
+    "time": "2026-08-25T04:46:47.846Z",
+    "ts": 1787633207846,
+    "source": "mc_keepalive",
+    "interval": 15051,
+    "count": 44,
+    "details": "[Ph4nt0m] KeepAlive #43 • Uptime 645s"
+  },
+  {
+    "time": "2026-08-25T04:46:32.795Z",
+    "ts": 1787633192795,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 43,
+    "details": "[Ph4nt0m] KeepAlive #42 • Uptime 630s"
+  },
+  {
+    "time": "2026-08-25T04:46:17.746Z",
+    "ts": 1787633177746,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 42,
+    "details": "[Ph4nt0m] KeepAlive #41 • Uptime 615s"
+  },
+  {
+    "time": "2026-08-25T04:46:02.747Z",
+    "ts": 1787633162747,
+    "source": "mc_keepalive",
+    "interval": 15041,
+    "count": 41,
+    "details": "[Ph4nt0m] KeepAlive #40 • Uptime 600s"
+  },
+  {
+    "time": "2026-08-25T04:45:47.706Z",
+    "ts": 1787633147706,
+    "source": "mc_keepalive",
+    "interval": 15007,
+    "count": 40,
+    "details": "[Ph4nt0m] KeepAlive #39 • Uptime 585s"
+  },
+  {
+    "time": "2026-08-25T04:45:32.699Z",
+    "ts": 1787633132699,
+    "source": "mc_keepalive",
+    "interval": 15002,
+    "count": 39,
+    "details": "[Ph4nt0m] KeepAlive #38 • Uptime 570s"
+  },
+  {
+    "time": "2026-08-25T04:45:17.697Z",
+    "ts": 1787633117697,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 38,
+    "details": "[Ph4nt0m] KeepAlive #37 • Uptime 555s"
+  },
+  {
+    "time": "2026-08-25T04:45:02.697Z",
+    "ts": 1787633102697,
+    "source": "mc_keepalive",
+    "interval": 15050,
+    "count": 37,
+    "details": "[Ph4nt0m] KeepAlive #36 • Uptime 540s"
+  },
+  {
+    "time": "2026-08-25T04:44:47.647Z",
+    "ts": 1787633087647,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 36,
+    "details": "[Ph4nt0m] KeepAlive #35 • Uptime 525s"
+  },
+  {
+    "time": "2026-08-25T04:44:32.647Z",
+    "ts": 1787633072647,
+    "source": "mc_keepalive",
+    "interval": 14997,
+    "count": 35,
+    "details": "[Ph4nt0m] KeepAlive #34 • Uptime 510s"
+  },
+  {
+    "time": "2026-08-25T04:44:17.650Z",
+    "ts": 1787633057650,
+    "source": "mc_keepalive",
+    "interval": 15002,
+    "count": 34,
+    "details": "[Ph4nt0m] KeepAlive #33 • Uptime 495s"
+  },
+  {
+    "time": "2026-08-25T04:44:02.648Z",
+    "ts": 1787633042648,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 33,
+    "details": "[Ph4nt0m] KeepAlive #32 • Uptime 480s"
+  },
+  {
+    "time": "2026-08-25T04:43:47.599Z",
+    "ts": 1787633027599,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 32,
+    "details": "[Ph4nt0m] KeepAlive #31 • Uptime 465s"
+  },
+  {
+    "time": "2026-08-25T04:43:32.599Z",
+    "ts": 1787633012599,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 31,
+    "details": "[Ph4nt0m] KeepAlive #30 • Uptime 450s"
+  },
+  {
+    "time": "2026-08-25T04:43:17.599Z",
+    "ts": 1787632997599,
+    "source": "mc_keepalive",
+    "interval": 2436,
+    "count": 30,
+    "details": "[Ph4nt0m] KeepAlive #29 • Uptime 435s"
+  },
+  {
+    "time": "2026-08-25T04:43:15.163Z",
+    "ts": 1787632995163,
+    "source": "health_external",
+    "interval": 12565,
+    "count": 29,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-25T04:43:02.598Z",
+    "ts": 1787632982598,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 28,
+    "details": "[Ph4nt0m] KeepAlive #28 • Uptime 420s"
+  },
+  {
+    "time": "2026-08-25T04:42:47.549Z",
+    "ts": 1787632967549,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 27,
+    "details": "[Ph4nt0m] KeepAlive #27 • Uptime 405s"
+  },
+  {
+    "time": "2026-08-25T04:42:32.549Z",
+    "ts": 1787632952549,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 26,
+    "details": "[Ph4nt0m] KeepAlive #26 • Uptime 390s"
+  },
+  {
+    "time": "2026-08-25T04:42:17.500Z",
+    "ts": 1787632937500,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 25,
+    "details": "[Ph4nt0m] KeepAlive #25 • Uptime 375s"
+  },
+  {
+    "time": "2026-08-25T04:42:02.499Z",
+    "ts": 1787632922499,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 24,
+    "details": "[Ph4nt0m] KeepAlive #24 • Uptime 360s"
+  },
+  {
+    "time": "2026-08-25T04:41:47.500Z",
+    "ts": 1787632907500,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 23,
+    "details": "[Ph4nt0m] KeepAlive #23 • Uptime 345s"
+  },
+  {
+    "time": "2026-08-25T04:41:32.451Z",
+    "ts": 1787632892451,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 22,
+    "details": "[Ph4nt0m] KeepAlive #22 • Uptime 330s"
+  },
+  {
+    "time": "2026-08-25T04:41:17.450Z",
+    "ts": 1787632877450,
+    "source": "mc_keepalive",
+    "interval": 14998,
+    "count": 21,
+    "details": "[Ph4nt0m] KeepAlive #21 • Uptime 315s"
+  },
+  {
+    "time": "2026-08-25T04:41:02.452Z",
+    "ts": 1787632862452,
+    "source": "mc_keepalive",
+    "interval": 15002,
+    "count": 20,
+    "details": "[Ph4nt0m] KeepAlive #20 • Uptime 300s"
+  },
+  {
+    "time": "2026-08-25T04:40:47.450Z",
+    "ts": 1787632847450,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 19,
+    "details": "[Ph4nt0m] KeepAlive #19 • Uptime 285s"
+  },
+  {
+    "time": "2026-08-25T04:40:32.450Z",
+    "ts": 1787632832450,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 18,
+    "details": "[Ph4nt0m] KeepAlive #18 • Uptime 270s"
+  },
+  {
+    "time": "2026-08-25T04:40:17.450Z",
+    "ts": 1787632817450,
+    "source": "mc_keepalive",
+    "interval": 15048,
+    "count": 17,
+    "details": "[Ph4nt0m] KeepAlive #17 • Uptime 255s"
+  },
+  {
+    "time": "2026-08-25T04:40:02.402Z",
+    "ts": 1787632802402,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 16,
+    "details": "[Ph4nt0m] KeepAlive #16 • Uptime 240s"
+  },
+  {
+    "time": "2026-08-25T04:39:47.402Z",
+    "ts": 1787632787402,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 15,
+    "details": "[Ph4nt0m] KeepAlive #15 • Uptime 225s"
+  },
+  {
+    "time": "2026-08-25T04:39:32.402Z",
+    "ts": 1787632772402,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 14,
+    "details": "[Ph4nt0m] KeepAlive #14 • Uptime 210s"
+  },
+  {
+    "time": "2026-08-25T04:39:17.401Z",
+    "ts": 1787632757401,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 13,
+    "details": "[Ph4nt0m] KeepAlive #13 • Uptime 195s"
+  },
+  {
+    "time": "2026-08-25T04:39:02.352Z",
+    "ts": 1787632742352,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 12,
+    "details": "[Ph4nt0m] KeepAlive #12 • Uptime 180s"
+  },
+  {
+    "time": "2026-08-25T04:38:47.303Z",
+    "ts": 1787632727303,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 11,
+    "details": "[Ph4nt0m] KeepAlive #11 • Uptime 165s"
+  },
+  {
+    "time": "2026-08-25T04:38:32.304Z",
+    "ts": 1787632712304,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 10,
+    "details": "[Ph4nt0m] KeepAlive #10 • Uptime 150s"
+  },
+  {
+    "time": "2026-08-25T04:38:17.303Z",
+    "ts": 1787632697303,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 9,
+    "details": "[Ph4nt0m] KeepAlive #9 • Uptime 135s"
+  },
+  {
+    "time": "2026-08-25T04:38:02.302Z",
+    "ts": 1787632682302,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 8,
+    "details": "[Ph4nt0m] KeepAlive #8 • Uptime 120s"
+  },
+  {
+    "time": "2026-08-25T04:37:47.302Z",
+    "ts": 1787632667302,
+    "source": "mc_keepalive",
+    "interval": 15048,
+    "count": 7,
+    "details": "[Ph4nt0m] KeepAlive #7 • Uptime 105s"
+  },
+  {
+    "time": "2026-08-25T04:37:32.254Z",
+    "ts": 1787632652254,
+    "source": "mc_keepalive",
+    "interval": 15035,
+    "count": 6,
+    "details": "[Ph4nt0m] KeepAlive #6 • Uptime 90s"
+  },
+  {
+    "time": "2026-08-25T04:37:17.219Z",
+    "ts": 1787632637219,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 5,
+    "details": "[Ph4nt0m] KeepAlive #5 • Uptime 75s"
+  },
+  {
+    "time": "2026-08-25T04:37:02.219Z",
+    "ts": 1787632622219,
+    "source": "mc_keepalive",
+    "interval": 15014,
+    "count": 4,
+    "details": "[Ph4nt0m] KeepAlive #4 • Uptime 60s"
+  },
+  {
+    "time": "2026-08-25T04:36:47.205Z",
+    "ts": 1787632607205,
+    "source": "mc_keepalive",
+    "interval": 14998,
+    "count": 3,
+    "details": "[Ph4nt0m] KeepAlive #3 • Uptime 45s"
+  },
+  {
+    "time": "2026-08-25T04:36:32.207Z",
+    "ts": 1787632592207,
+    "source": "mc_keepalive",
+    "interval": 14994,
+    "count": 2,
+    "details": "[Ph4nt0m] KeepAlive #2 • Uptime 30s"
+  },
+  {
+    "time": "2026-08-25T04:36:17.213Z",
+    "ts": 1787632577213,
+    "source": "mc_keepalive",
+    "interval": 0,
+    "count": 1,
+    "details": "[Ph4nt0m] KeepAlive #1 • Uptime 15s"
+  },
+  {
+    "time": "2026-08-25T04:19:39.917Z",
+    "ts": 1787631579917,
+    "source": "health_external",
+    "interval": 0,
+    "count": 1,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-23T09:39:04.714Z",
+    "ts": 1787477944714,
+    "source": "health_external",
+    "interval": 539933,
+    "count": 2,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-23T09:30:04.781Z",
+    "ts": 1787477404781,
+    "source": "health_external",
+    "interval": 0,
+    "count": 1,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-23T09:13:47.498Z",
+    "ts": 1787476427498,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 6,
+    "details": "[rsrs] KeepAlive #6 • Uptime 1m 30s"
+  },
+  {
+    "time": "2026-08-23T09:13:32.499Z",
+    "ts": 1787476412499,
+    "source": "mc_keepalive",
+    "interval": 15047,
+    "count": 5,
+    "details": "[rsrs] KeepAlive #5 • Uptime 1m 15s"
+  },
+  {
+    "time": "2026-08-23T09:13:17.452Z",
+    "ts": 1787476397452,
+    "source": "mc_keepalive",
+    "interval": 15004,
+    "count": 4,
+    "details": "[rsrs] KeepAlive #4 • Uptime 1m 0s"
+  },
+  {
+    "time": "2026-08-23T09:13:02.448Z",
+    "ts": 1787476382448,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 3,
+    "details": "[rsrs] KeepAlive #3 • Uptime 45s"
+  },
+  {
+    "time": "2026-08-23T09:12:47.449Z",
+    "ts": 1787476367449,
+    "source": "mc_keepalive",
+    "interval": 14997,
+    "count": 2,
+    "details": "[Ph4nt0m] KeepAlive #2 • Uptime 30s"
+  },
+  {
+    "time": "2026-08-23T09:12:32.452Z",
+    "ts": 1787476352452,
+    "source": "mc_keepalive",
+    "interval": 0,
+    "count": 1,
+    "details": "[Ph4nt0m] KeepAlive #1 • Uptime 15s"
+  },
+  {
+    "time": "2026-08-23T09:10:26.050Z",
+    "ts": 1787476226050,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 567,
+    "details": "[Ph4nt0m] KeepAlive #2 • Uptime 30s"
+  },
+  {
+    "time": "2026-08-23T09:10:11.051Z",
+    "ts": 1787476211051,
+    "source": "mc_keepalive",
+    "interval": 374480,
+    "count": 566,
+    "details": "[Ph4nt0m] KeepAlive #1 • Uptime 15s"
+  },
+  {
+    "time": "2026-08-23T09:03:56.571Z",
+    "ts": 1787475836571,
+    "source": "health_external",
+    "interval": 62772,
+    "count": 565,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-23T09:02:53.799Z",
+    "ts": 1787475773799,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 564,
+    "details": "[rsrs] KeepAlive #119 • Uptime 1787s"
+  },
+  {
+    "time": "2026-08-23T09:02:38.799Z",
+    "ts": 1787475758799,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 563,
+    "details": "[rsrs] KeepAlive #118 • Uptime 1772s"
+  },
+  {
+    "time": "2026-08-23T09:02:23.799Z",
+    "ts": 1787475743799,
+    "source": "mc_keepalive",
+    "interval": 15048,
+    "count": 562,
+    "details": "[rsrs] KeepAlive #117 • Uptime 1757s"
+  },
+  {
+    "time": "2026-08-23T09:02:08.751Z",
+    "ts": 1787475728751,
+    "source": "mc_keepalive",
+    "interval": 15002,
+    "count": 561,
+    "details": "[rsrs] KeepAlive #116 • Uptime 1742s"
+  },
+  {
+    "time": "2026-08-23T09:01:53.749Z",
+    "ts": 1787475713749,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 560,
+    "details": "[rsrs] KeepAlive #115 • Uptime 1727s"
+  },
+  {
+    "time": "2026-08-23T09:01:38.750Z",
+    "ts": 1787475698750,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 559,
+    "details": "[rsrs] KeepAlive #114 • Uptime 1712s"
+  },
+  {
+    "time": "2026-08-23T09:01:23.749Z",
+    "ts": 1787475683749,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 558,
+    "details": "[rsrs] KeepAlive #113 • Uptime 1697s"
+  },
+  {
+    "time": "2026-08-23T09:01:08.700Z",
+    "ts": 1787475668700,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 557,
+    "details": "[rsrs] KeepAlive #112 • Uptime 1682s"
+  },
+  {
+    "time": "2026-08-23T09:00:53.700Z",
+    "ts": 1787475653700,
+    "source": "mc_keepalive",
+    "interval": 14996,
+    "count": 556,
+    "details": "[rsrs] KeepAlive #111 • Uptime 1667s"
+  },
+  {
+    "time": "2026-08-23T09:00:38.704Z",
+    "ts": 1787475638704,
+    "source": "mc_keepalive",
+    "interval": 15052,
+    "count": 555,
+    "details": "[rsrs] KeepAlive #110 • Uptime 1652s"
+  },
+  {
+    "time": "2026-08-23T09:00:23.652Z",
+    "ts": 1787475623652,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 554,
+    "details": "[rsrs] KeepAlive #109 • Uptime 1637s"
+  },
+  {
+    "time": "2026-08-23T09:00:08.652Z",
+    "ts": 1787475608652,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 553,
+    "details": "[rsrs] KeepAlive #108 • Uptime 1622s"
+  },
+  {
+    "time": "2026-08-23T08:59:53.652Z",
+    "ts": 1787475593652,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 552,
+    "details": "[rsrs] KeepAlive #107 • Uptime 1607s"
+  },
+  {
+    "time": "2026-08-23T08:59:38.652Z",
+    "ts": 1787475578652,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 551,
+    "details": "[rsrs] KeepAlive #106 • Uptime 1592s"
+  },
+  {
+    "time": "2026-08-23T08:59:23.651Z",
+    "ts": 1787475563651,
+    "source": "mc_keepalive",
+    "interval": 14999,
+    "count": 550,
+    "details": "[rsrs] KeepAlive #105 • Uptime 1577s"
+  },
+  {
+    "time": "2026-08-23T08:59:08.652Z",
+    "ts": 1787475548652,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 549,
+    "details": "[rsrs] KeepAlive #104 • Uptime 1562s"
+  },
+  {
+    "time": "2026-08-23T08:58:53.603Z",
+    "ts": 1787475533603,
+    "source": "mc_keepalive",
+    "interval": 15047,
+    "count": 548,
+    "details": "[rsrs] KeepAlive #103 • Uptime 1547s"
+  },
+  {
+    "time": "2026-08-23T08:58:38.556Z",
+    "ts": 1787475518556,
+    "source": "mc_keepalive",
+    "interval": 15003,
+    "count": 547,
+    "details": "[rsrs] KeepAlive #102 • Uptime 1532s"
+  },
+  {
+    "time": "2026-08-23T08:58:23.553Z",
+    "ts": 1787475503553,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 546,
+    "details": "[rsrs] KeepAlive #101 • Uptime 1517s"
+  },
+  {
+    "time": "2026-08-23T08:58:08.504Z",
+    "ts": 1787475488504,
+    "source": "mc_keepalive",
+    "interval": 15049,
+    "count": 545,
+    "details": "[rsrs] KeepAlive #100 • Uptime 1502s"
+  },
+  {
+    "time": "2026-08-23T08:57:53.455Z",
+    "ts": 1787475473455,
+    "source": "mc_keepalive",
+    "interval": 11651,
+    "count": 544,
+    "details": "[rsrs] KeepAlive #99 • Uptime 1487s"
+  },
+  {
+    "time": "2026-08-23T08:57:41.804Z",
+    "ts": 1787475461804,
+    "source": "mc_keepalive",
+    "interval": 3350,
+    "count": 543,
+    "details": "[teste] KeepAlive #119 • Uptime 1787s"
+  },
+  {
+    "time": "2026-08-23T08:57:38.454Z",
+    "ts": 1787475458454,
+    "source": "mc_keepalive",
+    "interval": 11698,
+    "count": 542,
+    "details": "[rsrs] KeepAlive #98 • Uptime 1472s"
+  },
+  {
+    "time": "2026-08-23T08:57:26.756Z",
+    "ts": 1787475446756,
+    "source": "mc_keepalive",
+    "interval": 3350,
+    "count": 541,
+    "details": "[teste] KeepAlive #118 • Uptime 1772s"
+  },
+  {
+    "time": "2026-08-23T08:57:23.406Z",
+    "ts": 1787475443406,
+    "source": "mc_keepalive",
+    "interval": 11651,
+    "count": 540,
+    "details": "[rsrs] KeepAlive #97 • Uptime 1457s"
+  },
+  {
+    "time": "2026-08-23T08:57:11.755Z",
+    "ts": 1787475431755,
+    "source": "mc_keepalive",
+    "interval": 3348,
+    "count": 539,
+    "details": "[teste] KeepAlive #117 • Uptime 1757s"
+  },
+  {
+    "time": "2026-08-23T08:57:08.407Z",
+    "ts": 1787475428407,
+    "source": "mc_keepalive",
+    "interval": 11653,
+    "count": 538,
+    "details": "[rsrs] KeepAlive #96 • Uptime 1442s"
+  },
+  {
+    "time": "2026-08-23T08:56:56.754Z",
+    "ts": 1787475416754,
+    "source": "mc_keepalive",
+    "interval": 3351,
+    "count": 537,
+    "details": "[teste] KeepAlive #116 • Uptime 1742s"
+  },
+  {
+    "time": "2026-08-23T08:56:53.403Z",
+    "ts": 1787475413403,
+    "source": "mc_keepalive",
+    "interval": 11650,
+    "count": 536,
+    "details": "[rsrs] KeepAlive #95 • Uptime 1427s"
+  },
+  {
+    "time": "2026-08-23T08:56:41.753Z",
+    "ts": 1787475401753,
+    "source": "mc_keepalive",
+    "interval": 3399,
+    "count": 535,
+    "details": "[teste] KeepAlive #115 • Uptime 1727s"
+  },
+  {
+    "time": "2026-08-23T08:56:38.354Z",
+    "ts": 1787475398354,
+    "source": "mc_keepalive",
+    "interval": 11649,
+    "count": 534,
+    "details": "[rsrs] KeepAlive #94 • Uptime 1411s"
+  },
+  {
+    "time": "2026-08-23T08:56:26.705Z",
+    "ts": 1787475386705,
+    "source": "mc_keepalive",
+    "interval": 3350,
+    "count": 533,
+    "details": "[teste] KeepAlive #114 • Uptime 1712s"
+  },
+  {
+    "time": "2026-08-23T08:56:23.355Z",
+    "ts": 1787475383355,
+    "source": "mc_keepalive",
+    "interval": 11700,
+    "count": 532,
+    "details": "[rsrs] KeepAlive #93 • Uptime 1396s"
+  },
+  {
+    "time": "2026-08-23T08:56:11.655Z",
+    "ts": 1787475371655,
+    "source": "mc_keepalive",
+    "interval": 3350,
+    "count": 531,
+    "details": "[teste] KeepAlive #113 • Uptime 1697s"
+  },
+  {
+    "time": "2026-08-23T08:56:08.305Z",
+    "ts": 1787475368305,
+    "source": "mc_keepalive",
+    "interval": 11650,
+    "count": 530,
+    "details": "[rsrs] KeepAlive #92 • Uptime 1381s"
+  },
+  {
+    "time": "2026-08-23T08:55:56.655Z",
+    "ts": 1787475356655,
+    "source": "mc_keepalive",
+    "interval": 3396,
+    "count": 529,
+    "details": "[teste] KeepAlive #112 • Uptime 1682s"
+  },
+  {
+    "time": "2026-08-23T08:55:53.259Z",
+    "ts": 1787475353259,
+    "source": "mc_keepalive",
+    "interval": 11653,
+    "count": 528,
+    "details": "[rsrs] KeepAlive #91 • Uptime 1366s"
+  },
+  {
+    "time": "2026-08-23T08:55:41.606Z",
+    "ts": 1787475341606,
+    "source": "mc_keepalive",
+    "interval": 3350,
+    "count": 527,
+    "details": "[teste] KeepAlive #111 • Uptime 1667s"
+  },
+  {
+    "time": "2026-08-23T08:55:38.256Z",
+    "ts": 1787475338256,
+    "source": "mc_keepalive",
+    "interval": 757,
+    "count": 526,
+    "details": "[rsrs] KeepAlive #90 • Uptime 1351s"
+  },
+  {
+    "time": "2026-08-23T08:55:37.499Z",
+    "ts": 1787475337499,
+    "source": "mc_keepalive",
+    "interval": 10894,
+    "count": 525,
+    "details": "[Ph4nt0m] KeepAlive #198 • Uptime 2970s"
+  },
+  {
+    "time": "2026-08-23T08:55:26.605Z",
+    "ts": 1787475326605,
+    "source": "mc_keepalive",
+    "interval": 3350,
+    "count": 524,
+    "details": "[teste] KeepAlive #110 • Uptime 1652s"
+  },
+  {
+    "time": "2026-08-23T08:55:23.255Z",
+    "ts": 1787475323255,
+    "source": "mc_keepalive",
+    "interval": 756,
+    "count": 523,
+    "details": "[rsrs] KeepAlive #89 • Uptime 1336s"
+  },
+  {
+    "time": "2026-08-23T08:55:22.499Z",
+    "ts": 1787475322499,
+    "source": "mc_keepalive",
+    "interval": 10943,
+    "count": 522,
+    "details": "[Ph4nt0m] KeepAlive #197 • Uptime 2955s"
+  },
+  {
+    "time": "2026-08-23T08:55:11.556Z",
+    "ts": 1787475311556,
+    "source": "mc_keepalive",
+    "interval": 3301,
+    "count": 521,
+    "details": "[teste] KeepAlive #109 • Uptime 1637s"
+  },
+  {
+    "time": "2026-08-23T08:55:08.255Z",
+    "ts": 1787475308255,
+    "source": "mc_keepalive",
+    "interval": 756,
+    "count": 520,
+    "details": "[rsrs] KeepAlive #88 • Uptime 1321s"
+  },
+  {
+    "time": "2026-08-23T08:55:07.499Z",
+    "ts": 1787475307499,
+    "source": "mc_keepalive",
+    "interval": 10927,
+    "count": 519,
+    "details": "[Ph4nt0m] KeepAlive #196 • Uptime 2940s"
+  },
+  {
+    "time": "2026-08-23T08:54:56.572Z",
+    "ts": 1787475296572,
+    "source": "health_external",
+    "interval": 16,
+    "count": 518,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-23T08:54:56.556Z",
+    "ts": 1787475296556,
+    "source": "mc_keepalive",
+    "interval": 3341,
+    "count": 517,
+    "details": "[teste] KeepAlive #108 • Uptime 1622s"
+  },
+  {
+    "time": "2026-08-23T08:54:53.215Z",
+    "ts": 1787475293215,
+    "source": "mc_keepalive",
+    "interval": 716,
+    "count": 516,
+    "details": "[rsrs] KeepAlive #87 • Uptime 1306s"
+  },
+  {
+    "time": "2026-08-23T08:54:52.499Z",
+    "ts": 1787475292499,
+    "source": "mc_keepalive",
+    "interval": 10943,
+    "count": 515,
+    "details": "[Ph4nt0m] KeepAlive #195 • Uptime 2925s"
+  },
+  {
+    "time": "2026-08-23T08:54:41.556Z",
+    "ts": 1787475281556,
+    "source": "mc_keepalive",
+    "interval": 3347,
+    "count": 514,
+    "details": "[teste] KeepAlive #107 • Uptime 1607s"
+  },
+  {
+    "time": "2026-08-23T08:54:38.209Z",
+    "ts": 1787475278209,
+    "source": "mc_keepalive",
+    "interval": 707,
+    "count": 513,
+    "details": "[rsrs] KeepAlive #86 • Uptime 1291s"
+  },
+  {
+    "time": "2026-08-23T08:54:37.502Z",
+    "ts": 1787475277502,
+    "source": "mc_keepalive",
+    "interval": 10946,
+    "count": 512,
+    "details": "[Ph4nt0m] KeepAlive #194 • Uptime 2910s"
+  },
+  {
+    "time": "2026-08-23T08:54:26.556Z",
+    "ts": 1787475266556,
+    "source": "mc_keepalive",
+    "interval": 3398,
+    "count": 511,
+    "details": "[teste] KeepAlive #106 • Uptime 1592s"
+  },
+  {
+    "time": "2026-08-23T08:54:23.158Z",
+    "ts": 1787475263158,
+    "source": "mc_keepalive",
+    "interval": 658,
+    "count": 510,
+    "details": "[rsrs] KeepAlive #85 • Uptime 1276s"
+  },
+  {
+    "time": "2026-08-23T08:54:22.500Z",
+    "ts": 1787475262500,
+    "source": "mc_keepalive",
+    "interval": 10944,
+    "count": 509,
+    "details": "[Ph4nt0m] KeepAlive #193 • Uptime 2895s"
+  },
+  {
+    "time": "2026-08-23T08:54:11.556Z",
+    "ts": 1787475251556,
+    "source": "mc_keepalive",
+    "interval": 3399,
+    "count": 508,
+    "details": "[teste] KeepAlive #105 • Uptime 1577s"
+  },
+  {
+    "time": "2026-08-23T08:54:08.157Z",
+    "ts": 1787475248157,
+    "source": "mc_keepalive",
+    "interval": 657,
+    "count": 507,
+    "details": "[rsrs] KeepAlive #84 • Uptime 1261s"
+  },
+  {
+    "time": "2026-08-23T08:54:07.500Z",
+    "ts": 1787475247500,
+    "source": "mc_keepalive",
+    "interval": 10943,
+    "count": 506,
+    "details": "[Ph4nt0m] KeepAlive #192 • Uptime 2880s"
+  },
+  {
+    "time": "2026-08-23T08:53:56.557Z",
+    "ts": 1787475236557,
+    "source": "mc_keepalive",
+    "interval": 3400,
+    "count": 505,
+    "details": "[teste] KeepAlive #104 • Uptime 1562s"
+  },
+  {
+    "time": "2026-08-23T08:53:53.157Z",
+    "ts": 1787475233157,
+    "source": "mc_keepalive",
+    "interval": 657,
+    "count": 504,
+    "details": "[rsrs] KeepAlive #83 • Uptime 1246s"
+  },
+  {
+    "time": "2026-08-23T08:53:52.500Z",
+    "ts": 1787475232500,
+    "source": "mc_keepalive",
+    "interval": 10943,
+    "count": 503,
+    "details": "[Ph4nt0m] KeepAlive #191 • Uptime 2865s"
+  },
+  {
+    "time": "2026-08-23T08:53:41.557Z",
+    "ts": 1787475221557,
+    "source": "mc_keepalive",
+    "interval": 3400,
+    "count": 502,
+    "details": "[teste] KeepAlive #103 • Uptime 1547s"
+  },
+  {
+    "time": "2026-08-23T08:53:38.157Z",
+    "ts": 1787475218157,
+    "source": "mc_keepalive",
+    "interval": 656,
+    "count": 501,
+    "details": "[rsrs] KeepAlive #82 • Uptime 1231s"
+  },
+  {
+    "time": "2026-08-23T08:53:37.501Z",
+    "ts": 1787475217501,
+    "source": "mc_keepalive",
+    "interval": 10994,
+    "count": 500,
+    "details": "[Ph4nt0m] KeepAlive #190 • Uptime 2850s"
+  },
+  {
+    "time": "2026-08-23T08:53:26.507Z",
+    "ts": 1787475206507,
+    "source": "mc_keepalive",
+    "interval": 3350,
+    "count": 499,
+    "details": "[teste] KeepAlive #102 • Uptime 1532s"
+  },
+  {
+    "time": "2026-08-23T08:53:23.157Z",
+    "ts": 1787475203157,
+    "source": "mc_keepalive",
+    "interval": 657,
+    "count": 498,
+    "details": "[rsrs] KeepAlive #81 • Uptime 1216s"
+  },
+  {
+    "time": "2026-08-23T08:53:22.500Z",
+    "ts": 1787475202500,
+    "source": "mc_keepalive",
+    "interval": 11038,
+    "count": 497,
+    "details": "[Ph4nt0m] KeepAlive #189 • Uptime 2835s"
+  },
+  {
+    "time": "2026-08-23T08:53:11.462Z",
+    "ts": 1787475191462,
+    "source": "mc_keepalive",
+    "interval": 3349,
+    "count": 496,
+    "details": "[teste] KeepAlive #101 • Uptime 1517s"
+  },
+  {
+    "time": "2026-08-23T08:53:08.113Z",
+    "ts": 1787475188113,
+    "source": "mc_keepalive",
+    "interval": 612,
+    "count": 495,
+    "details": "[rsrs] KeepAlive #80 • Uptime 1201s"
+  },
+  {
+    "time": "2026-08-23T08:53:07.501Z",
+    "ts": 1787475187501,
+    "source": "mc_keepalive",
+    "interval": 11093,
+    "count": 494,
+    "details": "[Ph4nt0m] KeepAlive #188 • Uptime 2820s"
+  },
+  {
+    "time": "2026-08-23T08:52:56.408Z",
+    "ts": 1787475176408,
+    "source": "mc_keepalive",
+    "interval": 3298,
+    "count": 493,
+    "details": "[teste] KeepAlive #100 • Uptime 1502s"
+  },
+  {
+    "time": "2026-08-23T08:52:53.110Z",
+    "ts": 1787475173110,
+    "source": "mc_keepalive",
+    "interval": 609,
+    "count": 492,
+    "details": "[rsrs] KeepAlive #79 • Uptime 1186s"
+  },
+  {
+    "time": "2026-08-23T08:52:52.501Z",
+    "ts": 1787475172501,
+    "source": "mc_keepalive",
+    "interval": 11141,
+    "count": 491,
+    "details": "[Ph4nt0m] KeepAlive #187 • Uptime 2805s"
+  },
+  {
+    "time": "2026-08-23T08:52:41.360Z",
+    "ts": 1787475161360,
+    "source": "mc_keepalive",
+    "interval": 3253,
+    "count": 490,
+    "details": "[teste] KeepAlive #99 • Uptime 1487s"
+  },
+  {
+    "time": "2026-08-23T08:52:38.107Z",
+    "ts": 1787475158107,
+    "source": "mc_keepalive",
+    "interval": 606,
+    "count": 489,
+    "details": "[rsrs] KeepAlive #78 • Uptime 1171s"
+  },
+  {
+    "time": "2026-08-23T08:52:37.501Z",
+    "ts": 1787475157501,
+    "source": "mc_keepalive",
+    "interval": 11140,
+    "count": 488,
+    "details": "[Ph4nt0m] KeepAlive #186 • Uptime 2790s"
+  },
+  {
+    "time": "2026-08-23T08:52:26.361Z",
+    "ts": 1787475146361,
+    "source": "mc_keepalive",
+    "interval": 3253,
+    "count": 487,
+    "details": "[teste] KeepAlive #98 • Uptime 1472s"
+  },
+  {
+    "time": "2026-08-23T08:52:23.108Z",
+    "ts": 1787475143108,
+    "source": "mc_keepalive",
+    "interval": 406,
+    "count": 486,
+    "details": "[rsrs] KeepAlive #77 • Uptime 1156s"
+  },
+  {
+    "time": "2026-08-23T08:52:22.702Z",
+    "ts": 1787475142702,
+    "source": "mc_keepalive",
+    "interval": 11343,
+    "count": 485,
+    "details": "[Ph4nt0m] KeepAlive #185 • Uptime 2775s"
+  },
+  {
+    "time": "2026-08-23T08:52:11.359Z",
+    "ts": 1787475131359,
+    "source": "mc_keepalive",
+    "interval": 3251,
+    "count": 484,
+    "details": "[teste] KeepAlive #97 • Uptime 1457s"
+  },
+  {
+    "time": "2026-08-23T08:52:08.108Z",
+    "ts": 1787475128108,
+    "source": "mc_keepalive",
+    "interval": 607,
+    "count": 483,
+    "details": "[rsrs] KeepAlive #76 • Uptime 1141s"
+  },
+  {
+    "time": "2026-08-23T08:52:07.501Z",
+    "ts": 1787475127501,
+    "source": "mc_keepalive",
+    "interval": 11143,
+    "count": 482,
+    "details": "[Ph4nt0m] KeepAlive #184 • Uptime 2760s"
+  },
+  {
+    "time": "2026-08-23T08:51:56.358Z",
+    "ts": 1787475116358,
+    "source": "mc_keepalive",
+    "interval": 3250,
+    "count": 481,
+    "details": "[teste] KeepAlive #96 • Uptime 1442s"
+  },
+  {
+    "time": "2026-08-23T08:51:53.108Z",
+    "ts": 1787475113108,
+    "source": "mc_keepalive",
+    "interval": 606,
+    "count": 480,
+    "details": "[rsrs] KeepAlive #75 • Uptime 1126s"
+  },
+  {
+    "time": "2026-08-23T08:51:52.502Z",
+    "ts": 1787475112502,
+    "source": "mc_keepalive",
+    "interval": 11143,
+    "count": 479,
+    "details": "[Ph4nt0m] KeepAlive #183 • Uptime 2745s"
+  },
+  {
+    "time": "2026-08-23T08:51:41.359Z",
+    "ts": 1787475101359,
+    "source": "mc_keepalive",
+    "interval": 3300,
+    "count": 478,
+    "details": "[teste] KeepAlive #95 • Uptime 1427s"
+  },
+  {
+    "time": "2026-08-23T08:51:38.059Z",
+    "ts": 1787475098059,
+    "source": "mc_keepalive",
+    "interval": 557,
+    "count": 477,
+    "details": "[rsrs] KeepAlive #74 • Uptime 1111s"
+  },
+  {
+    "time": "2026-08-23T08:51:37.502Z",
+    "ts": 1787475097502,
+    "source": "mc_keepalive",
+    "interval": 11193,
+    "count": 476,
+    "details": "[Ph4nt0m] KeepAlive #182 • Uptime 2730s"
+  },
+  {
+    "time": "2026-08-23T08:51:26.309Z",
+    "ts": 1787475086309,
+    "source": "mc_keepalive",
+    "interval": 3250,
+    "count": 475,
+    "details": "[teste] KeepAlive #94 • Uptime 1412s"
+  },
+  {
+    "time": "2026-08-23T08:51:23.059Z",
+    "ts": 1787475083059,
+    "source": "mc_keepalive",
+    "interval": 557,
+    "count": 474,
+    "details": "[rsrs] KeepAlive #73 • Uptime 1096s"
+  },
+  {
+    "time": "2026-08-23T08:51:22.502Z",
+    "ts": 1787475082502,
+    "source": "mc_keepalive",
+    "interval": 11194,
+    "count": 473,
+    "details": "[Ph4nt0m] KeepAlive #181 • Uptime 2715s"
+  },
+  {
+    "time": "2026-08-23T08:51:11.308Z",
+    "ts": 1787475071308,
+    "source": "mc_keepalive",
+    "interval": 3299,
+    "count": 472,
+    "details": "[teste] KeepAlive #93 • Uptime 1397s"
+  },
+  {
+    "time": "2026-08-23T08:51:08.009Z",
+    "ts": 1787475068009,
+    "source": "mc_keepalive",
+    "interval": 507,
+    "count": 471,
+    "details": "[rsrs] KeepAlive #72 • Uptime 1081s"
+  },
+  {
+    "time": "2026-08-23T08:51:07.502Z",
+    "ts": 1787475067502,
+    "source": "mc_keepalive",
+    "interval": 11243,
+    "count": 470,
+    "details": "[Ph4nt0m] KeepAlive #180 • Uptime 2700s"
+  },
+  {
+    "time": "2026-08-23T08:50:56.259Z",
+    "ts": 1787475056259,
+    "source": "mc_keepalive",
+    "interval": 3251,
+    "count": 469,
+    "details": "[teste] KeepAlive #92 • Uptime 1382s"
+  },
+  {
+    "time": "2026-08-23T08:50:53.008Z",
+    "ts": 1787475053008,
+    "source": "mc_keepalive",
+    "interval": 555,
+    "count": 468,
+    "details": "[rsrs] KeepAlive #71 • Uptime 1066s"
+  },
+  {
+    "time": "2026-08-23T08:50:52.453Z",
+    "ts": 1787475052453,
+    "source": "mc_keepalive",
+    "interval": 11195,
+    "count": 467,
+    "details": "[Ph4nt0m] KeepAlive #179 • Uptime 2685s"
+  },
+  {
+    "time": "2026-08-23T08:50:41.258Z",
+    "ts": 1787475041258,
+    "source": "mc_keepalive",
+    "interval": 3249,
+    "count": 466,
+    "details": "[teste] KeepAlive #91 • Uptime 1367s"
+  },
+  {
+    "time": "2026-08-23T08:50:38.009Z",
+    "ts": 1787475038009,
+    "source": "mc_keepalive",
+    "interval": 557,
+    "count": 465,
+    "details": "[rsrs] KeepAlive #70 • Uptime 1051s"
+  },
+  {
+    "time": "2026-08-23T08:50:37.452Z",
+    "ts": 1787475037452,
+    "source": "mc_keepalive",
+    "interval": 11193,
+    "count": 464,
+    "details": "[Ph4nt0m] KeepAlive #178 • Uptime 2670s"
+  },
+  {
+    "time": "2026-08-23T08:50:26.259Z",
+    "ts": 1787475026259,
+    "source": "mc_keepalive",
+    "interval": 3251,
+    "count": 463,
+    "details": "[teste] KeepAlive #90 • Uptime 1352s"
+  },
+  {
+    "time": "2026-08-23T08:50:23.008Z",
+    "ts": 1787475023008,
+    "source": "mc_keepalive",
+    "interval": 605,
+    "count": 462,
+    "details": "[rsrs] KeepAlive #69 • Uptime 1036s"
+  },
+  {
+    "time": "2026-08-23T08:50:22.403Z",
+    "ts": 1787475022403,
+    "source": "mc_keepalive",
+    "interval": 11195,
+    "count": 461,
+    "details": "[Ph4nt0m] KeepAlive #177 • Uptime 2655s"
+  },
+  {
+    "time": "2026-08-23T08:50:11.208Z",
+    "ts": 1787475011208,
+    "source": "mc_keepalive",
+    "interval": 3249,
+    "count": 460,
+    "details": "[teste] KeepAlive #89 • Uptime 1336s"
+  },
+  {
+    "time": "2026-08-23T08:50:07.959Z",
+    "ts": 1787475007959,
+    "source": "mc_keepalive",
+    "interval": 606,
+    "count": 459,
+    "details": "[rsrs] KeepAlive #68 • Uptime 1021s"
+  },
+  {
+    "time": "2026-08-23T08:50:07.353Z",
+    "ts": 1787475007353,
+    "source": "mc_keepalive",
+    "interval": 11144,
+    "count": 458,
+    "details": "[Ph4nt0m] KeepAlive #176 • Uptime 2640s"
+  },
+  {
+    "time": "2026-08-23T08:49:56.209Z",
+    "ts": 1787474996209,
+    "source": "mc_keepalive",
+    "interval": 3249,
+    "count": 457,
+    "details": "[teste] KeepAlive #88 • Uptime 1321s"
+  },
+  {
+    "time": "2026-08-23T08:49:52.960Z",
+    "ts": 1787474992960,
+    "source": "mc_keepalive",
+    "interval": 607,
+    "count": 456,
+    "details": "[rsrs] KeepAlive #67 • Uptime 1006s"
+  },
+  {
+    "time": "2026-08-23T08:49:52.353Z",
+    "ts": 1787474992353,
+    "source": "mc_keepalive",
+    "interval": 11192,
+    "count": 455,
+    "details": "[Ph4nt0m] KeepAlive #175 • Uptime 2625s"
+  },
+  {
+    "time": "2026-08-23T08:49:41.161Z",
+    "ts": 1787474981161,
+    "source": "mc_keepalive",
+    "interval": 3251,
+    "count": 454,
+    "details": "[teste] KeepAlive #87 • Uptime 1306s"
+  },
+  {
+    "time": "2026-08-23T08:49:37.910Z",
+    "ts": 1787474977910,
+    "source": "mc_keepalive",
+    "interval": 557,
+    "count": 453,
+    "details": "[rsrs] KeepAlive #66 • Uptime 991s"
+  },
+  {
+    "time": "2026-08-23T08:49:37.353Z",
+    "ts": 1787474977353,
+    "source": "mc_keepalive",
+    "interval": 11192,
+    "count": 452,
+    "details": "[Ph4nt0m] KeepAlive #174 • Uptime 2610s"
+  },
+  {
+    "time": "2026-08-23T08:49:26.161Z",
+    "ts": 1787474966161,
+    "source": "mc_keepalive",
+    "interval": 3252,
+    "count": 451,
+    "details": "[teste] KeepAlive #86 • Uptime 1291s"
+  },
+  {
+    "time": "2026-08-23T08:49:22.909Z",
+    "ts": 1787474962909,
+    "source": "mc_keepalive",
+    "interval": 555,
+    "count": 450,
+    "details": "[rsrs] KeepAlive #65 • Uptime 976s"
+  },
+  {
+    "time": "2026-08-23T08:49:22.354Z",
+    "ts": 1787474962354,
+    "source": "mc_keepalive",
+    "interval": 11193,
+    "count": 449,
+    "details": "[Ph4nt0m] KeepAlive #173 • Uptime 2595s"
+  },
+  {
+    "time": "2026-08-23T08:49:11.161Z",
+    "ts": 1787474951161,
+    "source": "mc_keepalive",
+    "interval": 3251,
+    "count": 448,
+    "details": "[teste] KeepAlive #85 • Uptime 1276s"
+  },
+  {
+    "time": "2026-08-23T08:49:07.910Z",
+    "ts": 1787474947910,
+    "source": "mc_keepalive",
+    "interval": 556,
+    "count": 447,
+    "details": "[rsrs] KeepAlive #64 • Uptime 961s"
+  },
+  {
+    "time": "2026-08-23T08:49:07.354Z",
+    "ts": 1787474947354,
+    "source": "mc_keepalive",
+    "interval": 11242,
+    "count": 446,
+    "details": "[Ph4nt0m] KeepAlive #172 • Uptime 2580s"
+  },
+  {
+    "time": "2026-08-23T08:48:56.112Z",
+    "ts": 1787474936112,
+    "source": "mc_keepalive",
+    "interval": 3248,
+    "count": 445,
+    "details": "[teste] KeepAlive #84 • Uptime 1261s"
+  },
+  {
+    "time": "2026-08-23T08:48:52.864Z",
+    "ts": 1787474932864,
+    "source": "mc_keepalive",
+    "interval": 510,
+    "count": 444,
+    "details": "[rsrs] KeepAlive #63 • Uptime 946s"
+  },
+  {
+    "time": "2026-08-23T08:48:52.354Z",
+    "ts": 1787474932354,
+    "source": "mc_keepalive",
+    "interval": 11242,
+    "count": 443,
+    "details": "[Ph4nt0m] KeepAlive #171 • Uptime 2565s"
+  },
+  {
+    "time": "2026-08-23T08:48:41.112Z",
+    "ts": 1787474921112,
+    "source": "mc_keepalive",
+    "interval": 3302,
+    "count": 442,
+    "details": "[teste] KeepAlive #83 • Uptime 1246s"
+  },
+  {
+    "time": "2026-08-23T08:48:37.810Z",
+    "ts": 1787474917810,
+    "source": "mc_keepalive",
+    "interval": 456,
+    "count": 441,
+    "details": "[rsrs] KeepAlive #62 • Uptime 931s"
+  },
+  {
+    "time": "2026-08-23T08:48:37.354Z",
+    "ts": 1787474917354,
+    "source": "mc_keepalive",
+    "interval": 11244,
+    "count": 440,
+    "details": "[Ph4nt0m] KeepAlive #170 • Uptime 2550s"
+  },
+  {
+    "time": "2026-08-23T08:48:26.110Z",
+    "ts": 1787474906110,
+    "source": "mc_keepalive",
+    "interval": 3299,
+    "count": 439,
+    "details": "[teste] KeepAlive #82 • Uptime 1231s"
+  },
+  {
+    "time": "2026-08-23T08:48:22.811Z",
+    "ts": 1787474902811,
+    "source": "mc_keepalive",
+    "interval": 457,
+    "count": 438,
+    "details": "[rsrs] KeepAlive #61 • Uptime 916s"
+  },
+  {
+    "time": "2026-08-23T08:48:22.354Z",
+    "ts": 1787474902354,
+    "source": "mc_keepalive",
+    "interval": 11293,
+    "count": 437,
+    "details": "[Ph4nt0m] KeepAlive #169 • Uptime 2535s"
+  },
+  {
+    "time": "2026-08-23T08:48:11.061Z",
+    "ts": 1787474891061,
+    "source": "mc_keepalive",
+    "interval": 3250,
+    "count": 436,
+    "details": "[teste] KeepAlive #81 • Uptime 1216s"
+  },
+  {
+    "time": "2026-08-23T08:48:07.811Z",
+    "ts": 1787474887811,
+    "source": "mc_keepalive",
+    "interval": 456,
+    "count": 435,
+    "details": "[rsrs] KeepAlive #60 • Uptime 901s"
+  },
+  {
+    "time": "2026-08-23T08:48:07.355Z",
+    "ts": 1787474887355,
+    "source": "mc_keepalive",
+    "interval": 11294,
+    "count": 434,
+    "details": "[Ph4nt0m] KeepAlive #168 • Uptime 2520s"
+  },
+  {
+    "time": "2026-08-23T08:47:56.061Z",
+    "ts": 1787474876061,
+    "source": "mc_keepalive",
+    "interval": 3300,
+    "count": 433,
+    "details": "[teste] KeepAlive #80 • Uptime 1201s"
+  },
+  {
+    "time": "2026-08-23T08:47:52.761Z",
+    "ts": 1787474872761,
+    "source": "mc_keepalive",
+    "interval": 402,
+    "count": 432,
+    "details": "[rsrs] KeepAlive #59 • Uptime 886s"
+  },
+  {
+    "time": "2026-08-23T08:47:52.359Z",
+    "ts": 1787474872359,
+    "source": "mc_keepalive",
+    "interval": 11348,
+    "count": 431,
+    "details": "[Ph4nt0m] KeepAlive #167 • Uptime 2505s"
+  },
+  {
+    "time": "2026-08-23T08:47:41.011Z",
+    "ts": 1787474861011,
+    "source": "mc_keepalive",
+    "interval": 3249,
+    "count": 430,
+    "details": "[teste] KeepAlive #79 • Uptime 1186s"
+  },
+  {
+    "time": "2026-08-23T08:47:37.762Z",
+    "ts": 1787474857762,
+    "source": "mc_keepalive",
+    "interval": 407,
+    "count": 429,
+    "details": "[rsrs] KeepAlive #58 • Uptime 871s"
+  },
+  {
+    "time": "2026-08-23T08:47:37.355Z",
+    "ts": 1787474857355,
+    "source": "mc_keepalive",
+    "interval": 11393,
+    "count": 428,
+    "details": "[Ph4nt0m] KeepAlive #166 • Uptime 2490s"
+  },
+  {
+    "time": "2026-08-23T08:47:25.962Z",
+    "ts": 1787474845962,
+    "source": "mc_keepalive",
+    "interval": 3200,
+    "count": 427,
+    "details": "[teste] KeepAlive #78 • Uptime 1171s"
+  },
+  {
+    "time": "2026-08-23T08:47:22.762Z",
+    "ts": 1787474842762,
+    "source": "mc_keepalive",
+    "interval": 406,
+    "count": 426,
+    "details": "[rsrs] KeepAlive #57 • Uptime 856s"
+  },
+  {
+    "time": "2026-08-23T08:47:22.356Z",
+    "ts": 1787474842356,
+    "source": "mc_keepalive",
+    "interval": 11393,
+    "count": 425,
+    "details": "[Ph4nt0m] KeepAlive #165 • Uptime 2475s"
+  },
+  {
+    "time": "2026-08-23T08:47:10.963Z",
+    "ts": 1787474830963,
+    "source": "mc_keepalive",
+    "interval": 3201,
+    "count": 424,
+    "details": "[teste] KeepAlive #77 • Uptime 1156s"
+  },
+  {
+    "time": "2026-08-23T08:47:07.762Z",
+    "ts": 1787474827762,
+    "source": "mc_keepalive",
+    "interval": 407,
+    "count": 423,
+    "details": "[rsrs] KeepAlive #56 • Uptime 841s"
+  },
+  {
+    "time": "2026-08-23T08:47:07.355Z",
+    "ts": 1787474827355,
+    "source": "mc_keepalive",
+    "interval": 11444,
+    "count": 422,
+    "details": "[Ph4nt0m] KeepAlive #164 • Uptime 2460s"
+  },
+  {
+    "time": "2026-08-23T08:46:55.911Z",
+    "ts": 1787474815911,
+    "source": "mc_keepalive",
+    "interval": 3200,
+    "count": 421,
+    "details": "[teste] KeepAlive #76 • Uptime 1141s"
+  },
+  {
+    "time": "2026-08-23T08:46:52.711Z",
+    "ts": 1787474812711,
+    "source": "mc_keepalive",
+    "interval": 357,
+    "count": 420,
+    "details": "[rsrs] KeepAlive #55 • Uptime 826s"
+  },
+  {
+    "time": "2026-08-23T08:46:52.354Z",
+    "ts": 1787474812354,
+    "source": "mc_keepalive",
+    "interval": 11492,
+    "count": 419,
+    "details": "[Ph4nt0m] KeepAlive #163 • Uptime 2445s"
+  },
+  {
+    "time": "2026-08-23T08:46:40.862Z",
+    "ts": 1787474800862,
+    "source": "mc_keepalive",
+    "interval": 3151,
+    "count": 418,
+    "details": "[teste] KeepAlive #75 • Uptime 1126s"
+  },
+  {
+    "time": "2026-08-23T08:46:37.711Z",
+    "ts": 1787474797711,
+    "source": "mc_keepalive",
+    "interval": 357,
+    "count": 417,
+    "details": "[rsrs] KeepAlive #54 • Uptime 811s"
+  },
+  {
+    "time": "2026-08-23T08:46:37.354Z",
+    "ts": 1787474797354,
+    "source": "mc_keepalive",
+    "interval": 11494,
+    "count": 416,
+    "details": "[Ph4nt0m] KeepAlive #162 • Uptime 2430s"
+  },
+  {
+    "time": "2026-08-23T08:46:25.860Z",
+    "ts": 1787474785860,
+    "source": "mc_keepalive",
+    "interval": 3149,
+    "count": 415,
+    "details": "[teste] KeepAlive #74 • Uptime 1111s"
+  },
+  {
+    "time": "2026-08-23T08:46:22.711Z",
+    "ts": 1787474782711,
+    "source": "mc_keepalive",
+    "interval": 357,
+    "count": 414,
+    "details": "[rsrs] KeepAlive #53 • Uptime 796s"
+  },
+  {
+    "time": "2026-08-23T08:46:22.354Z",
+    "ts": 1787474782354,
+    "source": "mc_keepalive",
+    "interval": 11543,
+    "count": 413,
+    "details": "[Ph4nt0m] KeepAlive #161 • Uptime 2415s"
+  },
+  {
+    "time": "2026-08-23T08:46:10.811Z",
+    "ts": 1787474770811,
+    "source": "mc_keepalive",
+    "interval": 3100,
+    "count": 412,
+    "details": "[teste] KeepAlive #73 • Uptime 1096s"
+  },
+  {
+    "time": "2026-08-23T08:46:07.711Z",
+    "ts": 1787474767711,
+    "source": "mc_keepalive",
+    "interval": 356,
+    "count": 411,
+    "details": "[rsrs] KeepAlive #52 • Uptime 781s"
+  },
+  {
+    "time": "2026-08-23T08:46:07.355Z",
+    "ts": 1787474767355,
+    "source": "mc_keepalive",
+    "interval": 10781,
+    "count": 410,
+    "details": "[Ph4nt0m] KeepAlive #160 • Uptime 2400s"
+  },
+  {
+    "time": "2026-08-23T08:45:56.574Z",
+    "ts": 1787474756574,
+    "source": "health_external",
+    "interval": 761,
+    "count": 409,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-23T08:45:55.813Z",
+    "ts": 1787474755813,
+    "source": "mc_keepalive",
+    "interval": 3146,
+    "count": 408,
+    "details": "[teste] KeepAlive #72 • Uptime 1081s"
+  },
+  {
+    "time": "2026-08-23T08:45:52.667Z",
+    "ts": 1787474752667,
+    "source": "mc_keepalive",
+    "interval": 311,
+    "count": 407,
+    "details": "[rsrs] KeepAlive #51 • Uptime 766s"
+  },
+  {
+    "time": "2026-08-23T08:45:52.356Z",
+    "ts": 1787474752356,
+    "source": "mc_keepalive",
+    "interval": 11543,
+    "count": 406,
+    "details": "[Ph4nt0m] KeepAlive #159 • Uptime 2385s"
+  },
+  {
+    "time": "2026-08-23T08:45:40.813Z",
+    "ts": 1787474740813,
+    "source": "mc_keepalive",
+    "interval": 3150,
+    "count": 405,
+    "details": "[teste] KeepAlive #71 • Uptime 1066s"
+  },
+  {
+    "time": "2026-08-23T08:45:37.663Z",
+    "ts": 1787474737663,
+    "source": "mc_keepalive",
+    "interval": 307,
+    "count": 404,
+    "details": "[rsrs] KeepAlive #50 • Uptime 751s"
+  },
+  {
+    "time": "2026-08-23T08:45:37.356Z",
+    "ts": 1787474737356,
+    "source": "mc_keepalive",
+    "interval": 11543,
+    "count": 403,
+    "details": "[Ph4nt0m] KeepAlive #158 • Uptime 2370s"
+  },
+  {
+    "time": "2026-08-23T08:45:25.813Z",
+    "ts": 1787474725813,
+    "source": "mc_keepalive",
+    "interval": 3149,
+    "count": 402,
+    "details": "[teste] KeepAlive #70 • Uptime 1051s"
+  },
+  {
+    "time": "2026-08-23T08:45:22.664Z",
+    "ts": 1787474722664,
+    "source": "mc_keepalive",
+    "interval": 307,
+    "count": 401,
+    "details": "[rsrs] KeepAlive #49 • Uptime 736s"
+  },
+  {
+    "time": "2026-08-23T08:45:22.357Z",
+    "ts": 1787474722357,
+    "source": "mc_keepalive",
+    "interval": 11544,
+    "count": 400,
+    "details": "[Ph4nt0m] KeepAlive #157 • Uptime 2355s"
+  },
+  {
+    "time": "2026-08-23T08:45:10.813Z",
+    "ts": 1787474710813,
+    "source": "mc_keepalive",
+    "interval": 3199,
+    "count": 399,
+    "details": "[teste] KeepAlive #69 • Uptime 1036s"
+  },
+  {
+    "time": "2026-08-23T08:45:07.614Z",
+    "ts": 1787474707614,
+    "source": "mc_keepalive",
+    "interval": 257,
+    "count": 398,
+    "details": "[rsrs] KeepAlive #48 • Uptime 721s"
+  },
+  {
+    "time": "2026-08-23T08:45:07.357Z",
+    "ts": 1787474707357,
+    "source": "mc_keepalive",
+    "interval": 11593,
+    "count": 397,
+    "details": "[Ph4nt0m] KeepAlive #156 • Uptime 2340s"
+  },
+  {
+    "time": "2026-08-23T08:44:55.764Z",
+    "ts": 1787474695764,
+    "source": "mc_keepalive",
+    "interval": 3150,
+    "count": 396,
+    "details": "[teste] KeepAlive #68 • Uptime 1021s"
+  },
+  {
+    "time": "2026-08-23T08:44:52.614Z",
+    "ts": 1787474692614,
+    "source": "mc_keepalive",
+    "interval": 257,
+    "count": 395,
+    "details": "[rsrs] KeepAlive #47 • Uptime 706s"
+  },
+  {
+    "time": "2026-08-23T08:44:52.357Z",
+    "ts": 1787474692357,
+    "source": "mc_keepalive",
+    "interval": 11642,
+    "count": 394,
+    "details": "[Ph4nt0m] KeepAlive #155 • Uptime 2325s"
+  },
+  {
+    "time": "2026-08-23T08:44:40.715Z",
+    "ts": 1787474680715,
+    "source": "mc_keepalive",
+    "interval": 3150,
+    "count": 393,
+    "details": "[teste] KeepAlive #67 • Uptime 1006s"
+  },
+  {
+    "time": "2026-08-23T08:44:37.565Z",
+    "ts": 1787474677565,
+    "source": "mc_keepalive",
+    "interval": 208,
+    "count": 392,
+    "details": "[rsrs] KeepAlive #46 • Uptime 691s"
+  },
+  {
+    "time": "2026-08-23T08:44:37.357Z",
+    "ts": 1787474677357,
+    "source": "mc_keepalive",
+    "interval": 11642,
+    "count": 391,
+    "details": "[Ph4nt0m] KeepAlive #154 • Uptime 2310s"
+  },
+  {
+    "time": "2026-08-23T08:44:25.715Z",
+    "ts": 1787474665715,
+    "source": "mc_keepalive",
+    "interval": 3151,
+    "count": 390,
+    "details": "[teste] KeepAlive #66 • Uptime 991s"
+  },
+  {
+    "time": "2026-08-23T08:44:22.564Z",
+    "ts": 1787474662564,
+    "source": "mc_keepalive",
+    "interval": 207,
+    "count": 389,
+    "details": "[rsrs] KeepAlive #45 • Uptime 676s"
+  },
+  {
+    "time": "2026-08-23T08:44:22.357Z",
+    "ts": 1787474662357,
+    "source": "mc_keepalive",
+    "interval": 11643,
+    "count": 388,
+    "details": "[Ph4nt0m] KeepAlive #153 • Uptime 2295s"
+  },
+  {
+    "time": "2026-08-23T08:44:10.714Z",
+    "ts": 1787474650714,
+    "source": "mc_keepalive",
+    "interval": 3198,
+    "count": 387,
+    "details": "[teste] KeepAlive #65 • Uptime 976s"
+  },
+  {
+    "time": "2026-08-23T08:44:07.516Z",
+    "ts": 1787474647516,
+    "source": "mc_keepalive",
+    "interval": 158,
+    "count": 386,
+    "details": "[rsrs] KeepAlive #44 • Uptime 661s"
+  },
+  {
+    "time": "2026-08-23T08:44:07.358Z",
+    "ts": 1787474647358,
+    "source": "mc_keepalive",
+    "interval": 11693,
+    "count": 385,
+    "details": "[Ph4nt0m] KeepAlive #152 • Uptime 2280s"
+  },
+  {
+    "time": "2026-08-23T08:43:55.665Z",
+    "ts": 1787474635665,
+    "source": "mc_keepalive",
+    "interval": 3199,
+    "count": 384,
+    "details": "[teste] KeepAlive #64 • Uptime 961s"
+  },
+  {
+    "time": "2026-08-23T08:43:52.466Z",
+    "ts": 1787474632466,
+    "source": "mc_keepalive",
+    "interval": 108,
+    "count": 383,
+    "details": "[rsrs] KeepAlive #43 • Uptime 646s"
+  },
+  {
+    "time": "2026-08-23T08:43:52.358Z",
+    "ts": 1787474632358,
+    "source": "mc_keepalive",
+    "interval": 11694,
+    "count": 382,
+    "details": "[Ph4nt0m] KeepAlive #151 • Uptime 2265s"
+  },
+  {
+    "time": "2026-08-23T08:43:40.664Z",
+    "ts": 1787474620664,
+    "source": "mc_keepalive",
+    "interval": 3198,
+    "count": 381,
+    "details": "[teste] KeepAlive #63 • Uptime 946s"
+  },
+  {
+    "time": "2026-08-23T08:43:37.466Z",
+    "ts": 1787474617466,
+    "source": "mc_keepalive",
+    "interval": 108,
+    "count": 380,
+    "details": "[rsrs] KeepAlive #42 • Uptime 631s"
+  },
+  {
+    "time": "2026-08-23T08:43:37.358Z",
+    "ts": 1787474617358,
+    "source": "mc_keepalive",
+    "interval": 11694,
+    "count": 379,
+    "details": "[Ph4nt0m] KeepAlive #150 • Uptime 2250s"
+  },
+  {
+    "time": "2026-08-23T08:43:25.664Z",
+    "ts": 1787474605664,
+    "source": "mc_keepalive",
+    "interval": 3198,
+    "count": 378,
+    "details": "[teste] KeepAlive #62 • Uptime 931s"
+  },
+  {
+    "time": "2026-08-23T08:43:22.466Z",
+    "ts": 1787474602466,
+    "source": "mc_keepalive",
+    "interval": 108,
+    "count": 377,
+    "details": "[rsrs] KeepAlive #41 • Uptime 616s"
+  },
+  {
+    "time": "2026-08-23T08:43:22.358Z",
+    "ts": 1787474602358,
+    "source": "mc_keepalive",
+    "interval": 11743,
+    "count": 376,
+    "details": "[Ph4nt0m] KeepAlive #149 • Uptime 2235s"
+  },
+  {
+    "time": "2026-08-23T08:43:10.615Z",
+    "ts": 1787474590615,
+    "source": "mc_keepalive",
+    "interval": 3199,
+    "count": 375,
+    "details": "[teste] KeepAlive #61 • Uptime 916s"
+  },
+  {
+    "time": "2026-08-23T08:43:07.416Z",
+    "ts": 1787474587416,
+    "source": "mc_keepalive",
+    "interval": 58,
+    "count": 374,
+    "details": "[rsrs] KeepAlive #40 • Uptime 601s"
+  },
+  {
+    "time": "2026-08-23T08:43:07.358Z",
+    "ts": 1787474587358,
+    "source": "mc_keepalive",
+    "interval": 11742,
+    "count": 373,
+    "details": "[Ph4nt0m] KeepAlive #148 • Uptime 2220s"
+  },
+  {
+    "time": "2026-08-23T08:42:55.616Z",
+    "ts": 1787474575616,
+    "source": "mc_keepalive",
+    "interval": 3200,
+    "count": 372,
+    "details": "[teste] KeepAlive #60 • Uptime 901s"
+  },
+  {
+    "time": "2026-08-23T08:42:52.416Z",
+    "ts": 1787474572416,
+    "source": "mc_keepalive",
+    "interval": 58,
+    "count": 371,
+    "details": "[rsrs] KeepAlive #39 • Uptime 586s"
+  },
+  {
+    "time": "2026-08-23T08:42:52.358Z",
+    "ts": 1787474572358,
+    "source": "mc_keepalive",
+    "interval": 11792,
+    "count": 370,
+    "details": "[Ph4nt0m] KeepAlive #147 • Uptime 2205s"
+  },
+  {
+    "time": "2026-08-23T08:42:40.566Z",
+    "ts": 1787474560566,
+    "source": "mc_keepalive",
+    "interval": 3150,
+    "count": 369,
+    "details": "[teste] KeepAlive #59 • Uptime 886s"
+  },
+  {
+    "time": "2026-08-23T08:42:37.416Z",
+    "ts": 1787474557416,
+    "source": "mc_keepalive",
+    "interval": 57,
+    "count": 368,
+    "details": "[rsrs] KeepAlive #38 • Uptime 571s"
+  },
+  {
+    "time": "2026-08-23T08:42:37.359Z",
+    "ts": 1787474557359,
+    "source": "mc_keepalive",
+    "interval": 11793,
+    "count": 367,
+    "details": "[Ph4nt0m] KeepAlive #146 • Uptime 2190s"
+  },
+  {
+    "time": "2026-08-23T08:42:25.566Z",
+    "ts": 1787474545566,
+    "source": "mc_keepalive",
+    "interval": 3150,
+    "count": 366,
+    "details": "[teste] KeepAlive #58 • Uptime 871s"
+  },
+  {
+    "time": "2026-08-23T08:42:22.416Z",
+    "ts": 1787474542416,
+    "source": "mc_keepalive",
+    "interval": 56,
+    "count": 365,
+    "details": "[rsrs] KeepAlive #37 • Uptime 556s"
+  },
+  {
+    "time": "2026-08-23T08:42:22.360Z",
+    "ts": 1787474542360,
+    "source": "mc_keepalive",
+    "interval": 11844,
+    "count": 364,
+    "details": "[Ph4nt0m] KeepAlive #145 • Uptime 2175s"
+  },
+  {
+    "time": "2026-08-23T08:42:10.516Z",
+    "ts": 1787474530516,
+    "source": "mc_keepalive",
+    "interval": 3149,
+    "count": 363,
+    "details": "[teste] KeepAlive #57 • Uptime 856s"
+  },
+  {
+    "time": "2026-08-23T08:42:07.367Z",
+    "ts": 1787474527367,
+    "source": "mc_keepalive",
+    "interval": 8,
+    "count": 362,
+    "details": "[rsrs] KeepAlive #36 • Uptime 540s"
+  },
+  {
+    "time": "2026-08-23T08:42:07.359Z",
+    "ts": 1787474527359,
+    "source": "mc_keepalive",
+    "interval": 11892,
+    "count": 361,
+    "details": "[Ph4nt0m] KeepAlive #144 • Uptime 2160s"
+  },
+  {
+    "time": "2026-08-23T08:41:55.467Z",
+    "ts": 1787474515467,
+    "source": "mc_keepalive",
+    "interval": 3101,
+    "count": 360,
+    "details": "[teste] KeepAlive #56 • Uptime 841s"
+  },
+  {
+    "time": "2026-08-23T08:41:52.366Z",
+    "ts": 1787474512366,
+    "source": "mc_keepalive",
+    "interval": 6,
+    "count": 359,
+    "details": "[rsrs] KeepAlive #35 • Uptime 525s"
+  },
+  {
+    "time": "2026-08-23T08:41:52.360Z",
+    "ts": 1787474512360,
+    "source": "mc_keepalive",
+    "interval": 11894,
+    "count": 358,
+    "details": "[Ph4nt0m] KeepAlive #143 • Uptime 2145s"
+  },
+  {
+    "time": "2026-08-23T08:41:40.466Z",
+    "ts": 1787474500466,
+    "source": "mc_keepalive",
+    "interval": 3106,
+    "count": 357,
+    "details": "[teste] KeepAlive #55 • Uptime 826s"
+  },
+  {
+    "time": "2026-08-23T08:41:37.360Z",
+    "ts": 1787474497360,
+    "source": "mc_keepalive",
+    "interval": 43,
+    "count": 356,
+    "details": "[Ph4nt0m] KeepAlive #142 • Uptime 2130s"
+  },
+  {
+    "time": "2026-08-23T08:41:37.317Z",
+    "ts": 1787474497317,
+    "source": "mc_keepalive",
+    "interval": 11850,
+    "count": 355,
+    "details": "[rsrs] KeepAlive #34 • Uptime 510s"
+  },
+  {
+    "time": "2026-08-23T08:41:25.467Z",
+    "ts": 1787474485467,
+    "source": "mc_keepalive",
+    "interval": 3108,
+    "count": 354,
+    "details": "[teste] KeepAlive #54 • Uptime 811s"
+  },
+  {
+    "time": "2026-08-23T08:41:22.359Z",
+    "ts": 1787474482359,
+    "source": "mc_keepalive",
+    "interval": 92,
+    "count": 353,
+    "details": "[Ph4nt0m] KeepAlive #141 • Uptime 2115s"
+  },
+  {
+    "time": "2026-08-23T08:41:22.267Z",
+    "ts": 1787474482267,
+    "source": "mc_keepalive",
+    "interval": 11850,
+    "count": 352,
+    "details": "[rsrs] KeepAlive #33 • Uptime 495s"
+  },
+  {
+    "time": "2026-08-23T08:41:10.417Z",
+    "ts": 1787474470417,
+    "source": "mc_keepalive",
+    "interval": 3057,
+    "count": 351,
+    "details": "[teste] KeepAlive #53 • Uptime 796s"
+  },
+  {
+    "time": "2026-08-23T08:41:07.360Z",
+    "ts": 1787474467360,
+    "source": "mc_keepalive",
+    "interval": 93,
+    "count": 350,
+    "details": "[Ph4nt0m] KeepAlive #140 • Uptime 2100s"
+  },
+  {
+    "time": "2026-08-23T08:41:07.267Z",
+    "ts": 1787474467267,
+    "source": "mc_keepalive",
+    "interval": 11900,
+    "count": 349,
+    "details": "[rsrs] KeepAlive #32 • Uptime 480s"
+  },
+  {
+    "time": "2026-08-23T08:40:55.367Z",
+    "ts": 1787474455367,
+    "source": "mc_keepalive",
+    "interval": 3008,
+    "count": 348,
+    "details": "[teste] KeepAlive #52 • Uptime 781s"
+  },
+  {
+    "time": "2026-08-23T08:40:52.359Z",
+    "ts": 1787474452359,
+    "source": "mc_keepalive",
+    "interval": 93,
+    "count": 347,
+    "details": "[Ph4nt0m] KeepAlive #139 • Uptime 2085s"
+  },
+  {
+    "time": "2026-08-23T08:40:52.266Z",
+    "ts": 1787474452266,
+    "source": "mc_keepalive",
+    "interval": 11899,
+    "count": 346,
+    "details": "[rsrs] KeepAlive #31 • Uptime 465s"
+  },
+  {
+    "time": "2026-08-23T08:40:40.367Z",
+    "ts": 1787474440367,
+    "source": "mc_keepalive",
+    "interval": 3007,
+    "count": 345,
+    "details": "[teste] KeepAlive #51 • Uptime 766s"
+  },
+  {
+    "time": "2026-08-23T08:40:37.360Z",
+    "ts": 1787474437360,
+    "source": "mc_keepalive",
+    "interval": 94,
+    "count": 344,
+    "details": "[Ph4nt0m] KeepAlive #138 • Uptime 2070s"
+  },
+  {
+    "time": "2026-08-23T08:40:37.266Z",
+    "ts": 1787474437266,
+    "source": "mc_keepalive",
+    "interval": 11899,
+    "count": 343,
+    "details": "[rsrs] KeepAlive #30 • Uptime 450s"
+  },
+  {
+    "time": "2026-08-23T08:40:25.367Z",
+    "ts": 1787474425367,
+    "source": "mc_keepalive",
+    "interval": 3008,
+    "count": 342,
+    "details": "[teste] KeepAlive #50 • Uptime 751s"
+  },
+  {
+    "time": "2026-08-23T08:40:22.359Z",
+    "ts": 1787474422359,
+    "source": "mc_keepalive",
+    "interval": 142,
+    "count": 341,
+    "details": "[Ph4nt0m] KeepAlive #137 • Uptime 2055s"
+  },
+  {
+    "time": "2026-08-23T08:40:22.217Z",
+    "ts": 1787474422217,
+    "source": "mc_keepalive",
+    "interval": 11849,
+    "count": 340,
+    "details": "[rsrs] KeepAlive #29 • Uptime 435s"
+  },
+  {
+    "time": "2026-08-23T08:40:10.368Z",
+    "ts": 1787474410368,
+    "source": "mc_keepalive",
+    "interval": 3008,
+    "count": 339,
+    "details": "[teste] KeepAlive #49 • Uptime 736s"
+  },
+  {
+    "time": "2026-08-23T08:40:07.360Z",
+    "ts": 1787474407360,
+    "source": "mc_keepalive",
+    "interval": 193,
+    "count": 338,
+    "details": "[Ph4nt0m] KeepAlive #136 • Uptime 2040s"
+  },
+  {
+    "time": "2026-08-23T08:40:07.167Z",
+    "ts": 1787474407167,
+    "source": "mc_keepalive",
+    "interval": 11848,
+    "count": 337,
+    "details": "[rsrs] KeepAlive #28 • Uptime 420s"
+  },
+  {
+    "time": "2026-08-23T08:39:55.319Z",
+    "ts": 1787474395319,
+    "source": "mc_keepalive",
+    "interval": 2958,
+    "count": 336,
+    "details": "[teste] KeepAlive #48 • Uptime 721s"
+  },
+  {
+    "time": "2026-08-23T08:39:52.361Z",
+    "ts": 1787474392361,
+    "source": "mc_keepalive",
+    "interval": 193,
+    "count": 335,
+    "details": "[Ph4nt0m] KeepAlive #135 • Uptime 2025s"
+  },
+  {
+    "time": "2026-08-23T08:39:52.168Z",
+    "ts": 1787474392168,
+    "source": "mc_keepalive",
+    "interval": 11899,
+    "count": 334,
+    "details": "[rsrs] KeepAlive #27 • Uptime 405s"
+  },
+  {
+    "time": "2026-08-23T08:39:40.269Z",
+    "ts": 1787474380269,
+    "source": "mc_keepalive",
+    "interval": 2908,
+    "count": 333,
+    "details": "[teste] KeepAlive #47 • Uptime 706s"
+  },
+  {
+    "time": "2026-08-23T08:39:37.361Z",
+    "ts": 1787474377361,
+    "source": "mc_keepalive",
+    "interval": 242,
+    "count": 332,
+    "details": "[Ph4nt0m] KeepAlive #134 • Uptime 2010s"
+  },
+  {
+    "time": "2026-08-23T08:39:37.119Z",
+    "ts": 1787474377119,
+    "source": "mc_keepalive",
+    "interval": 11849,
+    "count": 331,
+    "details": "[rsrs] KeepAlive #26 • Uptime 390s"
+  },
+  {
+    "time": "2026-08-23T08:39:25.270Z",
+    "ts": 1787474365270,
+    "source": "mc_keepalive",
+    "interval": 2909,
+    "count": 330,
+    "details": "[teste] KeepAlive #46 • Uptime 691s"
+  },
+  {
+    "time": "2026-08-23T08:39:22.361Z",
+    "ts": 1787474362361,
+    "source": "mc_keepalive",
+    "interval": 287,
+    "count": 329,
+    "details": "[Ph4nt0m] KeepAlive #133 • Uptime 1995s"
+  },
+  {
+    "time": "2026-08-23T08:39:22.074Z",
+    "ts": 1787474362074,
+    "source": "mc_keepalive",
+    "interval": 11805,
+    "count": 328,
+    "details": "[rsrs] KeepAlive #25 • Uptime 375s"
+  },
+  {
+    "time": "2026-08-23T08:39:10.269Z",
+    "ts": 1787474350269,
+    "source": "mc_keepalive",
+    "interval": 2908,
+    "count": 327,
+    "details": "[teste] KeepAlive #45 • Uptime 676s"
+  },
+  {
+    "time": "2026-08-23T08:39:07.361Z",
+    "ts": 1787474347361,
+    "source": "mc_keepalive",
+    "interval": 293,
+    "count": 326,
+    "details": "[Ph4nt0m] KeepAlive #132 • Uptime 1980s"
+  },
+  {
+    "time": "2026-08-23T08:39:07.068Z",
+    "ts": 1787474347068,
+    "source": "mc_keepalive",
+    "interval": 11849,
+    "count": 325,
+    "details": "[rsrs] KeepAlive #24 • Uptime 360s"
+  },
+  {
+    "time": "2026-08-23T08:38:55.219Z",
+    "ts": 1787474335219,
+    "source": "mc_keepalive",
+    "interval": 2857,
+    "count": 324,
+    "details": "[teste] KeepAlive #44 • Uptime 660s"
+  },
+  {
+    "time": "2026-08-23T08:38:52.362Z",
+    "ts": 1787474332362,
+    "source": "mc_keepalive",
+    "interval": 343,
+    "count": 323,
+    "details": "[Ph4nt0m] KeepAlive #131 • Uptime 1965s"
+  },
+  {
+    "time": "2026-08-23T08:38:52.019Z",
+    "ts": 1787474332019,
+    "source": "mc_keepalive",
+    "interval": 11800,
+    "count": 322,
+    "details": "[rsrs] KeepAlive #23 • Uptime 345s"
+  },
+  {
+    "time": "2026-08-23T08:38:40.219Z",
+    "ts": 1787474320219,
+    "source": "mc_keepalive",
+    "interval": 2857,
+    "count": 321,
+    "details": "[teste] KeepAlive #43 • Uptime 645s"
+  },
+  {
+    "time": "2026-08-23T08:38:37.362Z",
+    "ts": 1787474317362,
+    "source": "mc_keepalive",
+    "interval": 343,
+    "count": 320,
+    "details": "[Ph4nt0m] KeepAlive #130 • Uptime 1950s"
+  },
+  {
+    "time": "2026-08-23T08:38:37.019Z",
+    "ts": 1787474317019,
+    "source": "mc_keepalive",
+    "interval": 11849,
+    "count": 319,
+    "details": "[rsrs] KeepAlive #22 • Uptime 330s"
+  },
+  {
+    "time": "2026-08-23T08:38:25.170Z",
+    "ts": 1787474305170,
+    "source": "mc_keepalive",
+    "interval": 2808,
+    "count": 318,
+    "details": "[teste] KeepAlive #42 • Uptime 630s"
+  },
+  {
+    "time": "2026-08-23T08:38:22.362Z",
+    "ts": 1787474302362,
+    "source": "mc_keepalive",
+    "interval": 392,
+    "count": 317,
+    "details": "[Ph4nt0m] KeepAlive #129 • Uptime 1935s"
+  },
+  {
+    "time": "2026-08-23T08:38:21.970Z",
+    "ts": 1787474301970,
+    "source": "mc_keepalive",
+    "interval": 11801,
+    "count": 316,
+    "details": "[rsrs] KeepAlive #21 • Uptime 315s"
+  },
+  {
+    "time": "2026-08-23T08:38:10.169Z",
+    "ts": 1787474290169,
+    "source": "mc_keepalive",
+    "interval": 2807,
+    "count": 315,
+    "details": "[teste] KeepAlive #41 • Uptime 615s"
+  },
+  {
+    "time": "2026-08-23T08:38:07.362Z",
+    "ts": 1787474287362,
+    "source": "mc_keepalive",
+    "interval": 393,
+    "count": 314,
+    "details": "[Ph4nt0m] KeepAlive #128 • Uptime 1920s"
+  },
+  {
+    "time": "2026-08-23T08:38:06.969Z",
+    "ts": 1787474286969,
+    "source": "mc_keepalive",
+    "interval": 11849,
+    "count": 313,
+    "details": "[rsrs] KeepAlive #20 • Uptime 300s"
+  },
+  {
+    "time": "2026-08-23T08:37:55.120Z",
+    "ts": 1787474275120,
+    "source": "mc_keepalive",
+    "interval": 2757,
+    "count": 312,
+    "details": "[teste] KeepAlive #40 • Uptime 600s"
+  },
+  {
+    "time": "2026-08-23T08:37:52.363Z",
+    "ts": 1787474272363,
+    "source": "mc_keepalive",
+    "interval": 443,
+    "count": 311,
+    "details": "[Ph4nt0m] KeepAlive #127 • Uptime 1905s"
+  },
+  {
+    "time": "2026-08-23T08:37:51.920Z",
+    "ts": 1787474271920,
+    "source": "mc_keepalive",
+    "interval": 11801,
+    "count": 310,
+    "details": "[rsrs] KeepAlive #19 • Uptime 285s"
+  },
+  {
+    "time": "2026-08-23T08:37:40.119Z",
+    "ts": 1787474260119,
+    "source": "mc_keepalive",
+    "interval": 2756,
+    "count": 309,
+    "details": "[teste] KeepAlive #39 • Uptime 585s"
+  },
+  {
+    "time": "2026-08-23T08:37:37.363Z",
+    "ts": 1787474257363,
+    "source": "mc_keepalive",
+    "interval": 443,
+    "count": 308,
+    "details": "[Ph4nt0m] KeepAlive #126 • Uptime 1890s"
+  },
+  {
+    "time": "2026-08-23T08:37:36.920Z",
+    "ts": 1787474256920,
+    "source": "mc_keepalive",
+    "interval": 11800,
+    "count": 307,
+    "details": "[rsrs] KeepAlive #18 • Uptime 270s"
+  },
+  {
+    "time": "2026-08-23T08:37:25.120Z",
+    "ts": 1787474245120,
+    "source": "mc_keepalive",
+    "interval": 2756,
+    "count": 306,
+    "details": "[teste] KeepAlive #38 • Uptime 570s"
+  },
+  {
+    "time": "2026-08-23T08:37:22.364Z",
+    "ts": 1787474242364,
+    "source": "mc_keepalive",
+    "interval": 492,
+    "count": 305,
+    "details": "[Ph4nt0m] KeepAlive #125 • Uptime 1875s"
+  },
+  {
+    "time": "2026-08-23T08:37:21.872Z",
+    "ts": 1787474241872,
+    "source": "mc_keepalive",
+    "interval": 11753,
+    "count": 304,
+    "details": "[rsrs] KeepAlive #17 • Uptime 255s"
+  },
+  {
+    "time": "2026-08-23T08:37:10.119Z",
+    "ts": 1787474230119,
+    "source": "mc_keepalive",
+    "interval": 2756,
+    "count": 303,
+    "details": "[teste] KeepAlive #37 • Uptime 555s"
+  },
+  {
+    "time": "2026-08-23T08:37:07.363Z",
+    "ts": 1787474227363,
+    "source": "mc_keepalive",
+    "interval": 492,
+    "count": 302,
+    "details": "[Ph4nt0m] KeepAlive #124 • Uptime 1860s"
+  },
+  {
+    "time": "2026-08-23T08:37:06.871Z",
+    "ts": 1787474226871,
+    "source": "mc_keepalive",
+    "interval": 10314,
+    "count": 301,
+    "details": "[rsrs] KeepAlive #16 • Uptime 240s"
+  },
+  {
+    "time": "2026-08-23T08:36:56.557Z",
+    "ts": 1787474216557,
+    "source": "health_external",
+    "interval": 1486,
+    "count": 300,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-23T08:36:55.071Z",
+    "ts": 1787474215071,
+    "source": "mc_keepalive",
+    "interval": 2708,
+    "count": 299,
+    "details": "[teste] KeepAlive #36 • Uptime 540s"
+  },
+  {
+    "time": "2026-08-23T08:36:52.363Z",
+    "ts": 1787474212363,
+    "source": "mc_keepalive",
+    "interval": 543,
+    "count": 298,
+    "details": "[Ph4nt0m] KeepAlive #123 • Uptime 1845s"
+  },
+  {
+    "time": "2026-08-23T08:36:51.820Z",
+    "ts": 1787474211820,
+    "source": "mc_keepalive",
+    "interval": 11799,
+    "count": 297,
+    "details": "[rsrs] KeepAlive #15 • Uptime 225s"
+  },
+  {
+    "time": "2026-08-23T08:36:40.021Z",
+    "ts": 1787474200021,
+    "source": "mc_keepalive",
+    "interval": 2658,
+    "count": 296,
+    "details": "[teste] KeepAlive #35 • Uptime 525s"
+  },
+  {
+    "time": "2026-08-23T08:36:37.364Z",
+    "ts": 1787474197363,
+    "source": "mc_keepalive",
+    "interval": 591,
+    "count": 295,
+    "details": "[Ph4nt0m] KeepAlive #122 • Uptime 1830s"
+  },
+  {
+    "time": "2026-08-23T08:36:36.772Z",
+    "ts": 1787474196772,
+    "source": "mc_keepalive",
+    "interval": 11801,
+    "count": 294,
+    "details": "[rsrs] KeepAlive #14 • Uptime 210s"
+  },
+  {
+    "time": "2026-08-23T08:36:24.971Z",
+    "ts": 1787474184971,
+    "source": "mc_keepalive",
+    "interval": 2607,
+    "count": 293,
+    "details": "[teste] KeepAlive #34 • Uptime 510s"
+  },
+  {
+    "time": "2026-08-23T08:36:22.364Z",
+    "ts": 1787474182364,
+    "source": "mc_keepalive",
+    "interval": 641,
+    "count": 292,
+    "details": "[Ph4nt0m] KeepAlive #121 • Uptime 1815s"
+  },
+  {
+    "time": "2026-08-23T08:36:21.723Z",
+    "ts": 1787474181723,
+    "source": "mc_keepalive",
+    "interval": 11752,
+    "count": 291,
+    "details": "[rsrs] KeepAlive #13 • Uptime 195s"
+  },
+  {
+    "time": "2026-08-23T08:36:09.971Z",
+    "ts": 1787474169971,
+    "source": "mc_keepalive",
+    "interval": 2607,
+    "count": 290,
+    "details": "[teste] KeepAlive #33 • Uptime 495s"
+  },
+  {
+    "time": "2026-08-23T08:36:07.364Z",
+    "ts": 1787474167364,
+    "source": "mc_keepalive",
+    "interval": 644,
+    "count": 289,
+    "details": "[Ph4nt0m] KeepAlive #120 • Uptime 1800s"
+  },
+  {
+    "time": "2026-08-23T08:36:06.720Z",
+    "ts": 1787474166720,
+    "source": "mc_keepalive",
+    "interval": 11749,
+    "count": 288,
+    "details": "[rsrs] KeepAlive #12 • Uptime 180s"
+  },
+  {
+    "time": "2026-08-23T08:35:54.971Z",
+    "ts": 1787474154971,
+    "source": "mc_keepalive",
+    "interval": 2607,
+    "count": 287,
+    "details": "[teste] KeepAlive #32 • Uptime 480s"
+  },
+  {
+    "time": "2026-08-23T08:35:52.364Z",
+    "ts": 1787474152364,
+    "source": "mc_keepalive",
+    "interval": 643,
+    "count": 286,
+    "details": "[Ph4nt0m] KeepAlive #119 • Uptime 1785s"
+  },
+  {
+    "time": "2026-08-23T08:35:51.721Z",
+    "ts": 1787474151721,
+    "source": "mc_keepalive",
+    "interval": 11799,
+    "count": 285,
+    "details": "[rsrs] KeepAlive #11 • Uptime 165s"
+  },
+  {
+    "time": "2026-08-23T08:35:39.922Z",
+    "ts": 1787474139922,
+    "source": "mc_keepalive",
+    "interval": 2558,
+    "count": 284,
+    "details": "[teste] KeepAlive #31 • Uptime 465s"
+  },
+  {
+    "time": "2026-08-23T08:35:37.364Z",
+    "ts": 1787474137364,
+    "source": "mc_keepalive",
+    "interval": 643,
+    "count": 283,
+    "details": "[Ph4nt0m] KeepAlive #118 • Uptime 1770s"
+  },
+  {
+    "time": "2026-08-23T08:35:36.721Z",
+    "ts": 1787474136721,
+    "source": "mc_keepalive",
+    "interval": 11799,
+    "count": 282,
+    "details": "[rsrs] KeepAlive #10 • Uptime 150s"
+  },
+  {
+    "time": "2026-08-23T08:35:24.922Z",
+    "ts": 1787474124922,
+    "source": "mc_keepalive",
+    "interval": 2558,
+    "count": 281,
+    "details": "[teste] KeepAlive #30 • Uptime 450s"
+  },
+  {
+    "time": "2026-08-23T08:35:22.364Z",
+    "ts": 1787474122364,
+    "source": "mc_keepalive",
+    "interval": 642,
+    "count": 280,
+    "details": "[Ph4nt0m] KeepAlive #117 • Uptime 1755s"
+  },
+  {
+    "time": "2026-08-23T08:35:21.722Z",
+    "ts": 1787474121722,
+    "source": "mc_keepalive",
+    "interval": 11801,
+    "count": 279,
+    "details": "[rsrs] KeepAlive #9 • Uptime 135s"
+  },
+  {
+    "time": "2026-08-23T08:35:09.921Z",
+    "ts": 1787474109921,
+    "source": "mc_keepalive",
+    "interval": 2556,
+    "count": 278,
+    "details": "[teste] KeepAlive #29 • Uptime 435s"
+  },
+  {
+    "time": "2026-08-23T08:35:07.365Z",
+    "ts": 1787474107365,
+    "source": "mc_keepalive",
+    "interval": 643,
+    "count": 277,
+    "details": "[Ph4nt0m] KeepAlive #116 • Uptime 1740s"
+  },
+  {
+    "time": "2026-08-23T08:35:06.722Z",
+    "ts": 1787474106722,
+    "source": "mc_keepalive",
+    "interval": 11850,
+    "count": 276,
+    "details": "[rsrs] KeepAlive #8 • Uptime 120s"
+  },
+  {
+    "time": "2026-08-23T08:34:54.872Z",
+    "ts": 1787474094872,
+    "source": "mc_keepalive",
+    "interval": 2507,
+    "count": 275,
+    "details": "[teste] KeepAlive #28 • Uptime 420s"
+  },
+  {
+    "time": "2026-08-23T08:34:52.365Z",
+    "ts": 1787474092365,
+    "source": "mc_keepalive",
+    "interval": 693,
+    "count": 274,
+    "details": "[Ph4nt0m] KeepAlive #115 • Uptime 1725s"
+  },
+  {
+    "time": "2026-08-23T08:34:51.672Z",
+    "ts": 1787474091672,
+    "source": "mc_keepalive",
+    "interval": 11801,
+    "count": 273,
+    "details": "[rsrs] KeepAlive #7 • Uptime 105s"
+  },
+  {
+    "time": "2026-08-23T08:34:39.871Z",
+    "ts": 1787474079871,
+    "source": "mc_keepalive",
+    "interval": 2506,
+    "count": 272,
+    "details": "[teste] KeepAlive #27 • Uptime 405s"
+  },
+  {
+    "time": "2026-08-23T08:34:37.365Z",
+    "ts": 1787474077365,
+    "source": "mc_keepalive",
+    "interval": 693,
+    "count": 271,
+    "details": "[Ph4nt0m] KeepAlive #114 • Uptime 1710s"
+  },
+  {
+    "time": "2026-08-23T08:34:36.672Z",
+    "ts": 1787474076672,
+    "source": "mc_keepalive",
+    "interval": 11849,
+    "count": 270,
+    "details": "[rsrs] KeepAlive #6 • Uptime 90s"
+  },
+  {
+    "time": "2026-08-23T08:34:24.823Z",
+    "ts": 1787474064823,
+    "source": "mc_keepalive",
+    "interval": 2458,
+    "count": 269,
+    "details": "[teste] KeepAlive #26 • Uptime 390s"
+  },
+  {
+    "time": "2026-08-23T08:34:22.365Z",
+    "ts": 1787474062365,
+    "source": "mc_keepalive",
+    "interval": 693,
+    "count": 268,
+    "details": "[Ph4nt0m] KeepAlive #113 • Uptime 1695s"
+  },
+  {
+    "time": "2026-08-23T08:34:21.672Z",
+    "ts": 1787474061672,
+    "source": "mc_keepalive",
+    "interval": 11850,
+    "count": 267,
+    "details": "[rsrs] KeepAlive #5 • Uptime 75s"
+  },
+  {
+    "time": "2026-08-23T08:34:09.822Z",
+    "ts": 1787474049822,
+    "source": "mc_keepalive",
+    "interval": 2457,
+    "count": 266,
+    "details": "[teste] KeepAlive #25 • Uptime 375s"
+  },
+  {
+    "time": "2026-08-23T08:34:07.365Z",
+    "ts": 1787474047365,
+    "source": "mc_keepalive",
+    "interval": 742,
+    "count": 265,
+    "details": "[Ph4nt0m] KeepAlive #112 • Uptime 1680s"
+  },
+  {
+    "time": "2026-08-23T08:34:06.623Z",
+    "ts": 1787474046623,
+    "source": "mc_keepalive",
+    "interval": 11800,
+    "count": 264,
+    "details": "[rsrs] KeepAlive #4 • Uptime 60s"
+  },
+  {
+    "time": "2026-08-23T08:33:54.823Z",
+    "ts": 1787474034823,
+    "source": "mc_keepalive",
+    "interval": 2458,
+    "count": 263,
+    "details": "[teste] KeepAlive #24 • Uptime 360s"
+  },
+  {
+    "time": "2026-08-23T08:33:52.365Z",
+    "ts": 1787474032365,
+    "source": "mc_keepalive",
+    "interval": 744,
+    "count": 262,
+    "details": "[Ph4nt0m] KeepAlive #111 • Uptime 1665s"
+  },
+  {
+    "time": "2026-08-23T08:33:51.621Z",
+    "ts": 1787474031621,
+    "source": "mc_keepalive",
+    "interval": 11849,
+    "count": 261,
+    "details": "[rsrs] KeepAlive #3 • Uptime 45s"
+  },
+  {
+    "time": "2026-08-23T08:33:39.772Z",
+    "ts": 1787474019772,
+    "source": "mc_keepalive",
+    "interval": 2407,
+    "count": 260,
+    "details": "[teste] KeepAlive #23 • Uptime 345s"
+  },
+  {
+    "time": "2026-08-23T08:33:37.365Z",
+    "ts": 1787474017365,
+    "source": "mc_keepalive",
+    "interval": 743,
+    "count": 259,
+    "details": "[Ph4nt0m] KeepAlive #110 • Uptime 1650s"
+  },
+  {
+    "time": "2026-08-23T08:33:36.622Z",
+    "ts": 1787474016622,
+    "source": "mc_keepalive",
+    "interval": 11898,
+    "count": 258,
+    "details": "[rsrs] KeepAlive #2 • Uptime 30s"
+  },
+  {
+    "time": "2026-08-23T08:33:24.724Z",
+    "ts": 1787474004724,
+    "source": "mc_keepalive",
+    "interval": 2359,
+    "count": 257,
+    "details": "[teste] KeepAlive #22 • Uptime 330s"
+  },
+  {
+    "time": "2026-08-23T08:33:22.365Z",
+    "ts": 1787474002365,
+    "source": "mc_keepalive",
+    "interval": 744,
+    "count": 256,
+    "details": "[Ph4nt0m] KeepAlive #109 • Uptime 1635s"
+  },
+  {
+    "time": "2026-08-23T08:33:21.621Z",
+    "ts": 1787474001621,
+    "source": "mc_keepalive",
+    "interval": 11898,
+    "count": 255,
+    "details": "[rsrs] KeepAlive #1 • Uptime 15s"
+  },
+  {
+    "time": "2026-08-23T08:33:09.723Z",
+    "ts": 1787473989723,
+    "source": "mc_keepalive",
+    "interval": 2358,
+    "count": 254,
+    "details": "[teste] KeepAlive #21 • Uptime 315s"
+  },
+  {
+    "time": "2026-08-23T08:33:07.365Z",
+    "ts": 1787473987365,
+    "source": "mc_keepalive",
+    "interval": 12642,
+    "count": 253,
+    "details": "[Ph4nt0m] KeepAlive #108 • Uptime 1620s"
+  },
+  {
+    "time": "2026-08-23T08:32:54.723Z",
+    "ts": 1787473974723,
+    "source": "mc_keepalive",
+    "interval": 2357,
+    "count": 252,
+    "details": "[teste] KeepAlive #20 • Uptime 300s"
+  },
+  {
+    "time": "2026-08-23T08:32:52.366Z",
+    "ts": 1787473972366,
+    "source": "mc_keepalive",
+    "interval": 5392,
+    "count": 251,
+    "details": "[Ph4nt0m] KeepAlive #107 • Uptime 1605s"
+  },
+  {
+    "time": "2026-08-23T08:32:46.974Z",
+    "ts": 1787473966974,
+    "source": "mc_keepalive",
+    "interval": 7301,
+    "count": 250,
+    "details": "[rsrs] KeepAlive #119 • Uptime 1787s"
+  },
+  {
+    "time": "2026-08-23T08:32:39.673Z",
+    "ts": 1787473959673,
+    "source": "mc_keepalive",
+    "interval": 2307,
+    "count": 249,
+    "details": "[teste] KeepAlive #19 • Uptime 285s"
+  },
+  {
+    "time": "2026-08-23T08:32:37.366Z",
+    "ts": 1787473957366,
+    "source": "mc_keepalive",
+    "interval": 5393,
+    "count": 248,
+    "details": "[Ph4nt0m] KeepAlive #106 • Uptime 1590s"
+  },
+  {
+    "time": "2026-08-23T08:32:31.973Z",
+    "ts": 1787473951973,
+    "source": "mc_keepalive",
+    "interval": 7300,
+    "count": 247,
+    "details": "[rsrs] KeepAlive #118 • Uptime 1772s"
+  },
+  {
+    "time": "2026-08-23T08:32:24.673Z",
+    "ts": 1787473944673,
+    "source": "mc_keepalive",
+    "interval": 2306,
+    "count": 246,
+    "details": "[teste] KeepAlive #18 • Uptime 270s"
+  },
+  {
+    "time": "2026-08-23T08:32:22.367Z",
+    "ts": 1787473942367,
+    "source": "mc_keepalive",
+    "interval": 5391,
+    "count": 245,
+    "details": "[Ph4nt0m] KeepAlive #105 • Uptime 1575s"
+  },
+  {
+    "time": "2026-08-23T08:32:16.976Z",
+    "ts": 1787473936976,
+    "source": "mc_keepalive",
+    "interval": 7352,
+    "count": 244,
+    "details": "[rsrs] KeepAlive #117 • Uptime 1757s"
+  },
+  {
+    "time": "2026-08-23T08:32:09.624Z",
+    "ts": 1787473929624,
+    "source": "mc_keepalive",
+    "interval": 2257,
+    "count": 243,
+    "details": "[teste] KeepAlive #17 • Uptime 255s"
+  },
+  {
+    "time": "2026-08-23T08:32:07.367Z",
+    "ts": 1787473927367,
+    "source": "mc_keepalive",
+    "interval": 5394,
+    "count": 242,
+    "details": "[Ph4nt0m] KeepAlive #104 • Uptime 1560s"
+  },
+  {
+    "time": "2026-08-23T08:32:01.973Z",
+    "ts": 1787473921973,
+    "source": "mc_keepalive",
+    "interval": 7349,
+    "count": 241,
+    "details": "[rsrs] KeepAlive #116 • Uptime 1742s"
+  },
+  {
+    "time": "2026-08-23T08:31:54.624Z",
+    "ts": 1787473914624,
+    "source": "mc_keepalive",
+    "interval": 2257,
+    "count": 240,
+    "details": "[teste] KeepAlive #16 • Uptime 240s"
+  },
+  {
+    "time": "2026-08-23T08:31:52.367Z",
+    "ts": 1787473912367,
+    "source": "mc_keepalive",
+    "interval": 5393,
+    "count": 239,
+    "details": "[Ph4nt0m] KeepAlive #103 • Uptime 1545s"
+  },
+  {
+    "time": "2026-08-23T08:31:46.974Z",
+    "ts": 1787473906974,
+    "source": "mc_keepalive",
+    "interval": 7350,
+    "count": 238,
+    "details": "[rsrs] KeepAlive #115 • Uptime 1727s"
+  },
+  {
+    "time": "2026-08-23T08:31:39.624Z",
+    "ts": 1787473899624,
+    "source": "mc_keepalive",
+    "interval": 2257,
+    "count": 237,
+    "details": "[teste] KeepAlive #15 • Uptime 225s"
+  },
+  {
+    "time": "2026-08-23T08:31:37.367Z",
+    "ts": 1787473897367,
+    "source": "mc_keepalive",
+    "interval": 5441,
+    "count": 236,
+    "details": "[Ph4nt0m] KeepAlive #102 • Uptime 1530s"
+  },
+  {
+    "time": "2026-08-23T08:31:31.926Z",
+    "ts": 1787473891926,
+    "source": "mc_keepalive",
+    "interval": 7301,
+    "count": 235,
+    "details": "[rsrs] KeepAlive #114 • Uptime 1712s"
+  },
+  {
+    "time": "2026-08-23T08:31:24.625Z",
+    "ts": 1787473884625,
+    "source": "mc_keepalive",
+    "interval": 2257,
+    "count": 234,
+    "details": "[teste] KeepAlive #14 • Uptime 210s"
+  },
+  {
+    "time": "2026-08-23T08:31:22.368Z",
+    "ts": 1787473882368,
+    "source": "mc_keepalive",
+    "interval": 5443,
+    "count": 233,
+    "details": "[Ph4nt0m] KeepAlive #101 • Uptime 1515s"
+  },
+  {
+    "time": "2026-08-23T08:31:16.925Z",
+    "ts": 1787473876925,
+    "source": "mc_keepalive",
+    "interval": 7349,
+    "count": 232,
+    "details": "[rsrs] KeepAlive #113 • Uptime 1697s"
+  },
+  {
+    "time": "2026-08-23T08:31:09.576Z",
+    "ts": 1787473869576,
+    "source": "mc_keepalive",
+    "interval": 2208,
+    "count": 231,
+    "details": "[teste] KeepAlive #13 • Uptime 195s"
+  },
+  {
+    "time": "2026-08-23T08:31:07.368Z",
+    "ts": 1787473867368,
+    "source": "mc_keepalive",
+    "interval": 5443,
+    "count": 230,
+    "details": "[Ph4nt0m] KeepAlive #100 • Uptime 1500s"
+  },
+  {
+    "time": "2026-08-23T08:31:01.925Z",
+    "ts": 1787473861925,
+    "source": "mc_keepalive",
+    "interval": 7351,
+    "count": 229,
+    "details": "[rsrs] KeepAlive #112 • Uptime 1682s"
+  },
+  {
+    "time": "2026-08-23T08:30:54.574Z",
+    "ts": 1787473854574,
+    "source": "mc_keepalive",
+    "interval": 2206,
+    "count": 228,
+    "details": "[teste] KeepAlive #12 • Uptime 180s"
+  },
+  {
+    "time": "2026-08-23T08:30:52.368Z",
+    "ts": 1787473852368,
+    "source": "mc_keepalive",
+    "interval": 5493,
+    "count": 227,
+    "details": "[Ph4nt0m] KeepAlive #99 • Uptime 1485s"
+  },
+  {
+    "time": "2026-08-23T08:30:46.875Z",
+    "ts": 1787473846875,
+    "source": "mc_keepalive",
+    "interval": 7300,
+    "count": 226,
+    "details": "[rsrs] KeepAlive #111 • Uptime 1667s"
+  },
+  {
+    "time": "2026-08-23T08:30:39.575Z",
+    "ts": 1787473839575,
+    "source": "mc_keepalive",
+    "interval": 2207,
+    "count": 225,
+    "details": "[teste] KeepAlive #11 • Uptime 165s"
+  },
+  {
+    "time": "2026-08-23T08:30:37.368Z",
+    "ts": 1787473837368,
+    "source": "mc_keepalive",
+    "interval": 5493,
+    "count": 224,
+    "details": "[Ph4nt0m] KeepAlive #98 • Uptime 1470s"
+  },
+  {
+    "time": "2026-08-23T08:30:31.875Z",
+    "ts": 1787473831875,
+    "source": "mc_keepalive",
+    "interval": 7349,
+    "count": 223,
+    "details": "[rsrs] KeepAlive #110 • Uptime 1652s"
+  },
+  {
+    "time": "2026-08-23T08:30:24.526Z",
+    "ts": 1787473824526,
+    "source": "mc_keepalive",
+    "interval": 2157,
+    "count": 222,
+    "details": "[teste] KeepAlive #10 • Uptime 150s"
+  },
+  {
+    "time": "2026-08-23T08:30:22.369Z",
+    "ts": 1787473822369,
+    "source": "mc_keepalive",
+    "interval": 5543,
+    "count": 221,
+    "details": "[Ph4nt0m] KeepAlive #97 • Uptime 1455s"
+  },
+  {
+    "time": "2026-08-23T08:30:16.826Z",
+    "ts": 1787473816826,
+    "source": "mc_keepalive",
+    "interval": 7300,
+    "count": 220,
+    "details": "[rsrs] KeepAlive #109 • Uptime 1637s"
+  },
+  {
+    "time": "2026-08-23T08:30:09.526Z",
+    "ts": 1787473809526,
+    "source": "mc_keepalive",
+    "interval": 2157,
+    "count": 219,
+    "details": "[teste] KeepAlive #9 • Uptime 135s"
+  },
+  {
+    "time": "2026-08-23T08:30:07.369Z",
+    "ts": 1787473807369,
+    "source": "mc_keepalive",
+    "interval": 5542,
+    "count": 218,
+    "details": "[Ph4nt0m] KeepAlive #96 • Uptime 1440s"
+  },
+  {
+    "time": "2026-08-23T08:30:01.827Z",
+    "ts": 1787473801827,
+    "source": "mc_keepalive",
+    "interval": 7301,
+    "count": 217,
+    "details": "[rsrs] KeepAlive #108 • Uptime 1622s"
+  },
+  {
+    "time": "2026-08-23T08:29:54.526Z",
+    "ts": 1787473794526,
+    "source": "mc_keepalive",
+    "interval": 2157,
+    "count": 216,
+    "details": "[teste] KeepAlive #8 • Uptime 120s"
+  },
+  {
+    "time": "2026-08-23T08:29:52.369Z",
+    "ts": 1787473792369,
+    "source": "mc_keepalive",
+    "interval": 5544,
+    "count": 215,
+    "details": "[Ph4nt0m] KeepAlive #95 • Uptime 1425s"
+  },
+  {
+    "time": "2026-08-23T08:29:46.825Z",
+    "ts": 1787473786825,
+    "source": "mc_keepalive",
+    "interval": 7299,
+    "count": 214,
+    "details": "[rsrs] KeepAlive #107 • Uptime 1607s"
+  },
+  {
+    "time": "2026-08-23T08:29:39.526Z",
+    "ts": 1787473779526,
+    "source": "mc_keepalive",
+    "interval": 2157,
+    "count": 213,
+    "details": "[teste] KeepAlive #7 • Uptime 105s"
+  },
+  {
+    "time": "2026-08-23T08:29:37.369Z",
+    "ts": 1787473777369,
+    "source": "mc_keepalive",
+    "interval": 5543,
+    "count": 212,
+    "details": "[Ph4nt0m] KeepAlive #94 • Uptime 1410s"
+  },
+  {
+    "time": "2026-08-23T08:29:31.826Z",
+    "ts": 1787473771826,
+    "source": "mc_keepalive",
+    "interval": 7300,
+    "count": 211,
+    "details": "[rsrs] KeepAlive #106 • Uptime 1592s"
+  },
+  {
+    "time": "2026-08-23T08:29:24.526Z",
+    "ts": 1787473764526,
+    "source": "mc_keepalive",
+    "interval": 2157,
+    "count": 210,
+    "details": "[teste] KeepAlive #6 • Uptime 90s"
+  },
+  {
+    "time": "2026-08-23T08:29:22.369Z",
+    "ts": 1787473762369,
+    "source": "mc_keepalive",
+    "interval": 5543,
+    "count": 209,
+    "details": "[Ph4nt0m] KeepAlive #93 • Uptime 1395s"
+  },
+  {
+    "time": "2026-08-23T08:29:16.826Z",
+    "ts": 1787473756826,
+    "source": "mc_keepalive",
+    "interval": 7301,
+    "count": 208,
+    "details": "[rsrs] KeepAlive #105 • Uptime 1577s"
+  },
+  {
+    "time": "2026-08-23T08:29:09.525Z",
+    "ts": 1787473749525,
+    "source": "mc_keepalive",
+    "interval": 2155,
+    "count": 207,
+    "details": "[teste] KeepAlive #5 • Uptime 75s"
+  },
+  {
+    "time": "2026-08-23T08:29:07.370Z",
+    "ts": 1787473747370,
+    "source": "mc_keepalive",
+    "interval": 5544,
+    "count": 206,
+    "details": "[Ph4nt0m] KeepAlive #92 • Uptime 1380s"
+  },
+  {
+    "time": "2026-08-23T08:29:01.826Z",
+    "ts": 1787473741826,
+    "source": "mc_keepalive",
+    "interval": 7348,
+    "count": 205,
+    "details": "[rsrs] KeepAlive #104 • Uptime 1562s"
+  },
+  {
+    "time": "2026-08-23T08:28:54.478Z",
+    "ts": 1787473734478,
+    "source": "mc_keepalive",
+    "interval": 2108,
+    "count": 204,
+    "details": "[teste] KeepAlive #4 • Uptime 60s"
+  },
+  {
+    "time": "2026-08-23T08:28:52.370Z",
+    "ts": 1787473732370,
+    "source": "mc_keepalive",
+    "interval": 5543,
+    "count": 203,
+    "details": "[Ph4nt0m] KeepAlive #91 • Uptime 1365s"
+  },
+  {
+    "time": "2026-08-23T08:28:46.827Z",
+    "ts": 1787473726827,
+    "source": "mc_keepalive",
+    "interval": 7348,
+    "count": 202,
+    "details": "[rsrs] KeepAlive #103 • Uptime 1547s"
+  },
+  {
+    "time": "2026-08-23T08:28:39.479Z",
+    "ts": 1787473719479,
+    "source": "mc_keepalive",
+    "interval": 2109,
+    "count": 201,
+    "details": "[teste] KeepAlive #3 • Uptime 45s"
+  },
+  {
+    "time": "2026-08-23T08:28:37.370Z",
+    "ts": 1787473717370,
+    "source": "mc_keepalive",
+    "interval": 5543,
+    "count": 200,
+    "details": "[Ph4nt0m] KeepAlive #90 • Uptime 1350s"
+  },
+  {
+    "time": "2026-08-23T08:28:31.827Z",
+    "ts": 1787473711827,
+    "source": "mc_keepalive",
+    "interval": 7350,
+    "count": 199,
+    "details": "[rsrs] KeepAlive #102 • Uptime 1532s"
+  },
+  {
+    "time": "2026-08-23T08:28:24.477Z",
+    "ts": 1787473704477,
+    "source": "mc_keepalive",
+    "interval": 2107,
+    "count": 198,
+    "details": "[teste] KeepAlive #2 • Uptime 30s"
+  },
+  {
+    "time": "2026-08-23T08:28:22.370Z",
+    "ts": 1787473702370,
+    "source": "mc_keepalive",
+    "interval": 5591,
+    "count": 197,
+    "details": "[Ph4nt0m] KeepAlive #89 • Uptime 1335s"
+  },
+  {
+    "time": "2026-08-23T08:28:16.779Z",
+    "ts": 1787473696779,
+    "source": "mc_keepalive",
+    "interval": 7302,
+    "count": 196,
+    "details": "[rsrs] KeepAlive #101 • Uptime 1517s"
+  },
+  {
+    "time": "2026-08-23T08:28:09.477Z",
+    "ts": 1787473689477,
+    "source": "mc_keepalive",
+    "interval": 2107,
+    "count": 195,
+    "details": "[teste] KeepAlive #1 • Uptime 15s"
+  },
+  {
+    "time": "2026-08-23T08:28:07.370Z",
+    "ts": 1787473687370,
+    "source": "mc_keepalive",
+    "interval": 5591,
+    "count": 194,
+    "details": "[Ph4nt0m] KeepAlive #88 • Uptime 1320s"
+  },
+  {
+    "time": "2026-08-23T08:28:01.779Z",
+    "ts": 1787473681779,
+    "source": "mc_keepalive",
+    "interval": 5235,
+    "count": 193,
+    "details": "[rsrs] KeepAlive #100 • Uptime 1502s"
+  },
+  {
+    "time": "2026-08-23T08:27:56.544Z",
+    "ts": 1787473676544,
+    "source": "health_external",
+    "interval": 4173,
+    "count": 192,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-23T08:27:52.371Z",
+    "ts": 1787473672371,
+    "source": "mc_keepalive",
+    "interval": 5594,
+    "count": 191,
+    "details": "[Ph4nt0m] KeepAlive #87 • Uptime 1305s"
+  },
+  {
+    "time": "2026-08-23T08:27:46.777Z",
+    "ts": 1787473666777,
+    "source": "mc_keepalive",
+    "interval": 4748,
+    "count": 190,
+    "details": "[rsrs] KeepAlive #99 • Uptime 1487s"
+  },
+  {
+    "time": "2026-08-23T08:27:42.029Z",
+    "ts": 1787473662029,
+    "source": "mc_keepalive",
+    "interval": 4658,
+    "count": 189,
+    "details": "[teste] KeepAlive #1 • Uptime 15s"
+  },
+  {
+    "time": "2026-08-23T08:27:37.371Z",
+    "ts": 1787473657371,
+    "source": "mc_keepalive",
+    "interval": 5643,
+    "count": 188,
+    "details": "[Ph4nt0m] KeepAlive #86 • Uptime 1290s"
+  },
+  {
+    "time": "2026-08-23T08:27:31.728Z",
+    "ts": 1787473651728,
+    "source": "mc_keepalive",
+    "interval": 9357,
+    "count": 187,
+    "details": "[rsrs] KeepAlive #98 • Uptime 1472s"
+  },
+  {
+    "time": "2026-08-23T08:27:22.371Z",
+    "ts": 1787473642371,
+    "source": "mc_keepalive",
+    "interval": 5642,
+    "count": 186,
+    "details": "[Ph4nt0m] KeepAlive #85 • Uptime 1275s"
+  },
+  {
+    "time": "2026-08-23T08:27:16.729Z",
+    "ts": 1787473636729,
+    "source": "mc_keepalive",
+    "interval": 9358,
+    "count": 185,
+    "details": "[rsrs] KeepAlive #97 • Uptime 1457s"
+  },
+  {
+    "time": "2026-08-23T08:27:07.371Z",
+    "ts": 1787473627371,
+    "source": "mc_keepalive",
+    "interval": 5692,
+    "count": 184,
+    "details": "[Ph4nt0m] KeepAlive #84 • Uptime 1260s"
+  },
+  {
+    "time": "2026-08-23T08:27:01.679Z",
+    "ts": 1787473621679,
+    "source": "mc_keepalive",
+    "interval": 9308,
+    "count": 183,
+    "details": "[rsrs] KeepAlive #96 • Uptime 1442s"
+  },
+  {
+    "time": "2026-08-23T08:26:52.371Z",
+    "ts": 1787473612371,
+    "source": "mc_keepalive",
+    "interval": 5741,
+    "count": 182,
+    "details": "[Ph4nt0m] KeepAlive #83 • Uptime 1245s"
+  },
+  {
+    "time": "2026-08-23T08:26:46.630Z",
+    "ts": 1787473606630,
+    "source": "mc_keepalive",
+    "interval": 9258,
+    "count": 181,
+    "details": "[rsrs] KeepAlive #95 • Uptime 1427s"
+  },
+  {
+    "time": "2026-08-23T08:26:37.372Z",
+    "ts": 1787473597372,
+    "source": "mc_keepalive",
+    "interval": 5793,
+    "count": 180,
+    "details": "[Ph4nt0m] KeepAlive #82 • Uptime 1230s"
+  },
+  {
+    "time": "2026-08-23T08:26:31.579Z",
+    "ts": 1787473591579,
+    "source": "mc_keepalive",
+    "interval": 9207,
+    "count": 179,
+    "details": "[rsrs] KeepAlive #94 • Uptime 1412s"
+  },
+  {
+    "time": "2026-08-23T08:26:22.372Z",
+    "ts": 1787473582372,
+    "source": "mc_keepalive",
+    "interval": 5793,
+    "count": 178,
+    "details": "[Ph4nt0m] KeepAlive #81 • Uptime 1215s"
+  },
+  {
+    "time": "2026-08-23T08:26:16.579Z",
+    "ts": 1787473576579,
+    "source": "mc_keepalive",
+    "interval": 9207,
+    "count": 177,
+    "details": "[rsrs] KeepAlive #93 • Uptime 1397s"
+  },
+  {
+    "time": "2026-08-23T08:26:07.372Z",
+    "ts": 1787473567372,
+    "source": "mc_keepalive",
+    "interval": 5841,
+    "count": 176,
+    "details": "[Ph4nt0m] KeepAlive #80 • Uptime 1200s"
+  },
+  {
+    "time": "2026-08-23T08:26:01.531Z",
+    "ts": 1787473561531,
+    "source": "mc_keepalive",
+    "interval": 9159,
+    "count": 175,
+    "details": "[rsrs] KeepAlive #92 • Uptime 1382s"
+  },
+  {
+    "time": "2026-08-23T08:25:52.372Z",
+    "ts": 1787473552372,
+    "source": "mc_keepalive",
+    "interval": 5893,
+    "count": 174,
+    "details": "[Ph4nt0m] KeepAlive #79 • Uptime 1185s"
+  },
+  {
+    "time": "2026-08-23T08:25:46.479Z",
+    "ts": 1787473546479,
+    "source": "mc_keepalive",
+    "interval": 9107,
+    "count": 173,
+    "details": "[rsrs] KeepAlive #91 • Uptime 1367s"
+  },
+  {
+    "time": "2026-08-23T08:25:37.372Z",
+    "ts": 1787473537372,
+    "source": "mc_keepalive",
+    "interval": 5943,
+    "count": 172,
+    "details": "[Ph4nt0m] KeepAlive #78 • Uptime 1170s"
+  },
+  {
+    "time": "2026-08-23T08:25:31.429Z",
+    "ts": 1787473531429,
+    "source": "mc_keepalive",
+    "interval": 9056,
+    "count": 171,
+    "details": "[rsrs] KeepAlive #90 • Uptime 1351s"
+  },
+  {
+    "time": "2026-08-23T08:25:22.373Z",
+    "ts": 1787473522373,
+    "source": "mc_keepalive",
+    "interval": 5944,
+    "count": 170,
+    "details": "[Ph4nt0m] KeepAlive #77 • Uptime 1155s"
+  },
+  {
+    "time": "2026-08-23T08:25:16.429Z",
+    "ts": 1787473516429,
+    "source": "mc_keepalive",
+    "interval": 9056,
+    "count": 169,
+    "details": "[rsrs] KeepAlive #89 • Uptime 1336s"
+  },
+  {
+    "time": "2026-08-23T08:25:07.373Z",
+    "ts": 1787473507373,
+    "source": "mc_keepalive",
+    "interval": 5992,
+    "count": 168,
+    "details": "[Ph4nt0m] KeepAlive #76 • Uptime 1140s"
+  },
+  {
+    "time": "2026-08-23T08:25:01.381Z",
+    "ts": 1787473501381,
+    "source": "mc_keepalive",
+    "interval": 9008,
+    "count": 167,
+    "details": "[rsrs] KeepAlive #88 • Uptime 1321s"
+  },
+  {
+    "time": "2026-08-23T08:24:52.373Z",
+    "ts": 1787473492373,
+    "source": "mc_keepalive",
+    "interval": 5993,
+    "count": 166,
+    "details": "[Ph4nt0m] KeepAlive #75 • Uptime 1125s"
+  },
+  {
+    "time": "2026-08-23T08:24:46.380Z",
+    "ts": 1787473486380,
+    "source": "mc_keepalive",
+    "interval": 9007,
+    "count": 165,
+    "details": "[rsrs] KeepAlive #87 • Uptime 1306s"
+  },
+  {
+    "time": "2026-08-23T08:24:37.373Z",
+    "ts": 1787473477373,
+    "source": "mc_keepalive",
+    "interval": 5993,
+    "count": 164,
+    "details": "[Ph4nt0m] KeepAlive #74 • Uptime 1110s"
+  },
+  {
+    "time": "2026-08-23T08:24:31.380Z",
+    "ts": 1787473471380,
+    "source": "mc_keepalive",
+    "interval": 9007,
+    "count": 163,
+    "details": "[rsrs] KeepAlive #86 • Uptime 1291s"
+  },
+  {
+    "time": "2026-08-23T08:24:22.373Z",
+    "ts": 1787473462373,
+    "source": "mc_keepalive",
+    "interval": 6043,
+    "count": 162,
+    "details": "[Ph4nt0m] KeepAlive #73 • Uptime 1095s"
+  },
+  {
+    "time": "2026-08-23T08:24:16.330Z",
+    "ts": 1787473456330,
+    "source": "mc_keepalive",
+    "interval": 8957,
+    "count": 161,
+    "details": "[rsrs] KeepAlive #85 • Uptime 1276s"
+  },
+  {
+    "time": "2026-08-23T08:24:07.373Z",
+    "ts": 1787473447373,
+    "source": "mc_keepalive",
+    "interval": 6043,
+    "count": 160,
+    "details": "[Ph4nt0m] KeepAlive #72 • Uptime 1080s"
+  },
+  {
+    "time": "2026-08-23T08:24:01.330Z",
+    "ts": 1787473441330,
+    "source": "mc_keepalive",
+    "interval": 8957,
+    "count": 159,
+    "details": "[rsrs] KeepAlive #84 • Uptime 1261s"
+  },
+  {
+    "time": "2026-08-23T08:23:52.373Z",
+    "ts": 1787473432373,
+    "source": "mc_keepalive",
+    "interval": 6044,
+    "count": 158,
+    "details": "[Ph4nt0m] KeepAlive #71 • Uptime 1065s"
+  },
+  {
+    "time": "2026-08-23T08:23:46.329Z",
+    "ts": 1787473426329,
+    "source": "mc_keepalive",
+    "interval": 8956,
+    "count": 157,
+    "details": "[rsrs] KeepAlive #83 • Uptime 1246s"
+  },
+  {
+    "time": "2026-08-23T08:23:37.373Z",
+    "ts": 1787473417373,
+    "source": "mc_keepalive",
+    "interval": 6043,
+    "count": 156,
+    "details": "[Ph4nt0m] KeepAlive #70 • Uptime 1050s"
+  },
+  {
+    "time": "2026-08-23T08:23:31.330Z",
+    "ts": 1787473411330,
+    "source": "mc_keepalive",
+    "interval": 8957,
+    "count": 155,
+    "details": "[rsrs] KeepAlive #82 • Uptime 1231s"
+  },
+  {
+    "time": "2026-08-23T08:23:22.373Z",
+    "ts": 1787473402373,
+    "source": "mc_keepalive",
+    "interval": 6044,
+    "count": 154,
+    "details": "[Ph4nt0m] KeepAlive #69 • Uptime 1035s"
+  },
+  {
+    "time": "2026-08-23T08:23:16.329Z",
+    "ts": 1787473396329,
+    "source": "mc_keepalive",
+    "interval": 8956,
+    "count": 153,
+    "details": "[rsrs] KeepAlive #81 • Uptime 1216s"
+  },
+  {
+    "time": "2026-08-23T08:23:07.373Z",
+    "ts": 1787473387373,
+    "source": "mc_keepalive",
+    "interval": 6043,
+    "count": 152,
+    "details": "[Ph4nt0m] KeepAlive #68 • Uptime 1020s"
+  },
+  {
+    "time": "2026-08-23T08:23:01.330Z",
+    "ts": 1787473381330,
+    "source": "mc_keepalive",
+    "interval": 8956,
+    "count": 151,
+    "details": "[rsrs] KeepAlive #80 • Uptime 1201s"
+  },
+  {
+    "time": "2026-08-23T08:22:52.374Z",
+    "ts": 1787473372374,
+    "source": "mc_keepalive",
+    "interval": 6092,
+    "count": 150,
+    "details": "[Ph4nt0m] KeepAlive #67 • Uptime 1005s"
+  },
+  {
+    "time": "2026-08-23T08:22:46.282Z",
+    "ts": 1787473366282,
+    "source": "mc_keepalive",
+    "interval": 8907,
+    "count": 149,
+    "details": "[rsrs] KeepAlive #79 • Uptime 1186s"
+  },
+  {
+    "time": "2026-08-23T08:22:37.375Z",
+    "ts": 1787473357375,
+    "source": "mc_keepalive",
+    "interval": 6094,
+    "count": 148,
+    "details": "[Ph4nt0m] KeepAlive #66 • Uptime 990s"
+  },
+  {
+    "time": "2026-08-23T08:22:31.281Z",
+    "ts": 1787473351281,
+    "source": "mc_keepalive",
+    "interval": 8905,
+    "count": 147,
+    "details": "[rsrs] KeepAlive #78 • Uptime 1171s"
+  },
+  {
+    "time": "2026-08-23T08:22:22.376Z",
+    "ts": 1787473342376,
+    "source": "mc_keepalive",
+    "interval": 6142,
+    "count": 146,
+    "details": "[Ph4nt0m] KeepAlive #65 • Uptime 975s"
+  },
+  {
+    "time": "2026-08-23T08:22:16.234Z",
+    "ts": 1787473336234,
+    "source": "mc_keepalive",
+    "interval": 8859,
+    "count": 145,
+    "details": "[rsrs] KeepAlive #77 • Uptime 1156s"
+  },
+  {
+    "time": "2026-08-23T08:22:07.375Z",
+    "ts": 1787473327375,
+    "source": "mc_keepalive",
+    "interval": 6144,
+    "count": 144,
+    "details": "[Ph4nt0m] KeepAlive #64 • Uptime 960s"
+  },
+  {
+    "time": "2026-08-23T08:22:01.231Z",
+    "ts": 1787473321231,
+    "source": "mc_keepalive",
+    "interval": 8856,
+    "count": 143,
+    "details": "[rsrs] KeepAlive #76 • Uptime 1141s"
+  },
+  {
+    "time": "2026-08-23T08:21:52.375Z",
+    "ts": 1787473312375,
+    "source": "mc_keepalive",
+    "interval": 6143,
+    "count": 142,
+    "details": "[Ph4nt0m] KeepAlive #63 • Uptime 945s"
+  },
+  {
+    "time": "2026-08-23T08:21:46.232Z",
+    "ts": 1787473306232,
+    "source": "mc_keepalive",
+    "interval": 8857,
+    "count": 141,
+    "details": "[rsrs] KeepAlive #75 • Uptime 1126s"
+  },
+  {
+    "time": "2026-08-23T08:21:37.375Z",
+    "ts": 1787473297375,
+    "source": "mc_keepalive",
+    "interval": 6192,
+    "count": 140,
+    "details": "[Ph4nt0m] KeepAlive #62 • Uptime 930s"
+  },
+  {
+    "time": "2026-08-23T08:21:31.183Z",
+    "ts": 1787473291183,
+    "source": "mc_keepalive",
+    "interval": 8807,
+    "count": 139,
+    "details": "[rsrs] KeepAlive #74 • Uptime 1111s"
+  },
+  {
+    "time": "2026-08-23T08:21:22.376Z",
+    "ts": 1787473282376,
+    "source": "mc_keepalive",
+    "interval": 6243,
+    "count": 138,
+    "details": "[Ph4nt0m] KeepAlive #61 • Uptime 915s"
+  },
+  {
+    "time": "2026-08-23T08:21:16.133Z",
+    "ts": 1787473276133,
+    "source": "mc_keepalive",
+    "interval": 8757,
+    "count": 137,
+    "details": "[rsrs] KeepAlive #73 • Uptime 1096s"
+  },
+  {
+    "time": "2026-08-23T08:21:07.376Z",
+    "ts": 1787473267376,
+    "source": "mc_keepalive",
+    "interval": 6293,
+    "count": 136,
+    "details": "[Ph4nt0m] KeepAlive #60 • Uptime 900s"
+  },
+  {
+    "time": "2026-08-23T08:21:01.083Z",
+    "ts": 1787473261083,
+    "source": "mc_keepalive",
+    "interval": 8707,
+    "count": 135,
+    "details": "[rsrs] KeepAlive #72 • Uptime 1081s"
+  },
+  {
+    "time": "2026-08-23T08:20:52.376Z",
+    "ts": 1787473252376,
+    "source": "mc_keepalive",
+    "interval": 6343,
+    "count": 134,
+    "details": "[Ph4nt0m] KeepAlive #59 • Uptime 885s"
+  },
+  {
+    "time": "2026-08-23T08:20:46.033Z",
+    "ts": 1787473246033,
+    "source": "mc_keepalive",
+    "interval": 8657,
+    "count": 133,
+    "details": "[rsrs] KeepAlive #71 • Uptime 1066s"
+  },
+  {
+    "time": "2026-08-23T08:20:37.376Z",
+    "ts": 1787473237376,
+    "source": "mc_keepalive",
+    "interval": 6392,
+    "count": 132,
+    "details": "[Ph4nt0m] KeepAlive #58 • Uptime 870s"
+  },
+  {
+    "time": "2026-08-23T08:20:30.984Z",
+    "ts": 1787473230984,
+    "source": "mc_keepalive",
+    "interval": 8608,
+    "count": 131,
+    "details": "[rsrs] KeepAlive #70 • Uptime 1051s"
+  },
+  {
+    "time": "2026-08-23T08:20:22.376Z",
+    "ts": 1787473222376,
+    "source": "mc_keepalive",
+    "interval": 6393,
+    "count": 130,
+    "details": "[Ph4nt0m] KeepAlive #57 • Uptime 855s"
+  },
+  {
+    "time": "2026-08-23T08:20:15.983Z",
+    "ts": 1787473215983,
+    "source": "mc_keepalive",
+    "interval": 8606,
+    "count": 129,
+    "details": "[rsrs] KeepAlive #69 • Uptime 1036s"
+  },
+  {
+    "time": "2026-08-23T08:20:07.377Z",
+    "ts": 1787473207377,
+    "source": "mc_keepalive",
+    "interval": 6394,
+    "count": 128,
+    "details": "[Ph4nt0m] KeepAlive #56 • Uptime 840s"
+  },
+  {
+    "time": "2026-08-23T08:20:00.983Z",
+    "ts": 1787473200983,
+    "source": "mc_keepalive",
+    "interval": 8606,
+    "count": 127,
+    "details": "[rsrs] KeepAlive #68 • Uptime 1021s"
+  },
+  {
+    "time": "2026-08-23T08:19:52.377Z",
+    "ts": 1787473192377,
+    "source": "mc_keepalive",
+    "interval": 6393,
+    "count": 126,
+    "details": "[Ph4nt0m] KeepAlive #55 • Uptime 825s"
+  },
+  {
+    "time": "2026-08-23T08:19:45.984Z",
+    "ts": 1787473185984,
+    "source": "mc_keepalive",
+    "interval": 8607,
+    "count": 125,
+    "details": "[rsrs] KeepAlive #67 • Uptime 1006s"
+  },
+  {
+    "time": "2026-08-23T08:19:37.377Z",
+    "ts": 1787473177377,
+    "source": "mc_keepalive",
+    "interval": 6393,
+    "count": 124,
+    "details": "[Ph4nt0m] KeepAlive #54 • Uptime 810s"
+  },
+  {
+    "time": "2026-08-23T08:19:30.984Z",
+    "ts": 1787473170984,
+    "source": "mc_keepalive",
+    "interval": 8607,
+    "count": 123,
+    "details": "[rsrs] KeepAlive #66 • Uptime 991s"
+  },
+  {
+    "time": "2026-08-23T08:19:22.377Z",
+    "ts": 1787473162377,
+    "source": "mc_keepalive",
+    "interval": 6392,
+    "count": 122,
+    "details": "[Ph4nt0m] KeepAlive #53 • Uptime 795s"
+  },
+  {
+    "time": "2026-08-23T08:19:15.985Z",
+    "ts": 1787473155985,
+    "source": "mc_keepalive",
+    "interval": 8606,
+    "count": 121,
+    "details": "[rsrs] KeepAlive #65 • Uptime 976s"
+  },
+  {
+    "time": "2026-08-23T08:19:07.379Z",
+    "ts": 1787473147379,
+    "source": "mc_keepalive",
+    "interval": 6395,
+    "count": 120,
+    "details": "[Ph4nt0m] KeepAlive #52 • Uptime 780s"
+  },
+  {
+    "time": "2026-08-23T08:19:00.984Z",
+    "ts": 1787473140984,
+    "source": "mc_keepalive",
+    "interval": 4451,
+    "count": 119,
+    "details": "[rsrs] KeepAlive #64 • Uptime 961s"
+  },
+  {
+    "time": "2026-08-23T08:18:56.533Z",
+    "ts": 1787473136533,
+    "source": "health_external",
+    "interval": 4155,
+    "count": 118,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-23T08:18:52.378Z",
+    "ts": 1787473132378,
+    "source": "mc_keepalive",
+    "interval": 6441,
+    "count": 117,
+    "details": "[Ph4nt0m] KeepAlive #51 • Uptime 765s"
+  },
+  {
+    "time": "2026-08-23T08:18:45.937Z",
+    "ts": 1787473125937,
+    "source": "mc_keepalive",
+    "interval": 8559,
+    "count": 116,
+    "details": "[rsrs] KeepAlive #63 • Uptime 946s"
+  },
+  {
+    "time": "2026-08-23T08:18:37.378Z",
+    "ts": 1787473117378,
+    "source": "mc_keepalive",
+    "interval": 6442,
+    "count": 115,
+    "details": "[Ph4nt0m] KeepAlive #50 • Uptime 750s"
+  },
+  {
+    "time": "2026-08-23T08:18:30.936Z",
+    "ts": 1787473110936,
+    "source": "mc_keepalive",
+    "interval": 8558,
+    "count": 114,
+    "details": "[rsrs] KeepAlive #62 • Uptime 931s"
+  },
+  {
+    "time": "2026-08-23T08:18:22.378Z",
+    "ts": 1787473102378,
+    "source": "mc_keepalive",
+    "interval": 6443,
+    "count": 113,
+    "details": "[Ph4nt0m] KeepAlive #49 • Uptime 735s"
+  },
+  {
+    "time": "2026-08-23T08:18:15.935Z",
+    "ts": 1787473095935,
+    "source": "mc_keepalive",
+    "interval": 8557,
+    "count": 112,
+    "details": "[rsrs] KeepAlive #61 • Uptime 916s"
+  },
+  {
+    "time": "2026-08-23T08:18:07.378Z",
+    "ts": 1787473087378,
+    "source": "mc_keepalive",
+    "interval": 6444,
+    "count": 111,
+    "details": "[Ph4nt0m] KeepAlive #48 • Uptime 720s"
+  },
+  {
+    "time": "2026-08-23T08:18:00.934Z",
+    "ts": 1787473080934,
+    "source": "mc_keepalive",
+    "interval": 8555,
+    "count": 110,
+    "details": "[rsrs] KeepAlive #60 • Uptime 901s"
+  },
+  {
+    "time": "2026-08-23T08:17:52.379Z",
+    "ts": 1787473072379,
+    "source": "mc_keepalive",
+    "interval": 6445,
+    "count": 109,
+    "details": "[Ph4nt0m] KeepAlive #47 • Uptime 705s"
+  },
+  {
+    "time": "2026-08-23T08:17:45.934Z",
+    "ts": 1787473065934,
+    "source": "mc_keepalive",
+    "interval": 8555,
+    "count": 108,
+    "details": "[rsrs] KeepAlive #59 • Uptime 886s"
+  },
+  {
+    "time": "2026-08-23T08:17:37.379Z",
+    "ts": 1787473057379,
+    "source": "mc_keepalive",
+    "interval": 6493,
+    "count": 107,
+    "details": "[Ph4nt0m] KeepAlive #46 • Uptime 690s"
+  },
+  {
+    "time": "2026-08-23T08:17:30.886Z",
+    "ts": 1787473050886,
+    "source": "mc_keepalive",
+    "interval": 8507,
+    "count": 106,
+    "details": "[rsrs] KeepAlive #58 • Uptime 871s"
+  },
+  {
+    "time": "2026-08-23T08:17:22.379Z",
+    "ts": 1787473042379,
+    "source": "mc_keepalive",
+    "interval": 6544,
+    "count": 105,
+    "details": "[Ph4nt0m] KeepAlive #45 • Uptime 675s"
+  },
+  {
+    "time": "2026-08-23T08:17:15.835Z",
+    "ts": 1787473035835,
+    "source": "mc_keepalive",
+    "interval": 8456,
+    "count": 104,
+    "details": "[rsrs] KeepAlive #57 • Uptime 856s"
+  },
+  {
+    "time": "2026-08-23T08:17:07.379Z",
+    "ts": 1787473027379,
+    "source": "mc_keepalive",
+    "interval": 6592,
+    "count": 103,
+    "details": "[Ph4nt0m] KeepAlive #44 • Uptime 660s"
+  },
+  {
+    "time": "2026-08-23T08:17:00.787Z",
+    "ts": 1787473020787,
+    "source": "mc_keepalive",
+    "interval": 8408,
+    "count": 102,
+    "details": "[rsrs] KeepAlive #56 • Uptime 841s"
+  },
+  {
+    "time": "2026-08-23T08:16:52.379Z",
+    "ts": 1787473012379,
+    "source": "mc_keepalive",
+    "interval": 6593,
+    "count": 101,
+    "details": "[Ph4nt0m] KeepAlive #43 • Uptime 645s"
+  },
+  {
+    "time": "2026-08-23T08:16:45.786Z",
+    "ts": 1787473005786,
+    "source": "mc_keepalive",
+    "interval": 8405,
+    "count": 100,
+    "details": "[rsrs] KeepAlive #55 • Uptime 826s"
+  },
+  {
+    "time": "2026-08-23T08:16:37.381Z",
+    "ts": 1787472997381,
+    "source": "mc_keepalive",
+    "interval": 6592,
+    "count": 99,
+    "details": "[Ph4nt0m] KeepAlive #42 • Uptime 630s"
+  },
+  {
+    "time": "2026-08-23T08:16:30.789Z",
+    "ts": 1787472990789,
+    "source": "mc_keepalive",
+    "interval": 8409,
+    "count": 98,
+    "details": "[rsrs] KeepAlive #54 • Uptime 811s"
+  },
+  {
+    "time": "2026-08-23T08:16:22.380Z",
+    "ts": 1787472982380,
+    "source": "mc_keepalive",
+    "interval": 6643,
+    "count": 97,
+    "details": "[Ph4nt0m] KeepAlive #41 • Uptime 615s"
+  },
+  {
+    "time": "2026-08-23T08:16:15.737Z",
+    "ts": 1787472975737,
+    "source": "mc_keepalive",
+    "interval": 8356,
+    "count": 96,
+    "details": "[rsrs] KeepAlive #53 • Uptime 796s"
+  },
+  {
+    "time": "2026-08-23T08:16:07.381Z",
+    "ts": 1787472967381,
+    "source": "mc_keepalive",
+    "interval": 6693,
+    "count": 95,
+    "details": "[Ph4nt0m] KeepAlive #40 • Uptime 600s"
+  },
+  {
+    "time": "2026-08-23T08:16:00.688Z",
+    "ts": 1787472960688,
+    "source": "mc_keepalive",
+    "interval": 8307,
+    "count": 94,
+    "details": "[rsrs] KeepAlive #52 • Uptime 781s"
+  },
+  {
+    "time": "2026-08-23T08:15:52.381Z",
+    "ts": 1787472952381,
+    "source": "mc_keepalive",
+    "interval": 6694,
+    "count": 93,
+    "details": "[Ph4nt0m] KeepAlive #39 • Uptime 585s"
+  },
+  {
+    "time": "2026-08-23T08:15:45.687Z",
+    "ts": 1787472945687,
+    "source": "mc_keepalive",
+    "interval": 8307,
+    "count": 92,
+    "details": "[rsrs] KeepAlive #51 • Uptime 766s"
+  },
+  {
+    "time": "2026-08-23T08:15:37.380Z",
+    "ts": 1787472937380,
+    "source": "mc_keepalive",
+    "interval": 6693,
+    "count": 91,
+    "details": "[Ph4nt0m] KeepAlive #38 • Uptime 570s"
+  },
+  {
+    "time": "2026-08-23T08:15:30.687Z",
+    "ts": 1787472930687,
+    "source": "mc_keepalive",
+    "interval": 8306,
+    "count": 90,
+    "details": "[rsrs] KeepAlive #50 • Uptime 751s"
+  },
+  {
+    "time": "2026-08-23T08:15:22.381Z",
+    "ts": 1787472922381,
+    "source": "mc_keepalive",
+    "interval": 6743,
+    "count": 89,
+    "details": "[Ph4nt0m] KeepAlive #37 • Uptime 555s"
+  },
+  {
+    "time": "2026-08-23T08:15:15.638Z",
+    "ts": 1787472915638,
+    "source": "mc_keepalive",
+    "interval": 8257,
+    "count": 88,
+    "details": "[rsrs] KeepAlive #49 • Uptime 736s"
+  },
+  {
+    "time": "2026-08-23T08:15:07.381Z",
+    "ts": 1787472907381,
+    "source": "mc_keepalive",
+    "interval": 6793,
+    "count": 87,
+    "details": "[Ph4nt0m] KeepAlive #36 • Uptime 540s"
+  },
+  {
+    "time": "2026-08-23T08:15:00.588Z",
+    "ts": 1787472900588,
+    "source": "mc_keepalive",
+    "interval": 8207,
+    "count": 86,
+    "details": "[rsrs] KeepAlive #48 • Uptime 721s"
+  },
+  {
+    "time": "2026-08-23T08:14:52.381Z",
+    "ts": 1787472892381,
+    "source": "mc_keepalive",
+    "interval": 6794,
+    "count": 85,
+    "details": "[Ph4nt0m] KeepAlive #35 • Uptime 525s"
+  },
+  {
+    "time": "2026-08-23T08:14:45.587Z",
+    "ts": 1787472885587,
+    "source": "mc_keepalive",
+    "interval": 8207,
+    "count": 84,
+    "details": "[rsrs] KeepAlive #47 • Uptime 706s"
+  },
+  {
+    "time": "2026-08-23T08:14:37.380Z",
+    "ts": 1787472877380,
+    "source": "mc_keepalive",
+    "interval": 6793,
+    "count": 83,
+    "details": "[Ph4nt0m] KeepAlive #34 • Uptime 510s"
+  },
+  {
+    "time": "2026-08-23T08:14:30.587Z",
+    "ts": 1787472870587,
+    "source": "mc_keepalive",
+    "interval": 8197,
+    "count": 82,
+    "details": "[rsrs] KeepAlive #46 • Uptime 691s"
+  },
+  {
+    "time": "2026-08-23T08:14:22.390Z",
+    "ts": 1787472862390,
+    "source": "mc_keepalive",
+    "interval": 6853,
+    "count": 81,
+    "details": "[Ph4nt0m] KeepAlive #33 • Uptime 495s"
+  },
+  {
+    "time": "2026-08-23T08:14:15.537Z",
+    "ts": 1787472855537,
+    "source": "mc_keepalive",
+    "interval": 8157,
+    "count": 80,
+    "details": "[rsrs] KeepAlive #45 • Uptime 676s"
+  },
+  {
+    "time": "2026-08-23T08:14:07.380Z",
+    "ts": 1787472847380,
+    "source": "mc_keepalive",
+    "interval": 6842,
+    "count": 79,
+    "details": "[Ph4nt0m] KeepAlive #32 • Uptime 480s"
+  },
+  {
+    "time": "2026-08-23T08:14:00.538Z",
+    "ts": 1787472840538,
+    "source": "mc_keepalive",
+    "interval": 8157,
+    "count": 78,
+    "details": "[rsrs] KeepAlive #44 • Uptime 661s"
+  },
+  {
+    "time": "2026-08-23T08:13:52.381Z",
+    "ts": 1787472832381,
+    "source": "mc_keepalive",
+    "interval": 6843,
+    "count": 77,
+    "details": "[Ph4nt0m] KeepAlive #31 • Uptime 465s"
+  },
+  {
+    "time": "2026-08-23T08:13:45.538Z",
+    "ts": 1787472825538,
+    "source": "mc_keepalive",
+    "interval": 8156,
+    "count": 76,
+    "details": "[rsrs] KeepAlive #43 • Uptime 646s"
+  },
+  {
+    "time": "2026-08-23T08:13:37.382Z",
+    "ts": 1787472817382,
+    "source": "mc_keepalive",
+    "interval": 6844,
+    "count": 75,
+    "details": "[Ph4nt0m] KeepAlive #30 • Uptime 450s"
+  },
+  {
+    "time": "2026-08-23T08:13:30.538Z",
+    "ts": 1787472810538,
+    "source": "mc_keepalive",
+    "interval": 8156,
+    "count": 74,
+    "details": "[rsrs] KeepAlive #42 • Uptime 631s"
+  },
+  {
+    "time": "2026-08-23T08:13:22.382Z",
+    "ts": 1787472802382,
+    "source": "mc_keepalive",
+    "interval": 6844,
+    "count": 73,
+    "details": "[Ph4nt0m] KeepAlive #29 • Uptime 435s"
+  },
+  {
+    "time": "2026-08-23T08:13:15.538Z",
+    "ts": 1787472795538,
+    "source": "mc_keepalive",
+    "interval": 8155,
+    "count": 72,
+    "details": "[rsrs] KeepAlive #41 • Uptime 616s"
+  },
+  {
+    "time": "2026-08-23T08:13:07.383Z",
+    "ts": 1787472787383,
+    "source": "mc_keepalive",
+    "interval": 6890,
+    "count": 71,
+    "details": "[Ph4nt0m] KeepAlive #28 • Uptime 420s"
+  },
+  {
+    "time": "2026-08-23T08:13:00.493Z",
+    "ts": 1787472780493,
+    "source": "mc_keepalive",
+    "interval": 8111,
+    "count": 70,
+    "details": "[rsrs] KeepAlive #40 • Uptime 601s"
+  },
+  {
+    "time": "2026-08-23T08:12:52.382Z",
+    "ts": 1787472772382,
+    "source": "mc_keepalive",
+    "interval": 6892,
+    "count": 69,
+    "details": "[Ph4nt0m] KeepAlive #27 • Uptime 405s"
+  },
+  {
+    "time": "2026-08-23T08:12:45.490Z",
+    "ts": 1787472765490,
+    "source": "mc_keepalive",
+    "interval": 8107,
+    "count": 68,
+    "details": "[rsrs] KeepAlive #39 • Uptime 586s"
+  },
+  {
+    "time": "2026-08-23T08:12:37.383Z",
+    "ts": 1787472757383,
+    "source": "mc_keepalive",
+    "interval": 6893,
+    "count": 67,
+    "details": "[Ph4nt0m] KeepAlive #26 • Uptime 390s"
+  },
+  {
+    "time": "2026-08-23T08:12:30.490Z",
+    "ts": 1787472750490,
+    "source": "mc_keepalive",
+    "interval": 8107,
+    "count": 66,
+    "details": "[rsrs] KeepAlive #38 • Uptime 571s"
+  },
+  {
+    "time": "2026-08-23T08:12:22.383Z",
+    "ts": 1787472742383,
+    "source": "mc_keepalive",
+    "interval": 6893,
+    "count": 65,
+    "details": "[Ph4nt0m] KeepAlive #25 • Uptime 375s"
+  },
+  {
+    "time": "2026-08-23T08:12:15.490Z",
+    "ts": 1787472735490,
+    "source": "mc_keepalive",
+    "interval": 8106,
+    "count": 64,
+    "details": "[rsrs] KeepAlive #37 • Uptime 556s"
+  },
+  {
+    "time": "2026-08-23T08:12:07.384Z",
+    "ts": 1787472727384,
+    "source": "mc_keepalive",
+    "interval": 6894,
+    "count": 63,
+    "details": "[Ph4nt0m] KeepAlive #24 • Uptime 360s"
+  },
+  {
+    "time": "2026-08-23T08:12:00.490Z",
+    "ts": 1787472720490,
+    "source": "mc_keepalive",
+    "interval": 8107,
+    "count": 62,
+    "details": "[rsrs] KeepAlive #36 • Uptime 541s"
+  },
+  {
+    "time": "2026-08-23T08:11:52.383Z",
+    "ts": 1787472712383,
+    "source": "mc_keepalive",
+    "interval": 6894,
+    "count": 61,
+    "details": "[Ph4nt0m] KeepAlive #23 • Uptime 345s"
+  },
+  {
+    "time": "2026-08-23T08:11:45.489Z",
+    "ts": 1787472705489,
+    "source": "mc_keepalive",
+    "interval": 8105,
+    "count": 60,
+    "details": "[rsrs] KeepAlive #35 • Uptime 526s"
+  },
+  {
+    "time": "2026-08-23T08:11:37.384Z",
+    "ts": 1787472697384,
+    "source": "mc_keepalive",
+    "interval": 6894,
+    "count": 59,
+    "details": "[Ph4nt0m] KeepAlive #22 • Uptime 330s"
+  },
+  {
+    "time": "2026-08-23T08:11:30.490Z",
+    "ts": 1787472690490,
+    "source": "mc_keepalive",
+    "interval": 8106,
+    "count": 58,
+    "details": "[rsrs] KeepAlive #34 • Uptime 511s"
+  },
+  {
+    "time": "2026-08-23T08:11:22.384Z",
+    "ts": 1787472682384,
+    "source": "mc_keepalive",
+    "interval": 6944,
+    "count": 57,
+    "details": "[Ph4nt0m] KeepAlive #21 • Uptime 315s"
+  },
+  {
+    "time": "2026-08-23T08:11:15.440Z",
+    "ts": 1787472675440,
+    "source": "mc_keepalive",
+    "interval": 8056,
+    "count": 56,
+    "details": "[rsrs] KeepAlive #33 • Uptime 495s"
+  },
+  {
+    "time": "2026-08-23T08:11:07.384Z",
+    "ts": 1787472667384,
+    "source": "mc_keepalive",
+    "interval": 6991,
+    "count": 55,
+    "details": "[Ph4nt0m] KeepAlive #20 • Uptime 300s"
+  },
+  {
+    "time": "2026-08-23T08:11:00.393Z",
+    "ts": 1787472660393,
+    "source": "mc_keepalive",
+    "interval": 8009,
+    "count": 54,
+    "details": "[rsrs] KeepAlive #32 • Uptime 480s"
+  },
+  {
+    "time": "2026-08-23T08:10:52.384Z",
+    "ts": 1787472652384,
+    "source": "mc_keepalive",
+    "interval": 6992,
+    "count": 53,
+    "details": "[Ph4nt0m] KeepAlive #19 • Uptime 285s"
+  },
+  {
+    "time": "2026-08-23T08:10:45.392Z",
+    "ts": 1787472645392,
+    "source": "mc_keepalive",
+    "interval": 8008,
+    "count": 52,
+    "details": "[rsrs] KeepAlive #31 • Uptime 465s"
+  },
+  {
+    "time": "2026-08-23T08:10:37.384Z",
+    "ts": 1787472637384,
+    "source": "mc_keepalive",
+    "interval": 7042,
+    "count": 51,
+    "details": "[Ph4nt0m] KeepAlive #18 • Uptime 270s"
+  },
+  {
+    "time": "2026-08-23T08:10:30.342Z",
+    "ts": 1787472630342,
+    "source": "mc_keepalive",
+    "interval": 7957,
+    "count": 50,
+    "details": "[rsrs] KeepAlive #30 • Uptime 450s"
+  },
+  {
+    "time": "2026-08-23T08:10:22.385Z",
+    "ts": 1787472622385,
+    "source": "mc_keepalive",
+    "interval": 7093,
+    "count": 49,
+    "details": "[Ph4nt0m] KeepAlive #17 • Uptime 255s"
+  },
+  {
+    "time": "2026-08-23T08:10:15.292Z",
+    "ts": 1787472615292,
+    "source": "mc_keepalive",
+    "interval": 7956,
+    "count": 48,
+    "details": "[rsrs] KeepAlive #29 • Uptime 435s"
+  },
+  {
+    "time": "2026-08-23T08:10:07.336Z",
+    "ts": 1787472607336,
+    "source": "mc_keepalive",
+    "interval": 7043,
+    "count": 47,
+    "details": "[Ph4nt0m] KeepAlive #16 • Uptime 240s"
+  },
+  {
+    "time": "2026-08-23T08:10:00.293Z",
+    "ts": 1787472600293,
+    "source": "mc_keepalive",
+    "interval": 3772,
+    "count": 46,
+    "details": "[rsrs] KeepAlive #28 • Uptime 420s"
+  },
+  {
+    "time": "2026-08-23T08:09:56.521Z",
+    "ts": 1787472596521,
+    "source": "health_external",
+    "interval": 4185,
+    "count": 45,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-23T08:09:52.336Z",
+    "ts": 1787472592336,
+    "source": "mc_keepalive",
+    "interval": 7043,
+    "count": 44,
+    "details": "[Ph4nt0m] KeepAlive #15 • Uptime 225s"
+  },
+  {
+    "time": "2026-08-23T08:09:45.293Z",
+    "ts": 1787472585293,
+    "source": "mc_keepalive",
+    "interval": 7958,
+    "count": 43,
+    "details": "[rsrs] KeepAlive #27 • Uptime 405s"
+  },
+  {
+    "time": "2026-08-23T08:09:37.335Z",
+    "ts": 1787472577335,
+    "source": "mc_keepalive",
+    "interval": 7043,
+    "count": 42,
+    "details": "[Ph4nt0m] KeepAlive #14 • Uptime 210s"
+  },
+  {
+    "time": "2026-08-23T08:09:30.292Z",
+    "ts": 1787472570292,
+    "source": "mc_keepalive",
+    "interval": 7957,
+    "count": 41,
+    "details": "[rsrs] KeepAlive #26 • Uptime 390s"
+  },
+  {
+    "time": "2026-08-23T08:09:22.335Z",
+    "ts": 1787472562335,
+    "source": "mc_keepalive",
+    "interval": 7043,
+    "count": 40,
+    "details": "[Ph4nt0m] KeepAlive #13 • Uptime 195s"
+  },
+  {
+    "time": "2026-08-23T08:09:15.292Z",
+    "ts": 1787472555292,
+    "source": "mc_keepalive",
+    "interval": 7957,
+    "count": 39,
+    "details": "[rsrs] KeepAlive #25 • Uptime 375s"
+  },
+  {
+    "time": "2026-08-23T08:09:07.335Z",
+    "ts": 1787472547335,
+    "source": "mc_keepalive",
+    "interval": 7043,
+    "count": 38,
+    "details": "[Ph4nt0m] KeepAlive #12 • Uptime 180s"
+  },
+  {
+    "time": "2026-08-23T08:09:00.292Z",
+    "ts": 1787472540292,
+    "source": "mc_keepalive",
+    "interval": 7956,
+    "count": 37,
+    "details": "[rsrs] KeepAlive #24 • Uptime 360s"
+  },
+  {
+    "time": "2026-08-23T08:08:52.336Z",
+    "ts": 1787472532336,
+    "source": "mc_keepalive",
+    "interval": 7044,
+    "count": 36,
+    "details": "[Ph4nt0m] KeepAlive #11 • Uptime 165s"
+  },
+  {
+    "time": "2026-08-23T08:08:45.292Z",
+    "ts": 1787472525292,
+    "source": "mc_keepalive",
+    "interval": 7956,
+    "count": 35,
+    "details": "[rsrs] KeepAlive #23 • Uptime 345s"
+  },
+  {
+    "time": "2026-08-23T08:08:37.336Z",
+    "ts": 1787472517336,
+    "source": "mc_keepalive",
+    "interval": 7043,
+    "count": 34,
+    "details": "[Ph4nt0m] KeepAlive #10 • Uptime 150s"
+  },
+  {
+    "time": "2026-08-23T08:08:30.293Z",
+    "ts": 1787472510293,
+    "source": "mc_keepalive",
+    "interval": 7956,
+    "count": 33,
+    "details": "[rsrs] KeepAlive #22 • Uptime 330s"
+  },
+  {
+    "time": "2026-08-23T08:08:22.337Z",
+    "ts": 1787472502337,
+    "source": "mc_keepalive",
+    "interval": 7044,
+    "count": 32,
+    "details": "[Ph4nt0m] KeepAlive #9 • Uptime 135s"
+  },
+  {
+    "time": "2026-08-23T08:08:15.293Z",
+    "ts": 1787472495293,
+    "source": "mc_keepalive",
+    "interval": 7954,
+    "count": 31,
+    "details": "[rsrs] KeepAlive #21 • Uptime 315s"
+  },
+  {
+    "time": "2026-08-23T08:08:07.339Z",
+    "ts": 1787472487339,
+    "source": "mc_keepalive",
+    "interval": 7045,
+    "count": 30,
+    "details": "[Ph4nt0m] KeepAlive #8 • Uptime 120s"
+  },
+  {
+    "time": "2026-08-23T08:08:00.294Z",
+    "ts": 1787472480294,
+    "source": "mc_keepalive",
+    "interval": 7955,
+    "count": 29,
+    "details": "[rsrs] KeepAlive #20 • Uptime 300s"
+  },
+  {
+    "time": "2026-08-23T08:07:52.339Z",
+    "ts": 1787472472339,
+    "source": "mc_keepalive",
+    "interval": 7046,
+    "count": 28,
+    "details": "[Ph4nt0m] KeepAlive #7 • Uptime 105s"
+  },
+  {
+    "time": "2026-08-23T08:07:45.293Z",
+    "ts": 1787472465293,
+    "source": "mc_keepalive",
+    "interval": 8005,
+    "count": 27,
+    "details": "[rsrs] KeepAlive #19 • Uptime 285s"
+  },
+  {
+    "time": "2026-08-23T08:07:37.288Z",
+    "ts": 1787472457288,
+    "source": "mc_keepalive",
+    "interval": 7043,
+    "count": 26,
+    "details": "[Ph4nt0m] KeepAlive #6 • Uptime 90s"
+  },
+  {
+    "time": "2026-08-23T08:07:30.245Z",
+    "ts": 1787472450245,
+    "source": "mc_keepalive",
+    "interval": 7958,
+    "count": 25,
+    "details": "[rsrs] KeepAlive #18 • Uptime 270s"
+  },
+  {
+    "time": "2026-08-23T08:07:22.287Z",
+    "ts": 1787472442287,
+    "source": "mc_keepalive",
+    "interval": 7042,
+    "count": 24,
+    "details": "[Ph4nt0m] KeepAlive #5 • Uptime 75s"
+  },
+  {
+    "time": "2026-08-23T08:07:15.245Z",
+    "ts": 1787472435245,
+    "source": "mc_keepalive",
+    "interval": 7957,
+    "count": 23,
+    "details": "[rsrs] KeepAlive #17 • Uptime 255s"
+  },
+  {
+    "time": "2026-08-23T08:07:07.288Z",
+    "ts": 1787472427288,
+    "source": "mc_keepalive",
+    "interval": 7093,
+    "count": 22,
+    "details": "[Ph4nt0m] KeepAlive #4 • Uptime 60s"
+  },
+  {
+    "time": "2026-08-23T08:07:00.195Z",
+    "ts": 1787472420195,
+    "source": "mc_keepalive",
+    "interval": 7907,
+    "count": 21,
+    "details": "[rsrs] KeepAlive #16 • Uptime 240s"
+  },
+  {
+    "time": "2026-08-23T08:06:52.288Z",
+    "ts": 1787472412288,
+    "source": "mc_keepalive",
+    "interval": 7093,
+    "count": 20,
+    "details": "[Ph4nt0m] KeepAlive #3 • Uptime 45s"
+  },
+  {
+    "time": "2026-08-23T08:06:45.195Z",
+    "ts": 1787472405195,
+    "source": "mc_keepalive",
+    "interval": 7906,
+    "count": 19,
+    "details": "[rsrs] KeepAlive #15 • Uptime 225s"
+  },
+  {
+    "time": "2026-08-23T08:06:37.289Z",
+    "ts": 1787472397289,
+    "source": "mc_keepalive",
+    "interval": 7142,
+    "count": 18,
+    "details": "[Ph4nt0m] KeepAlive #2 • Uptime 30s"
+  },
+  {
+    "time": "2026-08-23T08:06:30.147Z",
+    "ts": 1787472390147,
+    "source": "mc_keepalive",
+    "interval": 7859,
+    "count": 17,
+    "details": "[rsrs] KeepAlive #14 • Uptime 210s"
+  },
+  {
+    "time": "2026-08-23T08:06:22.288Z",
+    "ts": 1787472382288,
+    "source": "mc_keepalive",
+    "interval": 7143,
+    "count": 16,
+    "details": "[Ph4nt0m] KeepAlive #1 • Uptime 15s"
+  },
+  {
+    "time": "2026-08-23T08:06:15.145Z",
+    "ts": 1787472375145,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 15,
+    "details": "[rsrs] KeepAlive #13 • Uptime 195s"
+  },
+  {
+    "time": "2026-08-23T08:06:00.144Z",
+    "ts": 1787472360144,
+    "source": "mc_keepalive",
+    "interval": 15048,
+    "count": 14,
+    "details": "[rsrs] KeepAlive #12 • Uptime 180s"
+  },
+  {
+    "time": "2026-08-23T08:05:45.096Z",
+    "ts": 1787472345096,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 13,
+    "details": "[rsrs] KeepAlive #11 • Uptime 165s"
+  },
+  {
+    "time": "2026-08-23T08:05:30.096Z",
+    "ts": 1787472330096,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 12,
+    "details": "[rsrs] KeepAlive #10 • Uptime 150s"
+  },
+  {
+    "time": "2026-08-23T08:05:15.096Z",
+    "ts": 1787472315096,
+    "source": "mc_keepalive",
+    "interval": 14998,
+    "count": 11,
+    "details": "[rsrs] KeepAlive #9 • Uptime 135s"
+  },
+  {
+    "time": "2026-08-23T08:05:00.098Z",
+    "ts": 1787472300098,
+    "source": "mc_keepalive",
+    "interval": 15050,
+    "count": 10,
+    "details": "[rsrs] KeepAlive #8 • Uptime 120s"
+  },
+  {
+    "time": "2026-08-23T08:04:45.048Z",
+    "ts": 1787472285048,
+    "source": "mc_keepalive",
+    "interval": 15001,
+    "count": 9,
+    "details": "[rsrs] KeepAlive #7 • Uptime 105s"
+  },
+  {
+    "time": "2026-08-23T08:04:30.047Z",
+    "ts": 1787472270047,
+    "source": "mc_keepalive",
+    "interval": 15050,
+    "count": 8,
+    "details": "[rsrs] KeepAlive #6 • Uptime 90s"
+  },
+  {
+    "time": "2026-08-23T08:04:14.997Z",
+    "ts": 1787472254997,
+    "source": "mc_keepalive",
+    "interval": 15050,
+    "count": 7,
+    "details": "[rsrs] KeepAlive #5 • Uptime 75s"
+  },
+  {
+    "time": "2026-08-23T08:03:59.947Z",
+    "ts": 1787472239947,
+    "source": "mc_keepalive",
+    "interval": 15048,
+    "count": 6,
+    "details": "[rsrs] KeepAlive #4 • Uptime 60s"
+  },
+  {
+    "time": "2026-08-23T08:03:44.899Z",
+    "ts": 1787472224899,
+    "source": "mc_keepalive",
+    "interval": 15000,
+    "count": 5,
+    "details": "[rsrs] KeepAlive #3 • Uptime 45s"
+  },
+  {
+    "time": "2026-08-23T08:03:29.899Z",
+    "ts": 1787472209899,
+    "source": "mc_keepalive",
+    "interval": 15047,
+    "count": 4,
+    "details": "[rsrs] KeepAlive #2 • Uptime 30s"
+  },
+  {
+    "time": "2026-08-23T08:03:14.852Z",
+    "ts": 1787472194852,
+    "source": "mc_keepalive",
+    "interval": 138300,
+    "count": 3,
+    "details": "[rsrs] KeepAlive #1 • Uptime 15s"
+  },
+  {
+    "time": "2026-08-23T08:00:56.552Z",
+    "ts": 1787472056552,
+    "source": "health_external",
+    "interval": 223429,
+    "count": 2,
+    "details": "GET /health de ::1 • UA Ph4nt0mBot/self-ping • externo"
+  },
+  {
+    "time": "2026-08-23T07:57:13.123Z",
+    "ts": 1787471833123,
+    "source": "health_external",
+    "interval": 0,
+    "count": 1,
+    "details": "GET /health de ::1 • UA Mozilla/5.0 (Windows NT; Windows NT 10.0; pt-BR) WindowsPowe • externo"
+  }
+]

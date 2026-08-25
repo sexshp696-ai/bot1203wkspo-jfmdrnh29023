@@ -1,5 +1,125 @@
 [
   {
+    "fname": "Ph4nt0m_2026-08-25_04-10-45.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-25_04-10-45.html",
+    "time": "2026-08-25T07:10:45.537Z",
+    "reason": "Desconectado (code null)",
+    "type": "desconectado",
+    "uptime": "3m 2s",
+    "ka": 12,
+    "tent": 7
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-25_03-55-31.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-25_03-55-31.html",
+    "time": "2026-08-25T06:55:31.170Z",
+    "reason": "[!] Kick play:",
+    "type": "kickado",
+    "uptime": "4m 12s",
+    "ka": 16,
+    "tent": 6
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-25_03-51-12.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-25_03-51-12.html",
+    "time": "2026-08-25T06:51:12.132Z",
+    "reason": "[!] Kick play:",
+    "type": "kickado",
+    "uptime": "28s",
+    "ka": 1,
+    "tent": 5
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-25_03-50-20.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-25_03-50-20.html",
+    "time": "2026-08-25T06:50:20.422Z",
+    "reason": "[!] Kick play:",
+    "type": "kickado",
+    "uptime": "18s",
+    "ka": 1,
+    "tent": 4
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-25_03-41-11.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-25_03-41-11.html",
+    "time": "2026-08-25T06:41:11.572Z",
+    "reason": "[rsrs] [!] Kick play:",
+    "type": "desconectado",
+    "uptime": "0s",
+    "ka": 0,
+    "tent": 3
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-23_06-13-51.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-23_06-13-51.html",
+    "time": "2026-08-23T09:13:51.534Z",
+    "reason": "Recuperado de disco",
+    "type": "desconectado",
+    "uptime": "?",
+    "ka": "?",
+    "tent": "?"
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-23_06-08-44.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-23_06-08-44.html",
+    "time": "2026-08-23T09:08:44.426Z",
+    "reason": "Recuperado de disco",
+    "type": "desconectado",
+    "uptime": "?",
+    "ka": "?",
+    "tent": "?"
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-23_06-03-06.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-23_06-03-06.html",
+    "time": "2026-08-23T09:03:06.631Z",
+    "reason": "Recuperado de disco",
+    "type": "desconectado",
+    "uptime": "?",
+    "ka": "?",
+    "tent": "?"
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-23_05-57-54.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-23_05-57-54.html",
+    "time": "2026-08-23T08:57:54.466Z",
+    "reason": "Recuperado de disco",
+    "type": "desconectado",
+    "uptime": "?",
+    "ka": "?",
+    "tent": "?"
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-23_05-55-49.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-23_05-55-49.html",
+    "time": "2026-08-23T08:55:49.973Z",
+    "reason": "Recuperado de disco",
+    "type": "desconectado",
+    "uptime": "?",
+    "ka": "?",
+    "tent": "?"
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-23_05-32-59.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-23_05-32-59.html",
+    "time": "2026-08-23T08:32:59.896Z",
+    "reason": "Recuperado de disco",
+    "type": "desconectado",
+    "uptime": "?",
+    "ka": "?",
+    "tent": "?"
+  },
+  {
+    "fname": "Ph4nt0m_2026-08-23_05-27-47.html",
+    "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-23_05-27-47.html",
+    "time": "2026-08-23T08:27:47.716Z",
+    "reason": "Recuperado de disco",
+    "type": "desconectado",
+    "uptime": "?",
+    "ka": "?",
+    "tent": "?"
+  },
+  {
     "fname": "Ph4nt0m_2026-08-23_03-48-24.html",
     "fpath": "C:\\Users\\Administrator\\Downloads\\Nova pasta (4)\\logs\\Ph4nt0m_2026-08-23_03-48-24.html",
     "time": "2026-08-23T06:48:24.040Z",

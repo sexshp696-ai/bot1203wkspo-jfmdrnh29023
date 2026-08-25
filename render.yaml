@@ -1,14 +1,16 @@
 services:
   - type: web
     name: phant0m-bot
-    runtime: docker
+    env: node
     plan: free
-    dockerfilePath: ./Dockerfile
-    autoDeploy: false
-    healthCheckPath: /health
+    buildCommand: npm install
+    startCommand: node discord_bot.js
     envVars:
+      - key: DISCORD_TOKEN
+        sync: false
+      - key: CHANNEL_ID
+        sync: false
+      - key: OWNER_ID
+        sync: false
       - key: PORT
         value: 3000
-      - key: NODE_ENV
-        value: production
-    # Render free dorme em 15 min sem tráfego — o bot faz self-ping a cada 9 min em /health pra ficar SEMPRE ON

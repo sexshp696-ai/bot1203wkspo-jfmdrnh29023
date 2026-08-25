@@ -1,0 +1,685 @@
+{
+  "sessionLogs": [
+    {
+      "time": "2026-08-25T04:35:59.581Z",
+      "ts": 1787632559581,
+      "type": "connect",
+      "msg": "Iniciando Ph4nt0m em 3ww123.play.hosting:25565",
+      "detail": "Por tres.w3 • Total antes: 0"
+    },
+    {
+      "time": "2026-08-25T04:36:00.087Z",
+      "ts": 1787632560087,
+      "type": "info",
+      "msg": "[Ph4nt0m] [*] Config: 3ww123.play.hosting:25565 como 'Ph4nt0m' proto=776",
+      "detail": "Bot phant0m • 01:36:00"
+    },
+    {
+      "time": "2026-08-25T04:36:00.089Z",
+      "ts": 1787632560089,
+      "type": "info",
+      "msg": "[Ph4nt0m] [*] Conectando a 3ww123.play.hosting:25565 como 'Ph4nt0m'...",
+      "detail": "Bot phant0m • 01:36:00"
+    },
+    {
+      "time": "2026-08-25T04:36:00.756Z",
+      "ts": 1787632560756,
+      "type": "info",
+      "msg": "[Ph4nt0m] [*] Compressao: 256",
+      "detail": "Bot phant0m • 01:36:00"
+    },
+    {
+      "time": "2026-08-25T04:36:00.758Z",
+      "ts": 1787632560758,
+      "type": "info",
+      "msg": "[Ph4nt0m] [+] Login Success!",
+      "detail": "Bot phant0m • 01:36:00"
+    },
+    {
+      "time": "2026-08-25T04:36:00.759Z",
+      "ts": 1787632560759,
+      "type": "info",
+      "msg": "[Ph4nt0m] [*] Login Acknowledged enviado",
+      "detail": "Bot phant0m • 01:36:00"
+    },
+    {
+      "time": "2026-08-25T04:36:00.760Z",
+      "ts": 1787632560760,
+      "type": "info",
+      "msg": "[Ph4nt0m] [*] Aguardando configuration...",
+      "detail": "Bot phant0m • 01:36:00"
+    },
+    {
+      "time": "2026-08-25T04:36:00.762Z",
+      "ts": 1787632560762,
+      "type": "info",
+      "msg": "[Ph4nt0m] [*] Client Information enviado",
+      "detail": "Bot phant0m • 01:36:00"
+    },
+    {
+      "time": "2026-08-25T04:36:00.963Z",
+      "ts": 1787632560963,
+      "type": "info",
+      "msg": "[Ph4nt0m] [*] Known Packs, respondendo...",
+      "detail": "Bot phant0m • 01:36:00"
+    },
+    {
+      "time": "2026-08-25T04:36:01.865Z",
+      "ts": 1787632561865,
+      "type": "info",
+      "msg": "[Ph4nt0m] [*] Finish Configuration recebido",
+      "detail": "Bot phant0m • 01:36:01"
+    },
+    {
+      "time": "2026-08-25T04:36:01.866Z",
+      "ts": 1787632561866,
+      "type": "info",
+      "msg": "[Ph4nt0m] [*] Acknowledge Finish Configuration enviado",
+      "detail": "Bot phant0m • 01:36:01"
+    },
+    {
+      "time": "2026-08-25T04:36:01.867Z",
+      "ts": 1787632561867,
+      "type": "info",
+      "msg": "[Ph4nt0m] [+] PLAY STATE!",
+      "detail": "Bot phant0m • 01:36:01"
+    },
+    {
+      "time": "2026-08-25T04:36:01.868Z",
+      "ts": 1787632561868,
+      "type": "play",
+      "msg": "[Ph4nt0m] Entrou no servidor",
+      "detail": "IP 3ww123.play.hosting:25565 • Protocolo 26.2 (776)"
+    },
+    {
+      "time": "2026-08-25T04:36:01.871Z",
+      "ts": 1787632561871,
+      "type": "info",
+      "msg": "[Ph4nt0m] [*] Bot ativo! Ficando parado no servidor...",
+      "detail": "Bot phant0m • 01:36:01"
+    },
+    {
+      "time": "2026-08-25T04:36:17.211Z",
+      "ts": 1787632577211,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #1] 15s",
+      "detail": "Bot phant0m • 01:36:17"
+    },
+    {
+      "time": "2026-08-25T04:36:32.205Z",
+      "ts": 1787632592205,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #2] 30s",
+      "detail": "Bot phant0m • 01:36:32"
+    },
+    {
+      "time": "2026-08-25T04:36:47.204Z",
+      "ts": 1787632607204,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #3] 45s",
+      "detail": "Bot phant0m • 01:36:47"
+    },
+    {
+      "time": "2026-08-25T04:37:02.217Z",
+      "ts": 1787632622217,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #4] 60s",
+      "detail": "Bot phant0m • 01:37:02"
+    },
+    {
+      "time": "2026-08-25T04:37:17.218Z",
+      "ts": 1787632637218,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #5] 75s",
+      "detail": "Bot phant0m • 01:37:17"
+    },
+    {
+      "time": "2026-08-25T04:37:32.253Z",
+      "ts": 1787632652253,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #6] 90s",
+      "detail": "Bot phant0m • 01:37:32"
+    },
+    {
+      "time": "2026-08-25T04:37:47.300Z",
+      "ts": 1787632667300,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #7] 105s",
+      "detail": "Bot phant0m • 01:37:47"
+    },
+    {
+      "time": "2026-08-25T04:38:02.301Z",
+      "ts": 1787632682301,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #8] 120s",
+      "detail": "Bot phant0m • 01:38:02"
+    },
+    {
+      "time": "2026-08-25T04:38:17.302Z",
+      "ts": 1787632697302,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #9] 135s",
+      "detail": "Bot phant0m • 01:38:17"
+    },
+    {
+      "time": "2026-08-25T04:38:32.303Z",
+      "ts": 1787632712303,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #10] 150s",
+      "detail": "Bot phant0m • 01:38:32"
+    },
+    {
+      "time": "2026-08-25T04:38:47.302Z",
+      "ts": 1787632727302,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #11] 165s",
+      "detail": "Bot phant0m • 01:38:47"
+    },
+    {
+      "time": "2026-08-25T04:39:02.351Z",
+      "ts": 1787632742351,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #12] 180s",
+      "detail": "Bot phant0m • 01:39:02"
+    },
+    {
+      "time": "2026-08-25T04:39:17.400Z",
+      "ts": 1787632757400,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #13] 196s",
+      "detail": "Bot phant0m • 01:39:17"
+    },
+    {
+      "time": "2026-08-25T04:39:32.401Z",
+      "ts": 1787632772401,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #14] 211s",
+      "detail": "Bot phant0m • 01:39:32"
+    },
+    {
+      "time": "2026-08-25T04:39:47.401Z",
+      "ts": 1787632787401,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #15] 226s",
+      "detail": "Bot phant0m • 01:39:47"
+    },
+    {
+      "time": "2026-08-25T04:40:02.401Z",
+      "ts": 1787632802401,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #16] 241s",
+      "detail": "Bot phant0m • 01:40:02"
+    },
+    {
+      "time": "2026-08-25T04:40:17.449Z",
+      "ts": 1787632817449,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #17] 256s",
+      "detail": "Bot phant0m • 01:40:17"
+    },
+    {
+      "time": "2026-08-25T04:40:32.449Z",
+      "ts": 1787632832449,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #18] 271s",
+      "detail": "Bot phant0m • 01:40:32"
+    },
+    {
+      "time": "2026-08-25T04:40:47.449Z",
+      "ts": 1787632847449,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #19] 286s",
+      "detail": "Bot phant0m • 01:40:47"
+    },
+    {
+      "time": "2026-08-25T04:41:02.450Z",
+      "ts": 1787632862450,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #20] 301s",
+      "detail": "Bot phant0m • 01:41:02"
+    },
+    {
+      "time": "2026-08-25T04:41:17.449Z",
+      "ts": 1787632877449,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #21] 316s",
+      "detail": "Bot phant0m • 01:41:17"
+    },
+    {
+      "time": "2026-08-25T04:41:32.450Z",
+      "ts": 1787632892450,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #22] 331s",
+      "detail": "Bot phant0m • 01:41:32"
+    },
+    {
+      "time": "2026-08-25T04:41:47.499Z",
+      "ts": 1787632907499,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #23] 346s",
+      "detail": "Bot phant0m • 01:41:47"
+    },
+    {
+      "time": "2026-08-25T04:42:02.498Z",
+      "ts": 1787632922498,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #24] 361s",
+      "detail": "Bot phant0m • 01:42:02"
+    },
+    {
+      "time": "2026-08-25T04:42:17.499Z",
+      "ts": 1787632937499,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #25] 376s",
+      "detail": "Bot phant0m • 01:42:17"
+    },
+    {
+      "time": "2026-08-25T04:42:32.548Z",
+      "ts": 1787632952548,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #26] 391s",
+      "detail": "Bot phant0m • 01:42:32"
+    },
+    {
+      "time": "2026-08-25T04:42:47.547Z",
+      "ts": 1787632967547,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #27] 406s",
+      "detail": "Bot phant0m • 01:42:47"
+    },
+    {
+      "time": "2026-08-25T04:43:02.597Z",
+      "ts": 1787632982597,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #28] 421s",
+      "detail": "Bot phant0m • 01:43:02"
+    },
+    {
+      "time": "2026-08-25T04:43:17.598Z",
+      "ts": 1787632997598,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #29] 436s",
+      "detail": "Bot phant0m • 01:43:17"
+    },
+    {
+      "time": "2026-08-25T04:43:32.597Z",
+      "ts": 1787633012597,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #30] 451s",
+      "detail": "Bot phant0m • 01:43:32"
+    },
+    {
+      "time": "2026-08-25T04:43:47.598Z",
+      "ts": 1787633027598,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #31] 466s",
+      "detail": "Bot phant0m • 01:43:47"
+    },
+    {
+      "time": "2026-08-25T04:44:02.647Z",
+      "ts": 1787633042647,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #32] 481s",
+      "detail": "Bot phant0m • 01:44:02"
+    },
+    {
+      "time": "2026-08-25T04:44:17.648Z",
+      "ts": 1787633057648,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #33] 496s",
+      "detail": "Bot phant0m • 01:44:17"
+    },
+    {
+      "time": "2026-08-25T04:44:32.646Z",
+      "ts": 1787633072646,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #34] 511s",
+      "detail": "Bot phant0m • 01:44:32"
+    },
+    {
+      "time": "2026-08-25T04:44:47.646Z",
+      "ts": 1787633087646,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #35] 526s",
+      "detail": "Bot phant0m • 01:44:47"
+    },
+    {
+      "time": "2026-08-25T04:45:02.695Z",
+      "ts": 1787633102695,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #36] 541s",
+      "detail": "Bot phant0m • 01:45:02"
+    },
+    {
+      "time": "2026-08-25T04:45:17.696Z",
+      "ts": 1787633117696,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #37] 556s",
+      "detail": "Bot phant0m • 01:45:17"
+    },
+    {
+      "time": "2026-08-25T04:45:32.698Z",
+      "ts": 1787633132698,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #38] 571s",
+      "detail": "Bot phant0m • 01:45:32"
+    },
+    {
+      "time": "2026-08-25T04:45:47.705Z",
+      "ts": 1787633147705,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #39] 586s",
+      "detail": "Bot phant0m • 01:45:47"
+    },
+    {
+      "time": "2026-08-25T04:46:02.746Z",
+      "ts": 1787633162746,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #40] 601s",
+      "detail": "Bot phant0m • 01:46:02"
+    },
+    {
+      "time": "2026-08-25T04:46:17.745Z",
+      "ts": 1787633177745,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #41] 616s",
+      "detail": "Bot phant0m • 01:46:17"
+    },
+    {
+      "time": "2026-08-25T04:46:32.794Z",
+      "ts": 1787633192794,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #42] 631s",
+      "detail": "Bot phant0m • 01:46:32"
+    },
+    {
+      "time": "2026-08-25T04:46:47.845Z",
+      "ts": 1787633207845,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #43] 646s",
+      "detail": "Bot phant0m • 01:46:47"
+    },
+    {
+      "time": "2026-08-25T04:47:02.893Z",
+      "ts": 1787633222893,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #44] 661s",
+      "detail": "Bot phant0m • 01:47:02"
+    },
+    {
+      "time": "2026-08-25T04:47:17.893Z",
+      "ts": 1787633237893,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #45] 676s",
+      "detail": "Bot phant0m • 01:47:17"
+    },
+    {
+      "time": "2026-08-25T04:47:32.894Z",
+      "ts": 1787633252894,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #46] 691s",
+      "detail": "Bot phant0m • 01:47:32"
+    },
+    {
+      "time": "2026-08-25T04:47:47.894Z",
+      "ts": 1787633267894,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #47] 706s",
+      "detail": "Bot phant0m • 01:47:47"
+    },
+    {
+      "time": "2026-08-25T04:48:02.943Z",
+      "ts": 1787633282943,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #48] 721s",
+      "detail": "Bot phant0m • 01:48:02"
+    },
+    {
+      "time": "2026-08-25T04:48:17.943Z",
+      "ts": 1787633297943,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #49] 736s",
+      "detail": "Bot phant0m • 01:48:17"
+    },
+    {
+      "time": "2026-08-25T04:48:32.942Z",
+      "ts": 1787633312942,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #50] 751s",
+      "detail": "Bot phant0m • 01:48:32"
+    },
+    {
+      "time": "2026-08-25T04:48:47.942Z",
+      "ts": 1787633327942,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #51] 766s",
+      "detail": "Bot phant0m • 01:48:47"
+    },
+    {
+      "time": "2026-08-25T04:49:02.942Z",
+      "ts": 1787633342942,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #52] 781s",
+      "detail": "Bot phant0m • 01:49:02"
+    },
+    {
+      "time": "2026-08-25T04:49:17.944Z",
+      "ts": 1787633357944,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #53] 796s",
+      "detail": "Bot phant0m • 01:49:17"
+    },
+    {
+      "time": "2026-08-25T04:49:32.993Z",
+      "ts": 1787633372993,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #54] 811s",
+      "detail": "Bot phant0m • 01:49:32"
+    },
+    {
+      "time": "2026-08-25T04:49:47.993Z",
+      "ts": 1787633387993,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #55] 826s",
+      "detail": "Bot phant0m • 01:49:47"
+    },
+    {
+      "time": "2026-08-25T04:50:02.992Z",
+      "ts": 1787633402992,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #56] 841s",
+      "detail": "Bot phant0m • 01:50:02"
+    },
+    {
+      "time": "2026-08-25T04:50:18.193Z",
+      "ts": 1787633418193,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #57] 856s",
+      "detail": "Bot phant0m • 01:50:18"
+    },
+    {
+      "time": "2026-08-25T04:50:33.200Z",
+      "ts": 1787633433200,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #58] 871s",
+      "detail": "Bot phant0m • 01:50:33"
+    },
+    {
+      "time": "2026-08-25T04:50:48.202Z",
+      "ts": 1787633448202,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #59] 886s",
+      "detail": "Bot phant0m • 01:50:48"
+    },
+    {
+      "time": "2026-08-25T04:51:03.206Z",
+      "ts": 1787633463206,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #60] 901s",
+      "detail": "Bot phant0m • 01:51:03"
+    },
+    {
+      "time": "2026-08-25T04:51:18.204Z",
+      "ts": 1787633478204,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #61] 916s",
+      "detail": "Bot phant0m • 01:51:18"
+    },
+    {
+      "time": "2026-08-25T04:51:33.192Z",
+      "ts": 1787633493192,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #62] 931s",
+      "detail": "Bot phant0m • 01:51:33"
+    },
+    {
+      "time": "2026-08-25T04:51:48.190Z",
+      "ts": 1787633508190,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #63] 946s",
+      "detail": "Bot phant0m • 01:51:48"
+    },
+    {
+      "time": "2026-08-25T04:52:03.203Z",
+      "ts": 1787633523203,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #64] 961s",
+      "detail": "Bot phant0m • 01:52:03"
+    },
+    {
+      "time": "2026-08-25T04:52:18.204Z",
+      "ts": 1787633538204,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #65] 976s",
+      "detail": "Bot phant0m • 01:52:18"
+    },
+    {
+      "time": "2026-08-25T04:52:33.205Z",
+      "ts": 1787633553205,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #66] 991s",
+      "detail": "Bot phant0m • 01:52:33"
+    },
+    {
+      "time": "2026-08-25T04:52:48.242Z",
+      "ts": 1787633568242,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #67] 1006s",
+      "detail": "Bot phant0m • 01:52:48"
+    },
+    {
+      "time": "2026-08-25T04:53:03.240Z",
+      "ts": 1787633583240,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #68] 1021s",
+      "detail": "Bot phant0m • 01:53:03"
+    },
+    {
+      "time": "2026-08-25T04:53:18.239Z",
+      "ts": 1787633598239,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #69] 1036s",
+      "detail": "Bot phant0m • 01:53:18"
+    },
+    {
+      "time": "2026-08-25T04:53:33.290Z",
+      "ts": 1787633613290,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #70] 1051s",
+      "detail": "Bot phant0m • 01:53:33"
+    },
+    {
+      "time": "2026-08-25T04:53:48.339Z",
+      "ts": 1787633628339,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #71] 1066s",
+      "detail": "Bot phant0m • 01:53:48"
+    },
+    {
+      "time": "2026-08-25T04:54:03.339Z",
+      "ts": 1787633643339,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #72] 1081s",
+      "detail": "Bot phant0m • 01:54:03"
+    },
+    {
+      "time": "2026-08-25T04:54:18.388Z",
+      "ts": 1787633658388,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #73] 1097s",
+      "detail": "Bot phant0m • 01:54:18"
+    },
+    {
+      "time": "2026-08-25T04:54:33.388Z",
+      "ts": 1787633673388,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #74] 1112s",
+      "detail": "Bot phant0m • 01:54:33"
+    },
+    {
+      "time": "2026-08-25T04:54:48.389Z",
+      "ts": 1787633688389,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #75] 1127s",
+      "detail": "Bot phant0m • 01:54:48"
+    },
+    {
+      "time": "2026-08-25T04:55:03.438Z",
+      "ts": 1787633703438,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #76] 1142s",
+      "detail": "Bot phant0m • 01:55:03"
+    },
+    {
+      "time": "2026-08-25T04:55:18.438Z",
+      "ts": 1787633718438,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #77] 1157s",
+      "detail": "Bot phant0m • 01:55:18"
+    },
+    {
+      "time": "2026-08-25T04:55:33.440Z",
+      "ts": 1787633733440,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #78] 1172s",
+      "detail": "Bot phant0m • 01:55:33"
+    },
+    {
+      "time": "2026-08-25T04:55:48.488Z",
+      "ts": 1787633748488,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #79] 1187s",
+      "detail": "Bot phant0m • 01:55:48"
+    },
+    {
+      "time": "2026-08-25T04:56:03.487Z",
+      "ts": 1787633763487,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #80] 1202s",
+      "detail": "Bot phant0m • 01:56:03"
+    },
+    {
+      "time": "2026-08-25T04:56:18.536Z",
+      "ts": 1787633778536,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #81] 1217s",
+      "detail": "Bot phant0m • 01:56:18"
+    },
+    {
+      "time": "2026-08-25T04:56:33.536Z",
+      "ts": 1787633793536,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #82] 1232s",
+      "detail": "Bot phant0m • 01:56:33"
+    },
+    {
+      "time": "2026-08-25T04:56:48.535Z",
+      "ts": 1787633808535,
+      "type": "info",
+      "msg": "[Ph4nt0m] [KA #83] 1247s",
+      "detail": "Bot phant0m • 01:56:48"
+    }
+  ],
+  "allLogs": [],
+  "pingLogs": []
+}

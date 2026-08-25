@@ -21,10 +21,13 @@
     "npm": ">=9.0.0"
   },
   "dependencies": {
+    "@whiskeysockets/baileys": "^7.0.0-rc14",
     "discord.js": "^14.27.0",
     "dotenv": "^17.4.2",
     "express": "^4.22.2",
     "minecraft-data": "^3.113.2",
-    "mineflayer": "^4.37.1"
+    "mineflayer": "^4.37.1",
+    "pino": "^10.3.1",
+    "qrcode": "^1.5.4"
   }
 }
