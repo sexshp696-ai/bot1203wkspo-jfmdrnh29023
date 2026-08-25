@@ -498,8 +498,11 @@ const whatsappManager = new WhatsAppManager({
                `_Envie o número do botão desejado (ex: *1*, *4.2*, *8*)._`;
     },
     onCommand: async (cmd, rawText) => {
+        // rawText = texto original preservado, cmd = minúsculo
+        // option = primeiro token em minúsculas, args = resto do texto original
         const parts = rawText.trim().split(/\s+/);
-        const option = parts[0].toLowerCase();
+        const option = parts[0].toLowerCase().trim();
+        const args = parts.slice(1).join(' ').trim(); // argumentos com case original
 
         // 1. Iniciar Bot
         if (option === '1' || option === '1.1' || option === 'iniciar' || option === 'ligar') {
@@ -653,9 +656,8 @@ const whatsappManager = new WhatsAppManager({
         }
 
         // 8. Enviar Comando / Chat
-        if (option === '8' || option.startsWith('8.')) {
-            const cmdToSend = rawText.replace(/^[0-9.]+\s*/, '').trim();
-            if (!cmdToSend) {
+        if (option === '8' || option.startsWith('8.') || option === 'chat' || option === 'cmd') {
+            if (!args) {
                 return `╭──────────────────────────────╮\n` +
                        `│ 💬 *ENVIAR COMANDO / CHAT*    │\n` +
                        `╰──────────────────────────────╯\n` +
@@ -665,11 +667,11 @@ const whatsappManager = new WhatsAppManager({
                        `> *8 /weather clear*\n` +
                        `> *8 Olá a todos no servidor!*`;
             }
-            sendBotCommand(cmdToSend);
+            sendBotCommand(args);
             return `╭──────────────────────────────╮\n` +
                    `│ 💬 *COMANDO / CHAT ENVIADO*   │\n` +
                    `╰──────────────────────────────╯\n` +
-                   `> 📤 *Enviado:* \`${cmdToSend}\`\n` +
+                   `> 📤 *Enviado:* \`${args}\`\n` +
                    `> 🤖 *Player:* ${MC_USER}\n\n` +
                    `*Ações:* [5] Status | [0] Menu`;
         }
@@ -689,17 +691,16 @@ const whatsappManager = new WhatsAppManager({
 
         // 10. Configurar IP
         if (option === '10') {
-            const arg = rawText.replace(/^[0-9.]+\s*/, '').trim();
-            if (!arg || !arg.includes(':')) {
+            if (!args || !args.includes(':')) {
                 return `╭──────────────────────────────╮\n` +
                        `│ ⚙️ *CONFIGURAR IP/HOST*       │\n` +
                        `╰──────────────────────────────╯\n` +
                        `Envie o IP e a porta após o *10*.\n\n` +
                        `*Exemplo:* *10 meuserver.play.hosting:25565*`;
             }
-            const [host, port] = arg.split(':');
-            bots[0].host = host;
-            bots[0].port = parseInt(port) || 25565;
+            const [newHost, newPort] = args.split(':');
+            bots[0].host = newHost;
+            bots[0].port = parseInt(newPort) || 25565;
             saveBots(); syncPrimary();
             return `╭──────────────────────────────╮\n` +
                    `│ ⚙️ *ENDEREÇO ATUALIZADO*      │\n` +
@@ -710,44 +711,43 @@ const whatsappManager = new WhatsAppManager({
 
         // 11. Renomear Nick
         if (option === '11') {
-            const newNick = rawText.replace(/^[0-9.]+\s*/, '').trim();
-            if (!newNick) {
+            if (!args) {
                 return `╭──────────────────────────────╮\n` +
                        `│ 📝 *RENOMEAR NICK DO BOT*     │\n` +
                        `╰──────────────────────────────╯\n` +
                        `Envie o novo nick após o *11*.\n\n` +
                        `*Exemplo:* *11 Ph4nt0m_Pro*`;
             }
-            bots[0].user = newNick;
+            bots[0].user = args;
             saveBots(); syncPrimary();
             return `╭──────────────────────────────╮\n` +
                    `│ 📝 *NICK ATUALIZADO*          │\n` +
                    `╰──────────────────────────────╯\n` +
-                   `> 👤 *Novo Nick:* \`${newNick}\`\n\n` +
+                   `> 👤 *Novo Nick:* \`${args}\`\n\n` +
                    `*Ações:* [1] Iniciar | [5] Status | [0] Menu`;
         }
 
         // 12. Criar Bot
         if (option === '12') {
-            const rest = rawText.replace(/^[0-9.]+\s*/, '').trim().split(/\s+/);
-            if (rest.length < 3) {
+            const rest = args.split(/\s+/);
+            if (rest.length < 3 || !rest[1]?.includes(':')) {
                 return `╭──────────────────────────────╮\n` +
                        `│ ➕ *CRIAR NOVO BOT*           │\n` +
                        `╰──────────────────────────────╯\n` +
                        `Envie: *12 <Nome> <IP:Porta> <Nick>*\n\n` +
                        `*Exemplo:* *12 Phantom2 3ww123.play.hosting:25565 Ph4nt0m2*`;
             }
-            const [name, hostPort, nick] = rest;
-            const [host, port] = hostPort.split(':');
-            const id = name.toLowerCase().replace(/[^a-z0-9]/g, "") || `bot${Date.now()}`;
-            bots.push({ id, name, host, port: parseInt(port)||25565, user: nick, version: MC_VERSION, enabled: true, createdAt: new Date().toISOString() });
+            const [botName, hostPort, botNick] = rest;
+            const [botHost, botPort] = hostPort.split(':');
+            const botId = botName.toLowerCase().replace(/[^a-z0-9]/g, "") || `bot${Date.now()}`;
+            bots.push({ id: botId, name: botName, host: botHost, port: parseInt(botPort)||25565, user: botNick, version: MC_VERSION, enabled: true, createdAt: new Date().toISOString() });
             saveBots();
             return `╭──────────────────────────────╮\n` +
                    `│ ✅ *NOVO BOT CRIADO!*         │\n` +
                    `╰──────────────────────────────╯\n` +
-                   `> 🤖 *Nome:* ${name}\n` +
-                   `> 🌐 *Servidor:* ${host}:${port||25565}\n` +
-                   `> 👤 *Nick:* ${nick}\n\n` +
+                   `> 🤖 *Nome:* ${botName}\n` +
+                   `> 🌐 *Servidor:* ${botHost}:${botPort||25565}\n` +
+                   `> 👤 *Nick:* ${botNick}\n\n` +
                    `*Ações:* [0] Ver Menu de Bots`;
         }
 
@@ -777,6 +777,9 @@ const whatsappManager = new WhatsAppManager({
 async function setupLogChannels(guild) {
     if (!guild) return;
     try {
+        // Busca todos os canais do servidor via API (não só cache) para evitar duplicatas
+        await guild.channels.fetch();
+
         const channelsToEnsure = [
             { name: "🟢・status-servidor", topic: "Status em tempo real do servidor Minecraft e tempo ligado (Uptime)", key: "status" },
             { name: "📱・whatsapp", topic: "Painel de controle e pareamento do WhatsApp com QR Code e vinculação de Admin", key: "wa_control" },
@@ -787,6 +790,9 @@ async function setupLogChannels(guild) {
             { name: "🚨・alertas-quedas", topic: "Alertas críticos de servidor ligou/caiu, kicks, bans e reinícios", key: "alerts" }
         ];
 
+        // Normaliza nome para comparação ignorando emojis/variações de unicode
+        const normName = (n) => n.toLowerCase().replace(/\s+/g, '').replace(/[^\w\u00C0-\u024F\u4E00-\u9FFF・]/gu, '');
+
         let category = guild.channels.cache.find(c => c.type === ChannelType.GuildCategory && c.name.includes("LOGS & MONITORAMENTO"));
         if (!category) {
             try {
@@ -794,11 +800,17 @@ async function setupLogChannels(guild) {
                     name: "📊 LOGS & MONITORAMENTO",
                     type: ChannelType.GuildCategory
                 });
+                console.log(`[CANAIS] Categoria criada.`);
             } catch {}
         }
 
         for (const item of channelsToEnsure) {
-            let ch = guild.channels.cache.find(c => c.name === item.name);
+            // Verifica por nome exato OU nome normalizado (evita duplicatas com emojis diferentes)
+            let ch = guild.channels.cache.find(c =>
+                c.type === ChannelType.GuildText &&
+                (c.name === item.name || normName(c.name) === normName(item.name))
+            );
+
             if (!ch) {
                 try {
                     ch = await guild.channels.create({
@@ -807,11 +819,14 @@ async function setupLogChannels(guild) {
                         parent: category ? category.id : null,
                         topic: item.topic
                     });
-                    console.log(`[CANAIS] Canal criado: ${item.name}`);
+                    console.log(`[CANAIS] ✅ Canal criado: ${item.name}`);
                 } catch (e) {
                     console.error(`[CANAIS] Erro ao criar ${item.name}:`, e.message);
                 }
+            } else {
+                console.log(`[CANAIS] ✔️  Canal já existe: ${ch.name}`);
             }
+
             if (ch) {
                 if (item.key === "status") serverStatusChannel = ch;
                 else if (item.key === "wa_control") whatsappControlChannel = ch;
@@ -827,6 +842,7 @@ async function setupLogChannels(guild) {
         console.error("[CANAIS] Erro no setupLogChannels:", e.message);
     }
 }
+
 
 // ============ PAINEL WHATSAPP NO DISCORD ============
 async function updateWhatsAppControlPanel(qrBuffer = null, pairingCode = null) {

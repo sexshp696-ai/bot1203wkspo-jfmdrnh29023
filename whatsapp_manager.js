@@ -16,6 +16,8 @@ class WhatsAppManager {
         this.pairingCode = null;
         this.userNumber = null;
         this.callbacks = callbacks;
+        // Rastreia a última mensagem enviada para cada JID (para deletar antes de enviar nova)
+        this.lastSentKeys = {}; // jid -> { key, timestamp }
         this.config = {
             adminNumber: null,
             adminName: null,
@@ -90,6 +92,7 @@ class WhatsAppManager {
                     this.state = "desconectado";
                     this.qrCodeBuffer = null;
                     this.userNumber = null;
+                    this.lastSentKeys = {};
                     if (this.callbacks.onStatusChange) this.callbacks.onStatusChange(this.state);
                     console.log(`[WA] Conexão fechada. Motivo: ${statusCode}. Reconectar: ${shouldReconnect}`);
 
@@ -153,15 +156,15 @@ class WhatsAppManager {
                     };
                     this.saveConfig();
 
-                    await this.sock.sendMessage(senderJid, {
-                        text: `╭──────────────────────────────╮\n` +
-                              `│ 📱 *PH4NT0M BOT — AUTORIZAÇÃO*   │\n` +
-                              `╰──────────────────────────────╯\n` +
-                              `> 👤 *Nome:* ${pushName}\n` +
-                              `> 📱 *Número:* +${senderNumber}\n` +
-                              `> ⏳ *Status:* Solicitação enviada ao Discord para autorização!\n\n` +
-                              `_Assim que o dono confirmar no Discord, você poderá controlar tudo pelo WhatsApp!_`
-                    });
+                    await this.sendAndReplace(senderJid,
+                        `╭──────────────────────────────╮\n` +
+                        `│ 📱 *PH4NT0M BOT — AUTORIZAÇÃO*   │\n` +
+                        `╰──────────────────────────────╯\n` +
+                        `> 👤 *Nome:* ${pushName}\n` +
+                        `> 📱 *Número:* +${senderNumber}\n` +
+                        `> ⏳ *Status:* Solicitação enviada ao Discord para autorização!\n\n` +
+                        `_Assim que o dono confirmar no Discord, você poderá controlar tudo pelo WhatsApp!_`
+                    );
 
                     if (this.callbacks.onAdminRequest) {
                         this.callbacks.onAdminRequest(this.config.pendingAdminRequest);
@@ -176,23 +179,53 @@ class WhatsAppManager {
         }
     }
 
-    async handleAdminCommand(jid, name, text) {
-        const cmd = text.toLowerCase();
+    /**
+     * Apaga a última mensagem enviada para este JID (se existir) e envia uma nova.
+     * Garante que só a mensagem mais recente fique visível na conversa.
+     */
+    async sendAndReplace(jid, text) {
+        if (!this.sock || this.state !== "conectado") return null;
+        const targetJid = jid.includes('@') ? jid : `${jid}@s.whatsapp.net`;
 
+        // Apaga a mensagem anterior se existir
+        const prev = this.lastSentKeys[targetJid];
+        if (prev && prev.key) {
+            try {
+                await this.sock.sendMessage(targetJid, { delete: prev.key });
+                console.log(`[WA] Mensagem anterior deletada para ${targetJid}`);
+            } catch (e) {
+                // Ignora erros de deleção (ex: mensagem muito antiga)
+            }
+        }
+
+        // Envia a nova mensagem e salva a key
+        try {
+            const sent = await this.sock.sendMessage(targetJid, { text });
+            if (sent?.key) {
+                this.lastSentKeys[targetJid] = { key: sent.key, timestamp: Date.now() };
+            }
+            return sent;
+        } catch (e) {
+            console.error('[WA] Erro ao enviar mensagem:', e.message);
+            return null;
+        }
+    }
+
+    async handleAdminCommand(jid, name, text) {
         // Se pediu menu ou opções
-        if (cmd === 'menu' || cmd === 'ajuda' || cmd === '0' || cmd === 'oi' || cmd === 'start' || cmd === '#menu') {
+        if (/^(menu|ajuda|0|oi|start|#menu|help)$/i.test(text.trim())) {
             if (this.callbacks.onGetMenuEmbed) {
                 const embedText = await this.callbacks.onGetMenuEmbed();
-                await this.sock.sendMessage(jid, { text: embedText });
+                await this.sendAndReplace(jid, embedText);
             }
             return;
         }
 
         // Executa comando via callback para o discord_bot.js
         if (this.callbacks.onCommand) {
-            const replyText = await this.callbacks.onCommand(cmd, text);
+            const replyText = await this.callbacks.onCommand(text.trim().toLowerCase(), text.trim());
             if (replyText) {
-                await this.sock.sendMessage(jid, { text: replyText });
+                await this.sendAndReplace(jid, replyText);
             }
         }
     }
@@ -211,7 +244,7 @@ class WhatsAppManager {
 
     async sendAdminAlert(text) {
         if (this.config.adminNumber) {
-            return await this.sendDirectMessage(this.config.adminNumber, text);
+            return await this.sendAndReplace(this.config.adminNumber, text);
         }
         return false;
     }
@@ -224,7 +257,7 @@ class WhatsAppManager {
 
         if (this.callbacks.onGetMenuEmbed) {
             this.callbacks.onGetMenuEmbed().then(menuText => {
-                this.sendDirectMessage(this.config.adminNumber, 
+                this.sendAndReplace(this.config.adminNumber,
                     `╭──────────────────────────────╮\n` +
                     `│ 🎉 *AUTORIZAÇÃO CONCLUÍDA!*   │\n` +
                     `╰──────────────────────────────╯\n` +
@@ -256,6 +289,7 @@ class WhatsAppManager {
             this.state = "desconectado";
             this.qrCodeBuffer = null;
             this.userNumber = null;
+            this.lastSentKeys = {};
             if (this.callbacks.onStatusChange) this.callbacks.onStatusChange(this.state);
             return true;
         } catch (e) {
