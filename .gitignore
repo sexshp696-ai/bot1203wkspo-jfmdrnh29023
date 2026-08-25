@@ -20,3 +20,7 @@ Thumbs.db
 __pycache__/
 *.pyc
 *.pyo
+
+# WhatsApp Baileys auth (credenciais sensíveis)
+auth_info_baileys/
+whatsapp_config.json
