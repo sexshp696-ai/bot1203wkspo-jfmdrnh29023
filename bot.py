@@ -162,9 +162,42 @@ class Bot:
 
     def connect(self):
         print(f"[*] Conectando a {self.host}:{self.port} como '{self.user}'...")
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.settimeout(20)
-        self.sock.connect((self.host, self.port))
+
+        # Resolver DNS e tentar todos os IPs disponíveis
+        try:
+            addrs = socket.getaddrinfo(self.host, self.port, socket.AF_INET, socket.SOCK_STREAM)
+        except socket.gaierror as e:
+            print(f"[!] Falha DNS ao resolver {self.host}: {e}")
+            return False
+
+        if not addrs:
+            print(f"[!] Nenhum IP encontrado para {self.host}")
+            return False
+
+        last_err = None
+        for addr_info in addrs:
+            ip = addr_info[4][0]
+            print(f"[*] Tentando IP: {ip}:{self.port}")
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock.settimeout(45)
+            try:
+                self.sock.connect((ip, self.port))
+                print(f"[*] TCP conectado via {ip}:{self.port}")
+                last_err = None
+                break
+            except (TimeoutError, ConnectionRefusedError, OSError) as e:
+                print(f"[!] Falha TCP {ip}:{self.port} -> {e}")
+                last_err = e
+                try:
+                    self.sock.close()
+                except Exception:
+                    pass
+                self.sock = None
+                time.sleep(2)
+
+        if self.sock is None:
+            print(f"[!] Todos os IPs falharam. Ultimo erro: {last_err}")
+            return False
 
         hand = ev(776) + ws(self.host) + struct.pack(">H", self.port) + ev(2)
         self._send_raw(0x00, hand)
